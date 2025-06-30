@@ -38,6 +38,52 @@ const BG_COLORS = [
   '#f0f2f5',
 ];
 
+// Компонент для комментариев с ветками
+const Comment = ({ comment, onReply, onSendReply, replyValue, setReplyValue, depth = 0 }) => {
+  const [showReply, setShowReply] = useState(false);
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'flex-start', mt: 1, ml: depth * 4 }}>
+      <Avatar sx={{ width: 28, height: 28, bgcolor: comment.isAI ? 'primary.main' : 'grey.400', fontSize: 16, mr: 1 }}>
+        {comment.isAI ? <SmartToyIcon fontSize="small" /> : (comment.author[0] || '?')}
+      </Avatar>
+      <Box sx={{ flex: 1 }}>
+        <Box sx={{ bgcolor: '#f0f2f5', borderRadius: 2, px: 2, py: 1, mb: 0.5 }}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: 14 }}>{comment.author}</Typography>
+          <Typography variant="body2" sx={{ fontSize: 15 }}>{comment.text}</Typography>
+          <Typography variant="caption" color="text.secondary">{comment.time}</Typography>
+        </Box>
+        <Button size="small" sx={{ textTransform: 'none', fontSize: 13, minWidth: 0, p: 0, color: 'primary.main' }} onClick={() => setShowReply(!showReply)}>
+          Ответить
+        </Button>
+        {showReply && (
+          <Box sx={{ mt: 1, mb: 1 }}>
+            <TextField
+              size="small"
+              placeholder="Ваш ответ..."
+              value={replyValue}
+              onChange={e => setReplyValue(e.target.value)}
+              sx={{ bgcolor: '#fff', borderRadius: 2, mr: 1 }}
+            />
+            <Button variant="contained" size="small" onClick={onSendReply} disabled={!replyValue}>Отправить</Button>
+          </Box>
+        )}
+        {/* Вложенные комментарии */}
+        {comment.replies && comment.replies.map((reply, i) => (
+          <Comment
+            key={i}
+            comment={reply}
+            onReply={() => onReply(comment.id, reply.id)}
+            onSendReply={() => onSendReply(comment.id, reply.id)}
+            replyValue={replyValue}
+            setReplyValue={setReplyValue}
+            depth={depth + 1}
+          />
+        ))}
+      </Box>
+    </Box>
+  );
+};
+
 const Feed = () => {
   const [posts, setPosts] = useState(initialPosts);
   const [text, setText] = useState('');
@@ -51,6 +97,10 @@ const Feed = () => {
   const [aiOpen, setAIOpen] = useState(false);
   const [aiMessages, setAIMessages] = useState(initialAIMessages);
   const [aiInput, setAIInput] = useState('');
+  // Комментарии хранятся в состоянии по id поста
+  const [comments, setComments] = useState({}); // { [postId]: [ {id, author, text, time, replies: []} ] }
+  const [commentValue, setCommentValue] = useState({}); // { [postId]: '' }
+  const [replyValue, setReplyValue] = useState('');
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files).slice(0, 5);
@@ -103,6 +153,52 @@ const Feed = () => {
   const handleInsertAI = (msg) => {
     setText(text ? text + '\n' + msg : msg);
     setAIOpen(false);
+  };
+
+  // Добавить комментарий к посту
+  const handleAddComment = (postId) => {
+    const newComment = {
+      id: Date.now(),
+      author: 'Вы',
+      text: commentValue[postId],
+      time: new Date().toLocaleTimeString().slice(0, 5),
+      replies: [],
+      isAI: false,
+    };
+    setComments(prev => ({
+      ...prev,
+      [postId]: prev[postId] ? [ ...prev[postId], newComment ] : [ newComment ]
+    }));
+    setCommentValue(prev => ({ ...prev, [postId]: '' }));
+  };
+
+  // Добавить ответ к комментарию (ветка)
+  const handleAddReply = (postId, commentId, text) => {
+    setComments(prev => {
+      const updateReplies = (arr) => arr.map(c => {
+        if (c.id === commentId) {
+          return {
+            ...c,
+            replies: [ ...(c.replies || []), {
+              id: Date.now(),
+              author: 'Вы',
+              text,
+              time: new Date().toLocaleTimeString().slice(0, 5),
+              replies: [],
+              isAI: false,
+            } ]
+          };
+        } else if (c.replies) {
+          return { ...c, replies: updateReplies(c.replies) };
+        }
+        return c;
+      });
+      return {
+        ...prev,
+        [postId]: updateReplies(prev[postId] || [])
+      };
+    });
+    setReplyValue('');
   };
 
   return (
@@ -284,7 +380,22 @@ const Feed = () => {
           <Grid item xs={12} key={post.id}>
             <Card sx={{ borderRadius: 3, boxShadow: 2, bgcolor: '#fff' }}>
               <CardContent sx={{ p: 2 }}>
-                <Typography variant="body1" sx={{ whiteSpace: 'pre-line', bgcolor: post.bg || 'transparent', borderRadius: 2, p: post.bg ? 2 : 0, fontWeight: post.bg ? 600 : 400, fontSize: post.bg ? 20 : 16 }}>{post.text}</Typography>
+                {/* Текст поста с фоном */}
+                <Box
+                  sx={{
+                    background: post.bg || 'transparent',
+                    borderRadius: 2,
+                    p: post.bg ? 2 : 0,
+                    mb: 1,
+                    fontWeight: post.bg ? 600 : 400,
+                    fontSize: post.bg ? 20 : 16,
+                    whiteSpace: 'pre-line',
+                    color: post.bg ? '#222' : 'inherit',
+                    transition: 'background 0.3s'
+                  }}
+                >
+                  {post.text}
+                </Box>
                 {post.images.length > 0 && (
                   <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
                     {post.images.map((img, i) => (
@@ -309,6 +420,38 @@ const Feed = () => {
                 <Typography variant="caption" color="text.secondary">
                   Раздел: {SECTIONS.find(s => s.value === post.section)?.label || ''} | Приватность: {post.privacy === 'all' ? 'Все' : 'Только я'}
                 </Typography>
+                {/* Комментарии */}
+                <Divider sx={{ my: 2 }} />
+                <Box sx={{ mb: 1 }}>
+                  <Button size="small" sx={{ textTransform: 'none', color: 'primary.main', fontWeight: 500 }}>
+                    Комментировать ({(comments[post.id]?.length || 0)})
+                  </Button>
+                </Box>
+                {/* Список комментариев */}
+                <Box>
+                  {(comments[post.id] || []).map((comment, i) => (
+                    <Comment
+                      key={comment.id}
+                      comment={comment}
+                      onReply={() => {}}
+                      onSendReply={() => handleAddReply(post.id, comment.id, replyValue)}
+                      replyValue={replyValue}
+                      setReplyValue={setReplyValue}
+                    />
+                  ))}
+                </Box>
+                {/* Ввод нового комментария */}
+                <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+                  <Avatar sx={{ width: 28, height: 28, bgcolor: 'primary.main', fontSize: 16, mr: 1 }}>В</Avatar>
+                  <TextField
+                    size="small"
+                    placeholder="Написать комментарий..."
+                    value={commentValue[post.id] || ''}
+                    onChange={e => setCommentValue(prev => ({ ...prev, [post.id]: e.target.value }))}
+                    sx={{ bgcolor: '#f0f2f5', borderRadius: 2, flex: 1, mr: 1 }}
+                  />
+                  <Button variant="contained" size="small" onClick={() => handleAddComment(post.id)} disabled={!(commentValue[post.id] && commentValue[post.id].trim())}>Отправить</Button>
+                </Box>
               </CardContent>
             </Card>
           </Grid>
