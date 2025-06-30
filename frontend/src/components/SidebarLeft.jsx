@@ -4,7 +4,7 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import StarIcon from '@mui/icons-material/Star';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 
-const SidebarLeft = () => (
+const SidebarLeft = ({ onAIChatClick }) => (
   <Drawer
     variant="permanent"
     anchor="left"
@@ -20,7 +20,7 @@ const SidebarLeft = () => (
         <ListItemIcon><StarIcon /></ListItemIcon>
         <ListItemText primary="Избранное" />
       </ListItem>
-      <ListItem button>
+      <ListItem button onClick={onAIChatClick}>
         <ListItemIcon><SmartToyIcon /></ListItemIcon>
         <ListItemText primary="AI-чаты" />
       </ListItem>
