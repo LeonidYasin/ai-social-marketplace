@@ -17,8 +17,8 @@ const AIChat = ({ open, onClose }) => {
 
   return (
     <Slide direction="left" in={open} mountOnEnter unmountOnExit>
-      <Paper sx={{ position: 'absolute', right: 0, top: 0, width: 340, height: 400, zIndex: 10, display: open ? 'flex' : 'none', flexDirection: 'column', boxShadow: 6 }}>
-        <Box sx={{ p: 1, display: 'flex', alignItems: 'center', borderBottom: '1px solid #eee' }}>
+      <Paper sx={{ position: 'absolute', right: 0, top: 0, width: 340, height: 400, zIndex: 10, display: open ? 'flex' : 'none', flexDirection: 'column', boxShadow: 3, borderRadius: 3, bgcolor: '#fff' }}>
+        <Box sx={{ p: 1.5, display: 'flex', alignItems: 'center', borderBottom: '1px solid #eee' }}>
           <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>AI-чат</Typography>
           <IconButton size="small" onClick={onClose}><CloseIcon /></IconButton>
         </Box>
@@ -33,7 +33,7 @@ const AIChat = ({ open, onClose }) => {
             ))}
           </List>
         </Box>
-        <Box sx={{ p: 1, display: 'flex', alignItems: 'center', borderTop: '1px solid #eee' }}>
+        <Box sx={{ p: 1.5, display: 'flex', alignItems: 'center', borderTop: '1px solid #eee' }}>
           <TextField
             fullWidth
             size="small"

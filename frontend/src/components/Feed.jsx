@@ -40,12 +40,12 @@ const Feed = () => {
   return (
     <Box>
       {/* Facebook-style create post panel */}
-      <Card sx={{ mb: 3 }}>
-        <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+      <Card sx={{ mb: 3, bgcolor: '#fff', borderRadius: 3, boxShadow: 2 }}>
+        <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 2 }}>
           <Avatar sx={{ bgcolor: 'primary.main', width: 44, height: 44 }}>A</Avatar>
           <Button
             variant="outlined"
-            sx={{ borderRadius: 8, flex: 1, justifyContent: 'flex-start', color: 'text.secondary', bgcolor: '#f0f2f5', textTransform: 'none', pl: 2 }}
+            sx={{ borderRadius: 8, flex: 1, justifyContent: 'flex-start', color: 'text.secondary', bgcolor: '#f0f2f5', textTransform: 'none', pl: 2, boxShadow: 0 }}
             onClick={() => setOpen(true)}
           >
             Что у вас нового?
@@ -53,7 +53,8 @@ const Feed = () => {
         </CardContent>
       </Card>
       {/* Модальное окно создания поста */}
-      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
+      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth
+        PaperProps={{ sx: { borderRadius: 3, boxShadow: 3, bgcolor: '#fff' } }}>
         <DialogTitle sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           Создать пост
           <IconButton onClick={() => setOpen(false)}>
@@ -99,8 +100,8 @@ const Feed = () => {
       <Grid container spacing={2}>
         {posts.map(post => (
           <Grid item xs={12} key={post.id}>
-            <Card>
-              <CardContent>
+            <Card sx={{ borderRadius: 3, boxShadow: 2, bgcolor: '#fff' }}>
+              <CardContent sx={{ p: 2 }}>
                 <Typography variant="body1">{post.text}</Typography>
                 {post.images.length > 0 && (
                   <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
@@ -110,7 +111,7 @@ const Feed = () => {
                         component="img"
                         image={img}
                         alt="Фото поста"
-                        sx={{ width: 100, height: 100, objectFit: 'cover' }}
+                        sx={{ width: 100, height: 100, objectFit: 'cover', borderRadius: 2 }}
                       />
                     ))}
                   </Box>
