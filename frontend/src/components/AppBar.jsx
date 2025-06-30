@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, Box, IconButton, InputBase, Stack, Tooltip, alpha } from '@mui/material';
+import { AppBar, Toolbar, Box, IconButton, InputBase, Stack, Tooltip, alpha, Badge, Menu, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import ForumIcon from '@mui/icons-material/Forum';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
@@ -10,6 +10,10 @@ import HomeWorkIcon from '@mui/icons-material/HomeWork';
 import SearchIcon from '@mui/icons-material/Search';
 import ChatIcon from '@mui/icons-material/Chat';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import SettingsIcon from '@mui/icons-material/Settings';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const sections = [
   { key: 'home', label: 'Главная', icon: HomeIcon },
@@ -21,8 +25,26 @@ const sections = [
   { key: 'realty', label: 'Недвижимость', icon: HomeWorkIcon },
 ];
 
+const notifications = [
+  { id: 1, text: 'Новое сообщение от Анны' },
+  { id: 2, text: 'AI Ассистент ответил на ваш вопрос' },
+  { id: 3, text: 'Появился новый пост в "Продам"' },
+];
+
 const AppBarMain = () => {
   const [active, setActive] = useState('home');
+  const [notifAnchor, setNotifAnchor] = useState(null);
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [unread, setUnread] = useState(notifications.length);
+
+  const handleNotifClick = (event) => {
+    setNotifAnchor(event.currentTarget);
+    setUnread(0);
+  };
+  const handleNotifClose = () => setNotifAnchor(null);
+
+  const handleMenuClick = (event) => setMenuAnchor(event.currentTarget);
+  const handleMenuClose = () => setMenuAnchor(null);
 
   return (
     <AppBar position="fixed" color="default" elevation={1} sx={{ zIndex: 1201 }}>
@@ -59,7 +81,7 @@ const AppBarMain = () => {
             );
           })}
         </Stack>
-        {/* Справа: поиск, чаты, профиль */}
+        {/* Справа: поиск, чаты, уведомления, профиль, меню */}
         <Stack direction="row" alignItems="center" spacing={1}>
           <Box sx={{ position: 'relative', mr: 1 }}>
             <InputBase
@@ -74,11 +96,42 @@ const AppBarMain = () => {
               <ChatIcon />
             </IconButton>
           </Tooltip>
+          <Tooltip title="Уведомления">
+            <IconButton color="default" onClick={handleNotifClick}>
+              <Badge color="error" badgeContent={unread} invisible={unread === 0}>
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+          </Tooltip>
+          <Menu anchorEl={notifAnchor} open={!!notifAnchor} onClose={handleNotifClose} PaperProps={{ sx: { mt: 1, borderRadius: 2 } }}>
+            {notifications.length === 0 ? (
+              <MenuItem disabled>Нет новых уведомлений</MenuItem>
+            ) : (
+              notifications.map(n => (
+                <MenuItem key={n.id} onClick={handleNotifClose}>{n.text}</MenuItem>
+              ))
+            )}
+          </Menu>
           <Tooltip title="Профиль">
             <IconButton color="default">
               <AccountCircleIcon />
             </IconButton>
           </Tooltip>
+          <Tooltip title="Меню">
+            <IconButton color="default" onClick={handleMenuClick}>
+              <MoreVertIcon />
+            </IconButton>
+          </Tooltip>
+          <Menu anchorEl={menuAnchor} open={!!menuAnchor} onClose={handleMenuClose} PaperProps={{ sx: { mt: 1, borderRadius: 2 } }}>
+            <MenuItem onClick={handleMenuClose}>
+              <ListItemIcon><SettingsIcon fontSize="small" /></ListItemIcon>
+              <ListItemText primary="Настройки" />
+            </MenuItem>
+            <MenuItem onClick={handleMenuClose}>
+              <ListItemIcon><LogoutIcon fontSize="small" /></ListItemIcon>
+              <ListItemText primary="Выйти" />
+            </MenuItem>
+          </Menu>
         </Stack>
       </Toolbar>
     </AppBar>
