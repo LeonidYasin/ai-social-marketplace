@@ -18,6 +18,7 @@ import MoodBadIcon from '@mui/icons-material/MoodBad';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AddIcon from '@mui/icons-material/Add';
 import UserSettings from './UserSettings';
+import PostCard from './PostCard';
 
 const initialPosts = [
   { id: 1, text: 'Продаю iPhone 13', images: [], video: null, doc: null, bg: '', section: 'sell', privacy: 'all', reactions: { like: 3, love: 2, laugh: 1, wow: 0, sad: 0, angry: 0 } },
@@ -145,7 +146,7 @@ const Comment = ({ comment, onReply, onSendReply, replyValue, setReplyValue, dep
   );
 };
 
-const Feed = ({ onDataUpdate }) => {
+const Feed = ({ onDataUpdate, currentUser }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const isSmallMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -270,6 +271,7 @@ const Feed = ({ onDataUpdate }) => {
       reactions: { like: 0, love: 0, laugh: 0, wow: 0, sad: 0, angry: 0 },
       author: fakeUsers[Math.floor(Math.random() * fakeUsers.length)],
       timestamp: new Date(),
+      createdAt: new Date().toISOString(),
     };
 
     setPosts(prev => [newPost, ...prev.slice(0, 9)]); // Добавляем новый пост, убираем старые
@@ -372,6 +374,7 @@ const Feed = ({ onDataUpdate }) => {
     setPosts([
       {
         id: Date.now(),
+        userId: currentUser?.id,
         text: aiDialog ? aiDialog.map(m => (m.isUser ? 'Вы: ' : 'AI: ') + m.text).join('\n') : text,
         images: images.map(f => URL.createObjectURL(f)),
         video: video ? URL.createObjectURL(video) : null,
@@ -380,6 +383,7 @@ const Feed = ({ onDataUpdate }) => {
         section,
         privacy,
         reactions: { like: 0, love: 0, laugh: 0, wow: 0, sad: 0, angry: 0 },
+        createdAt: new Date().toISOString(),
       },
       ...posts,
     ]);
@@ -1086,320 +1090,7 @@ const Feed = ({ onDataUpdate }) => {
       <Grid container spacing={isMobile ? 1 : 2}>
         {filteredPosts.map(post => (
           <Grid item xs={12} key={post.id}>
-            <Card sx={{ borderRadius: isMobile ? 2 : 3, boxShadow: isMobile ? 1 : 2, bgcolor: '#fff' }}>
-              <CardContent sx={{ p: isMobile ? 1.5 : 2 }}>
-                {/* Заголовок поста с автором */}
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: isMobile ? 1.5 : 2 }}>
-                  <Avatar sx={{ bgcolor: 'primary.main', width: isMobile ? 32 : 40, height: isMobile ? 32 : 40, mr: isMobile ? 1 : 2 }}>
-                    {post.author ? post.author[0] : 'П'}
-                  </Avatar>
-                  <Box sx={{ flex: 1, minWidth: 0 }}>
-                    <Typography variant={isMobile ? "body2" : "subtitle1"} sx={{ fontWeight: 600, fontSize: isMobile ? 14 : 16 }}>
-                      {post.author || 'Пользователь'}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary" sx={{ fontSize: isMobile ? '0.7rem' : '0.75rem' }}>
-                      {post.timestamp ? new Date(post.timestamp).toLocaleString() : 'Только что'} • {SECTIONS.find(s => s.value === post.section)?.label || ''}
-                    </Typography>
-                  </Box>
-                </Box>
-
-                {/* Текст поста с фоном */}
-                <Box
-                  sx={{
-                    background: post.bg || 'transparent',
-                    borderRadius: 2,
-                    p: post.bg ? (isMobile ? 1.5 : 2) : 0,
-                    mb: 1,
-                    fontWeight: post.bg ? 600 : 400,
-                    fontSize: post.bg ? (isMobile ? 18 : 20) : (isMobile ? 14 : 16),
-                    whiteSpace: 'pre-line',
-                    color: post.bg ? '#222' : 'inherit',
-                    transition: 'background 0.3s'
-                  }}
-                >
-                  {post.text}
-                </Box>
-                {post.images.length > 0 && (
-                  <Box sx={{ display: 'flex', gap: 1, mt: 1, flexWrap: 'wrap', flexDirection: 'row' }}>
-                    {post.images.map((img, i) => (
-                      <Box
-                        key={i}
-                        sx={{
-                          flex: '1 1 100%',
-                          maxWidth: '100%',
-                          mb: 1,
-                          cursor: 'pointer',
-                          position: 'relative',
-                          '&:hover::after': {
-                            content: '""',
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            width: '100%',
-                            height: '100%',
-                            bgcolor: 'rgba(0,0,0,0.08)',
-                            borderRadius: 2,
-                          },
-                        }}
-                        onClick={() => {
-                          setLightboxImages(post.images);
-                          setLightboxIndex(i);
-                          setLightboxOpen(true);
-                        }}
-                      >
-                        <img
-                          src={img}
-                          alt="Фото поста"
-                          style={{
-                            width: '100%',
-                            maxHeight: 400,
-                            objectFit: 'contain',
-                            borderRadius: 8,
-                            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                            background: '#f5f5f5',
-                            display: 'block',
-                          }}
-                        />
-                      </Box>
-                    ))}
-                  </Box>
-                )}
-                {post.video && (
-                  <Box sx={{ mt: 1 }}>
-                    <video 
-                      src={post.video} 
-                      controls 
-                      style={{ 
-                        width: isMobile ? '100%' : 200, 
-                        borderRadius: isMobile ? 4 : 8,
-                        maxWidth: '100%'
-                      }} 
-                    />
-                  </Box>
-                )}
-                {post.doc && (
-                  <Typography variant="caption" color="primary" sx={{ display: 'block', mt: 1, fontSize: isMobile ? '0.7rem' : '0.75rem' }}>
-                    Документ: {post.doc}
-                  </Typography>
-                )}
-                <Typography variant="caption" color="text.secondary">
-                  Раздел: {SECTIONS.find(s => s.value === post.section)?.label || ''} | Приватность: {post.privacy === 'all' ? 'Все' : 'Только я'}
-                </Typography>
-                {/* Реакции постов */}
-                <Divider sx={{ my: 2 }} />
-                {/* Статистика реакций */}
-                {userSettings?.filters?.showReactions !== false && getTotalReactions(post.reactions) > 0 && (
-                  <Box sx={{ mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                      {getMainReaction(post.reactions) && (
-                        <Typography sx={{ fontSize: 16 }}>
-                          {REACTIONS[getMainReaction(post.reactions)].icon}
-                        </Typography>
-                      )}
-                      <Typography variant="caption" color="text.secondary">
-                        {getTotalReactions(post.reactions)} {getTotalReactions(post.reactions) === 1 ? 'реакция' : getTotalReactions(post.reactions) < 5 ? 'реакции' : 'реакций'}
-                      </Typography>
-                    </Box>
-                  </Box>
-                )}
-                {userSettings?.filters?.showReactions !== false && (
-                  <Stack direction="row" spacing={isMobile ? 1 : 2} alignItems="center" sx={{ mb: 1, flexWrap: 'wrap' }}>
-                    {/* Кнопка быстрой реакции (основная) */}
-                    <Button
-                      size={isMobile ? "small" : "medium"}
-                      disabled={reactionLoading[post.id]}
-                      startIcon={
-                        <Box sx={{ position: 'relative' }}>
-                          <Typography sx={{ fontSize: isMobile ? 18 : 20 }}>
-                            {userReactions[post.id] ? REACTIONS[userReactions[post.id]].icon : '👍'}
-                          </Typography>
-                          {/* Анимация при новой реакции */}
-                          {reactionAnimations[post.id]?.active && (
-                            <Typography 
-                              sx={{ 
-                                position: 'absolute',
-                                top: -20,
-                                left: 0,
-                                fontSize: isMobile ? 20 : 24,
-                                animation: 'reactionFloat 0.8s ease-out',
-                                '@keyframes reactionFloat': {
-                                  '0%': { transform: 'translateY(0) scale(1)', opacity: 1 },
-                                  '100%': { transform: 'translateY(-30px) scale(1.5)', opacity: 0 },
-                                }
-                              }}
-                            >
-                              {REACTIONS[reactionAnimations[post.id].reaction].icon}
-                            </Typography>
-                          )}
-                        </Box>
-                      }
-                      onClick={(e) => {
-                        if (userReactions[post.id]) {
-                          handleReaction(post.id, userReactions[post.id]);
-                        } else {
-                          handleReactionClick(e, post.id);
-                        }
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!userReactions[post.id]) {
-                          handleReactionClick(e, post.id);
-                        }
-                      }}
-                      sx={{
-                        textTransform: 'none',
-                        color: userReactions[post.id] ? REACTIONS[userReactions[post.id]].color : 'text.secondary',
-                        fontWeight: userReactions[post.id] ? 600 : 400,
-                        transition: 'all 0.2s ease-in-out',
-                        borderRadius: 2,
-                        px: isMobile ? 1.5 : 2,
-                        py: isMobile ? 0.25 : 0.5,
-                        fontSize: isMobile ? '0.75rem' : '0.875rem',
-                        bgcolor: userReactions[post.id] ? `${REACTIONS[userReactions[post.id]].color}20` : 'transparent',
-                        '&:hover': { 
-                          transform: reactionLoading[post.id] ? 'none' : 'scale(1.05)',
-                          bgcolor: userReactions[post.id] ? `${REACTIONS[userReactions[post.id]].color}30` : 'grey.100',
-                          boxShadow: reactionLoading[post.id] ? 0 : 1,
-                        },
-                        '&:active': {
-                          transform: reactionLoading[post.id] ? 'none' : 'scale(0.95)',
-                        },
-                        '&:disabled': {
-                          opacity: 0.6,
-                          cursor: 'not-allowed',
-                        },
-                      }}
-                    >
-                      {reactionLoading[post.id] ? '...' : (userReactions[post.id] ? REACTIONS[userReactions[post.id]].label : 'Нравится')}
-                    </Button>
-
-                    {/* Поповер с выбором реакций */}
-                    <Popover
-                      open={Boolean(reactionAnchor[post.id])}
-                      anchorEl={reactionAnchor[post.id]}
-                      onClose={() => handleReactionClose(post.id)}
-                      anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left',
-                      }}
-                      transformOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                      }}
-                      PaperProps={{
-                        sx: {
-                          borderRadius: 3,
-                          boxShadow: 3,
-                          bgcolor: '#fff',
-                          p: 1,
-                        }
-                      }}
-                    >
-                      <Stack direction="row" spacing={1}>
-                        {Object.entries(REACTIONS).map(([key, reaction]) => (
-                          <Tooltip key={key} title={reaction.label} placement="top">
-                            <IconButton
-                              size="small"
-                              onClick={() => {
-                                handleReaction(post.id, key);
-                                handleReactionClose(post.id);
-                              }}
-                              sx={{
-                                width: isMobile ? 36 : 40,
-                                height: isMobile ? 36 : 40,
-                                transition: 'all 0.2s',
-                                '&:hover': {
-                                  transform: 'scale(1.2)',
-                                  bgcolor: `${reaction.color}20`,
-                                },
-                                '&:active': {
-                                  transform: 'scale(0.9)',
-                                },
-                              }}
-                            >
-                              <Typography sx={{ fontSize: isMobile ? 18 : 20 }}>
-                                {reaction.icon}
-                              </Typography>
-                            </IconButton>
-                          </Tooltip>
-                        ))}
-                      </Stack>
-                    </Popover>
-
-                    {/* Комментарии */}
-                    {userSettings?.filters?.showComments !== false && (
-                      <>
-                        <Divider sx={{ my: isMobile ? 1.5 : 2 }} />
-                        <Box sx={{ mb: 1 }}>
-                          <Button 
-                            size={isMobile ? "small" : "medium"} 
-                            sx={{ 
-                              textTransform: 'none', 
-                              color: 'primary.main', 
-                              fontWeight: 500,
-                              fontSize: isMobile ? '0.75rem' : '0.875rem'
-                            }}
-                          >
-                            {isMobile ? `💬 (${(comments[post.id]?.length || 0)})` : `Комментировать (${(comments[post.id]?.length || 0)})`}
-                          </Button>
-                        </Box>
-                        {/* Список комментариев */}
-                        <Box>
-                          {(comments[post.id] || []).map((comment, i) => (
-                            <Comment
-                              key={comment.id}
-                              comment={comment}
-                              onReply={() => {}}
-                              onSendReply={() => handleAddReply(post.id, comment.id, replyValue)}
-                              replyValue={replyValue}
-                              setReplyValue={setReplyValue}
-                              onLikeComment={handleLikeComment}
-                            />
-                          ))}
-                        </Box>
-                        {/* Ввод нового комментария */}
-                        <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: isMobile ? 0.5 : 1 }}>
-                          <Avatar sx={{ 
-                            width: isMobile ? 24 : 28, 
-                            height: isMobile ? 24 : 28, 
-                            bgcolor: 'primary.main', 
-                            fontSize: isMobile ? 12 : 16 
-                          }}>
-                            {userSettings?.profile?.name?.[0] || 'В'}
-                          </Avatar>
-                          <TextField
-                            size={isMobile ? "small" : "medium"}
-                            placeholder="Написать комментарий..."
-                            value={commentValue[post.id] || ''}
-                            onChange={e => setCommentValue(prev => ({ ...prev, [post.id]: e.target.value }))}
-                            sx={{ 
-                              bgcolor: '#f0f2f5', 
-                              borderRadius: 2, 
-                              flex: 1,
-                              '& .MuiInputBase-input': {
-                                fontSize: isMobile ? '0.875rem' : '1rem',
-                                padding: isMobile ? '8px 12px' : '12px 16px',
-                              }
-                            }}
-                          />
-                          <Button 
-                            variant="contained" 
-                            size={isMobile ? "small" : "medium"} 
-                            onClick={() => handleAddComment(post.id)} 
-                            disabled={!(commentValue[post.id] && commentValue[post.id].trim())}
-                            sx={{ 
-                              fontSize: isMobile ? '0.75rem' : '0.875rem',
-                              px: isMobile ? 1 : 2
-                            }}
-                          >
-                            {isMobile ? 'Отпр' : 'Отправить'}
-                          </Button>
-                        </Box>
-                      </>
-                    )}
-                  </Stack>
-                )}
-              </CardContent>
-            </Card>
+            <PostCard post={post} compact={false} />
           </Grid>
         ))}
       </Grid>

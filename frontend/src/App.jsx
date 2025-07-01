@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import AppBarMain from './components/AppBar';
 import SidebarLeft from './components/SidebarLeft';
@@ -9,6 +9,7 @@ import Analytics from './components/Analytics';
 import SearchDialog from './components/Search';
 import NotificationsManager from './components/Notifications';
 import Gamification from './components/Gamification';
+import UserSettings from './components/UserSettings';
 
 const USERS = [
   { id: 'ai', name: 'AI Ассистент', isAI: true },
@@ -29,6 +30,21 @@ const App = ({ themeMode, onThemeToggle }) => {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [gamificationOpen, setGamificationOpen] = useState(false);
   const [feedData, setFeedData] = useState({ posts: [], userReactions: {}, comments: {} });
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(true);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('currentUser');
+    console.log('LOADING USER FROM STORAGE:', saved);
+    if (saved) setCurrentUser(JSON.parse(saved));
+    setLoadingUser(false);
+  }, []);
+
+  useEffect(() => {
+    console.log('CURRENT USER CHANGED:', currentUser);
+    if (!loadingUser && !currentUser) setSettingsOpen(true);
+  }, [loadingUser, currentUser]);
 
   // Открыть чат с пользователем
   const openChat = (userId) => {
@@ -73,6 +89,8 @@ const App = ({ themeMode, onThemeToggle }) => {
       );
   }, [chats, searchChat]);
 
+  if (loadingUser) return null;
+
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: '#f0f2f5' }}>
       <Box sx={{ display: 'flex' }}>
@@ -81,6 +99,8 @@ const App = ({ themeMode, onThemeToggle }) => {
           onSearchOpen={() => setSearchOpen(true)} 
           onNotificationsOpen={() => setNotificationsOpen(true)} 
           onGamificationOpen={() => setGamificationOpen(true)} 
+          onUserSettingsOpen={() => setSettingsOpen(true)}
+          currentUser={currentUser}
         />
         <SidebarLeft
           chatList={chatList}
@@ -89,7 +109,7 @@ const App = ({ themeMode, onThemeToggle }) => {
           setSearchChat={setSearchChat}
         />
         <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8, mb: 2, position: 'relative' }}>
-          <Feed onDataUpdate={setFeedData} />
+          <Feed onDataUpdate={setFeedData} currentUser={currentUser} />
           {activeChatId && (
             <ChatDialog
               open={!!activeChatId}
@@ -129,6 +149,7 @@ const App = ({ themeMode, onThemeToggle }) => {
       <NotificationsManager
         open={notificationsOpen}
         onClose={() => setNotificationsOpen(false)}
+        currentUser={currentUser}
       />
       
       {/* Гамификация */}
@@ -143,6 +164,13 @@ const App = ({ themeMode, onThemeToggle }) => {
           totalViews: 1234, // TODO: Добавить просмотры
           soldItems: 2, // TODO: Добавить продажи
         }}
+      />
+      {/* Настройки пользователя и mock-логин */}
+      <UserSettings
+        open={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        onUserChange={setCurrentUser}
+        posts={feedData.posts}
       />
     </Box>
   );

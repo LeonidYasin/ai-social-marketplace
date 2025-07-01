@@ -21,6 +21,7 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import SearchDialog from './Search';
 import NotificationsManager from './Notifications';
 import Gamification from './Gamification';
+import Avatar from '@mui/material/Avatar';
 
 const sections = [
   { key: 'home', label: 'Главная', icon: HomeIcon },
@@ -38,7 +39,7 @@ const notifications = [
   { id: 3, text: 'Появился новый пост в "Продам"' },
 ];
 
-const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGamificationOpen }) => {
+const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGamificationOpen, onUserSettingsOpen, currentUser }) => {
   const theme = useTheme();
   const [active, setActive] = useState('home');
   const [notifAnchor, setNotifAnchor] = useState(null);
@@ -154,9 +155,15 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
               ))
             )}
           </Menu>
-          <Tooltip title="Профиль">
-            <IconButton color="default">
-              <AccountCircleIcon />
+          <Tooltip title={currentUser && currentUser.name ? currentUser.name : 'Войти'}>
+            <IconButton color="default" onClick={onUserSettingsOpen}>
+              {currentUser && currentUser.name ? (
+                <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.main', fontSize: 18 }} src={currentUser.avatar}>
+                  {currentUser.name[0]}
+                </Avatar>
+              ) : (
+                <AccountCircleIcon />
+              )}
             </IconButton>
           </Tooltip>
           <Tooltip title="Меню">

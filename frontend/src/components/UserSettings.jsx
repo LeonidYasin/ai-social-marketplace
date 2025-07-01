@@ -38,7 +38,11 @@ import {
   DarkMode as DarkModeIcon,
   LightMode as LightModeIcon,
   ColorLens as ColorLensIcon,
+  Edit as EditIcon,
 } from '@mui/icons-material';
+import { v4 as uuidv4 } from 'uuid';
+import DialogContentText from '@mui/material/DialogContentText';
+import PostCard from './PostCard';
 
 // Темы оформления
 const THEMES = {
@@ -69,7 +73,21 @@ const NOTIFICATION_TYPES = [
   { key: 'aiChat', label: 'AI чат', description: 'Уведомления от AI ассистента' },
 ];
 
-const UserSettings = ({ open, onClose, onSettingsChange }) => {
+const MOCK_USERS = [
+  { id: 'anna', name: 'Анна', avatar: '', email: 'anna@example.com' },
+  { id: 'ivan', name: 'Иван', avatar: '', email: 'ivan@example.com' },
+  { id: 'petr', name: 'Петр', avatar: '', email: 'petr@example.com' },
+  { id: 'ai', name: 'AI Ассистент', avatar: '', email: 'ai@ai.com' },
+];
+
+// Mock posts for demo
+const MOCK_POSTS = [
+  { id: '1', userId: 'anna', text: 'Мой первый пост!', createdAt: '2024-05-01', images: [] },
+  { id: '2', userId: 'ivan', text: 'Продаю велосипед', createdAt: '2024-05-02', images: [] },
+  { id: '3', userId: 'anna', text: 'Куплю ноутбук', createdAt: '2024-05-03', images: [] },
+];
+
+const UserSettings = ({ open, onClose, onUserChange, posts = [] }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [profile, setProfile] = useState({
     name: 'Александр',
@@ -93,6 +111,15 @@ const UserSettings = ({ open, onClose, onSettingsChange }) => {
     showComments: true,
     minReactions: 0,
   });
+  const [currentUser, setCurrentUser] = useState(null);
+  const [selectOpen, setSelectOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState('');
+  const [registerName, setRegisterName] = useState('');
+  const [registerEmail, setRegisterEmail] = useState('');
+  const [logoutConfirm, setLogoutConfirm] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [editName, setEditName] = useState('');
+  const [editEmail, setEditEmail] = useState('');
 
   // Загрузка настроек из localStorage
   useEffect(() => {
@@ -107,6 +134,14 @@ const UserSettings = ({ open, onClose, onSettingsChange }) => {
     }
   }, []);
 
+  useEffect(() => {
+    const saved = localStorage.getItem('currentUser');
+    if (saved) {
+      setCurrentUser(JSON.parse(saved));
+      setSelectedUserId(JSON.parse(saved).id);
+    }
+  }, [open]);
+
   // Сохранение настроек в localStorage
   useEffect(() => {
     const settings = {
@@ -117,11 +152,6 @@ const UserSettings = ({ open, onClose, onSettingsChange }) => {
       filters,
     };
     localStorage.setItem('userSettings', JSON.stringify(settings));
-    
-    // Уведомляем родительский компонент об изменениях
-    if (onSettingsChange) {
-      onSettingsChange(settings);
-    }
   }, [profile, theme, primaryColor, notifications, filters]);
 
   const handleAvatarChange = (event) => {
@@ -170,6 +200,64 @@ const UserSettings = ({ open, onClose, onSettingsChange }) => {
       return { ...prev, sections: newSections.length === 0 ? ['all'] : newSections };
     });
   };
+
+  const handleUserSelect = (e) => {
+    const user = MOCK_USERS.find(u => u.id === e.target.value);
+    setCurrentUser(user);
+    setSelectedUserId(user.id);
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    if (onUserChange) onUserChange(user);
+  };
+
+  const handleLogout = () => {
+    setLogoutConfirm(true);
+  };
+
+  const confirmLogout = () => {
+    setCurrentUser(null);
+    setSelectedUserId('');
+    localStorage.removeItem('currentUser');
+    if (onUserChange) onUserChange(null);
+    setLogoutConfirm(false);
+    setRegisterName('');
+    setRegisterEmail('');
+  };
+
+  const cancelLogout = () => setLogoutConfirm(false);
+
+  const handleRegister = () => {
+    if (!registerName) return;
+    const newUser = {
+      id: uuidv4(),
+      name: registerName,
+      avatar: '',
+      email: registerEmail || '',
+    };
+    setCurrentUser(newUser);
+    setSelectedUserId(newUser.id);
+    localStorage.setItem('currentUser', JSON.stringify(newUser));
+    if (onUserChange) onUserChange(newUser);
+    setRegisterName('');
+    setRegisterEmail('');
+  };
+
+  // --- Profile Edit ---
+  const startEdit = () => {
+    setEditName(currentUser.name);
+    setEditEmail(currentUser.email);
+    setEditMode(true);
+  };
+  const saveEdit = () => {
+    const updated = { ...currentUser, name: editName, email: editEmail };
+    setCurrentUser(updated);
+    localStorage.setItem('currentUser', JSON.stringify(updated));
+    if (onUserChange) onUserChange(updated);
+    setEditMode(false);
+  };
+  const cancelEdit = () => setEditMode(false);
+
+  // --- My Posts ---
+  const myPosts = currentUser ? posts.filter(p => p.userId === currentUser.id) : [];
 
   const renderProfileTab = () => (
     <Box>
@@ -413,43 +501,140 @@ const UserSettings = ({ open, onClose, onSettingsChange }) => {
   ];
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <SettingsIcon />
-          <Typography variant="h6">Настройки</Typography>
-        </Box>
-        <IconButton onClick={onClose}>
-          <CloseIcon />
-        </IconButton>
-      </DialogTitle>
-      
-      <DialogContent sx={{ p: 0 }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)}>
-            {tabs.map((tab, index) => (
-              <Tab
-                key={index}
-                label={tab.label}
-                icon={tab.icon}
-                iconPosition="start"
-                sx={{ textTransform: 'none' }}
-              />
-            ))}
-          </Tabs>
-        </Box>
-        
-        <Box sx={{ p: 3 }}>
-          {tabs[activeTab].content}
-        </Box>
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+      <DialogTitle>Профиль пользователя</DialogTitle>
+      <DialogContent>
+        {currentUser ? (
+          <>
+            <Tabs value={activeTab} onChange={(e, v) => setActiveTab(v)} sx={{ mb: 2 }}>
+              <Tab label="Профиль" />
+              <Tab label="Мои посты" />
+              <Tab label="Достижения" />
+              <Tab label="Настройки" />
+            </Tabs>
+            {activeTab === 0 && (
+              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, mt: 1 }}>
+                <Avatar sx={{ width: 64, height: 64, mb: 1 }} src={currentUser.avatar}>
+                  {currentUser.name[0]}
+                </Avatar>
+                {editMode ? (
+                  <>
+                    <TextField label="Имя" value={editName} onChange={e => setEditName(e.target.value)} fullWidth sx={{ mb: 2 }} />
+                    <TextField label="Email" value={editEmail} onChange={e => setEditEmail(e.target.value)} fullWidth sx={{ mb: 2 }} />
+                    <Stack direction="row" spacing={2}>
+                      <Button variant="contained" onClick={saveEdit} disabled={!editName}>Сохранить</Button>
+                      <Button onClick={cancelEdit}>Отмена</Button>
+                    </Stack>
+                  </>
+                ) : (
+                  <>
+                    <Typography variant="h6">{currentUser.name}</Typography>
+                    <Typography variant="body2" color="text.secondary">{currentUser.email}</Typography>
+                    <Button startIcon={<EditIcon />} onClick={startEdit} sx={{ mt: 1 }}>Редактировать</Button>
+                  </>
+                )}
+                <Button variant="outlined" color="primary" onClick={() => setSelectOpen(true)} sx={{ mt: 2 }}>
+                  Сменить пользователя
+                </Button>
+                <Button variant="text" color="error" onClick={handleLogout} sx={{ mt: 1 }}>
+                  Выйти
+                </Button>
+              </Box>
+            )}
+            {activeTab === 1 && (
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="h6" sx={{ mb: 2 }}>Мои посты</Typography>
+                {myPosts.length === 0 ? (
+                  <Typography color="text.secondary">У вас пока нет постов.</Typography>
+                ) : (
+                  myPosts.map(post => (
+                    <PostCard key={post.id} post={post} compact={true} />
+                  ))
+                )}
+              </Box>
+            )}
+            {activeTab === 2 && (
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="h6">Достижения</Typography>
+                <Typography color="text.secondary">(Здесь будут ваши достижения и уровень)</Typography>
+              </Box>
+            )}
+            {activeTab === 3 && (
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="h6">Настройки</Typography>
+                <Typography color="text.secondary">(Здесь будут настройки профиля и приватности)</Typography>
+              </Box>
+            )}
+          </>
+        ) : (
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, mt: 2 }}>
+            <Typography variant="body1" sx={{ mb: 2 }}>Регистрация нового пользователя</Typography>
+            <TextField
+              label="Имя"
+              value={registerName}
+              onChange={e => setRegisterName(e.target.value)}
+              fullWidth
+              sx={{ mb: 2 }}
+              autoFocus
+            />
+            <TextField
+              label="Email (необязательно)"
+              value={registerEmail}
+              onChange={e => setRegisterEmail(e.target.value)}
+              fullWidth
+              sx={{ mb: 2 }}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleRegister}
+              disabled={!registerName}
+              fullWidth
+            >
+              Зарегистрироваться
+            </Button>
+          </Box>
+        )}
       </DialogContent>
-      
       <DialogActions>
-        <Button onClick={onClose}>Отмена</Button>
-        <Button variant="contained" onClick={onClose}>
-          Сохранить
-        </Button>
+        <Button onClick={onClose}>Закрыть</Button>
       </DialogActions>
+      {/* Диалог подтверждения выхода */}
+      <Dialog open={logoutConfirm} onClose={cancelLogout}>
+        <DialogTitle>Выйти из аккаунта?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Вы уверены, что хотите выйти? Для продолжения потребуется выбрать или зарегистрировать нового пользователя.</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={cancelLogout}>Отмена</Button>
+          <Button onClick={confirmLogout} color="error">Выйти</Button>
+        </DialogActions>
+      </Dialog>
+      {/* Диалог выбора пользователя (оставляем как есть) */}
+      <Dialog open={selectOpen} onClose={() => setSelectOpen(false)} maxWidth="xs" fullWidth>
+        <DialogTitle>Сменить пользователя</DialogTitle>
+        <DialogContent>
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel id="user-switch-label">Пользователь</InputLabel>
+            <Select
+              labelId="user-switch-label"
+              value={selectedUserId}
+              label="Пользователь"
+              onChange={(e) => {
+                handleUserSelect(e);
+                setSelectOpen(false);
+              }}
+            >
+              {MOCK_USERS.map(user => (
+                <MenuItem key={user.id} value={user.id}>{user.name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setSelectOpen(false)}>Отмена</Button>
+        </DialogActions>
+      </Dialog>
     </Dialog>
   );
 };
