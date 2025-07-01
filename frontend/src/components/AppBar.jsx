@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, Box, IconButton, InputBase, Stack, Tooltip, alpha, Badge, Menu, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
+import { AppBar, Toolbar, Box, IconButton, InputBase, Stack, Tooltip, alpha, Badge, Menu, MenuItem, ListItemIcon, ListItemText, useTheme } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import ForumIcon from '@mui/icons-material/Forum';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
@@ -14,6 +14,13 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import SearchDialog from './Search';
+import NotificationsManager from './Notifications';
+import Gamification from './Gamification';
 
 const sections = [
   { key: 'home', label: 'Главная', icon: HomeIcon },
@@ -31,7 +38,8 @@ const notifications = [
   { id: 3, text: 'Появился новый пост в "Продам"' },
 ];
 
-const AppBarMain = () => {
+const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGamificationOpen }) => {
+  const theme = useTheme();
   const [active, setActive] = useState('home');
   const [notifAnchor, setNotifAnchor] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
@@ -86,8 +94,23 @@ const AppBarMain = () => {
           <Box sx={{ position: 'relative', mr: 1 }}>
             <InputBase
               placeholder="Поиск..."
-              sx={{ bgcolor: '#f0f2f5', pl: 4, pr: 2, py: 0.5, borderRadius: 2, width: 180 }}
-              inputProps={{ 'aria-label': 'search' }}
+              onClick={onSearchOpen}
+              sx={{ 
+                bgcolor: '#f0f2f5', 
+                pl: 4, 
+                pr: 2, 
+                py: 0.5, 
+                borderRadius: 2, 
+                width: 180,
+                cursor: 'pointer',
+                '&:hover': {
+                  bgcolor: '#e4e6eb',
+                }
+              }}
+              inputProps={{ 
+                'aria-label': 'search',
+                readOnly: true,
+              }}
             />
             <SearchIcon sx={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', color: 'grey.500' }} />
           </Box>
@@ -96,11 +119,30 @@ const AppBarMain = () => {
               <ChatIcon />
             </IconButton>
           </Tooltip>
+          <Tooltip title="Аналитика">
+            <IconButton color="default" onClick={onAnalyticsOpen}>
+              <TrendingUpIcon />
+            </IconButton>
+          </Tooltip>
           <Tooltip title="Уведомления">
-            <IconButton color="default" onClick={handleNotifClick}>
+            <IconButton color="default" onClick={onNotificationsOpen}>
               <Badge color="error" badgeContent={unread} invisible={unread === 0}>
                 <NotificationsIcon />
               </Badge>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title={theme.palette.mode === 'light' ? 'Темная тема' : 'Светлая тема'}>
+            <IconButton 
+              color="default" 
+              onClick={() => window.toggleTheme()}
+              sx={{
+                transition: 'transform 0.2s',
+                '&:hover': {
+                  transform: 'rotate(180deg)',
+                }
+              }}
+            >
+              {theme.palette.mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
             </IconButton>
           </Tooltip>
           <Menu anchorEl={notifAnchor} open={!!notifAnchor} onClose={handleNotifClose} PaperProps={{ sx: { mt: 1, borderRadius: 2 } }}>
@@ -123,6 +165,10 @@ const AppBarMain = () => {
             </IconButton>
           </Tooltip>
           <Menu anchorEl={menuAnchor} open={!!menuAnchor} onClose={handleMenuClose} PaperProps={{ sx: { mt: 1, borderRadius: 2 } }}>
+            <MenuItem onClick={onGamificationOpen}>
+              <ListItemIcon><EmojiEventsIcon fontSize="small" /></ListItemIcon>
+              <ListItemText primary="Гамификация" />
+            </MenuItem>
             <MenuItem onClick={handleMenuClose}>
               <ListItemIcon><SettingsIcon fontSize="small" /></ListItemIcon>
               <ListItemText primary="Настройки" />

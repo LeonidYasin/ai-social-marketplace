@@ -1,10 +1,14 @@
 import React, { useState, useMemo } from 'react';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import AppBarMain from './components/AppBar';
 import SidebarLeft from './components/SidebarLeft';
 import SidebarRight from './components/SidebarRight';
 import Feed from './components/Feed';
 import ChatDialog from './components/ChatDialog';
+import Analytics from './components/Analytics';
+import SearchDialog from './components/Search';
+import NotificationsManager from './components/Notifications';
+import Gamification from './components/Gamification';
 
 const USERS = [
   { id: 'ai', name: 'AI Ассистент', isAI: true },
@@ -13,13 +17,18 @@ const USERS = [
   { id: 'petr', name: 'Петр', isAI: false },
 ];
 
-const App = () => {
+const App = ({ themeMode, onThemeToggle }) => {
   // Чаты: { userId, messages: [{text, isUser, timestamp}] }
   const [chats, setChats] = useState({
     ai: { userId: 'ai', messages: [ { text: 'Здравствуйте! Чем могу помочь?', isUser: false, timestamp: Date.now() } ] },
   });
   const [activeChatId, setActiveChatId] = useState(null);
   const [searchChat, setSearchChat] = useState('');
+  const [analyticsOpen, setAnalyticsOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [gamificationOpen, setGamificationOpen] = useState(false);
+  const [feedData, setFeedData] = useState({ posts: [], userReactions: {}, comments: {} });
 
   // Открыть чат с пользователем
   const openChat = (userId) => {
@@ -67,7 +76,12 @@ const App = () => {
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: '#f0f2f5' }}>
       <Box sx={{ display: 'flex' }}>
-        <AppBarMain />
+        <AppBarMain 
+          onAnalyticsOpen={() => setAnalyticsOpen(true)} 
+          onSearchOpen={() => setSearchOpen(true)} 
+          onNotificationsOpen={() => setNotificationsOpen(true)} 
+          onGamificationOpen={() => setGamificationOpen(true)} 
+        />
         <SidebarLeft
           chatList={chatList}
           onChatClick={setActiveChatId}
@@ -75,7 +89,7 @@ const App = () => {
           setSearchChat={setSearchChat}
         />
         <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8, mb: 2, position: 'relative' }}>
-          <Feed />
+          <Feed onDataUpdate={setFeedData} />
           {activeChatId && (
             <ChatDialog
               open={!!activeChatId}
@@ -91,6 +105,45 @@ const App = () => {
           onUserClick={openChat}
         />
       </Box>
+      
+      {/* Аналитика */}
+      <Analytics
+        open={analyticsOpen}
+        onClose={() => setAnalyticsOpen(false)}
+        posts={feedData.posts}
+        userReactions={feedData.userReactions}
+        comments={feedData.comments}
+      />
+      
+      {/* Поиск */}
+      <SearchDialog
+        open={searchOpen}
+        onClose={() => setSearchOpen(false)}
+        onSearchResult={(results) => {
+          console.log('Search results:', results);
+          // TODO: Обработать результаты поиска
+        }}
+      />
+      
+      {/* Уведомления */}
+      <NotificationsManager
+        open={notificationsOpen}
+        onClose={() => setNotificationsOpen(false)}
+      />
+      
+      {/* Гамификация */}
+      <Gamification
+        open={gamificationOpen}
+        onClose={() => setGamificationOpen(false)}
+        userStats={{
+          totalPosts: feedData.posts.length,
+          totalReactions: Object.values(feedData.userReactions).filter(r => r).length,
+          totalComments: Object.values(feedData.comments).flat().length,
+          totalXP: 450, // TODO: Рассчитывать на основе достижений
+          totalViews: 1234, // TODO: Добавить просмотры
+          soldItems: 2, // TODO: Добавить продажи
+        }}
+      />
     </Box>
   );
 };
