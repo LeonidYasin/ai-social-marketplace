@@ -182,6 +182,9 @@ const Feed = ({ onDataUpdate }) => {
   // Настройки пользователя
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [userSettings, setUserSettings] = useState(null);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxImages, setLightboxImages] = useState([]);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   // Загрузка реакций из localStorage
   useEffect(() => {
@@ -1117,20 +1120,47 @@ const Feed = ({ onDataUpdate }) => {
                   {post.text}
                 </Box>
                 {post.images.length > 0 && (
-                  <Box sx={{ display: 'flex', gap: isMobile ? 0.5 : 1, mt: 1, flexWrap: 'wrap' }}>
+                  <Box sx={{ display: 'flex', gap: 1, mt: 1, flexWrap: 'wrap', flexDirection: 'row' }}>
                     {post.images.map((img, i) => (
-                      <CardMedia
+                      <Box
                         key={i}
-                        component="img"
-                        image={img}
-                        alt="Фото поста"
-                        sx={{ 
-                          width: isMobile ? 80 : 100, 
-                          height: isMobile ? 80 : 100, 
-                          objectFit: 'cover', 
-                          borderRadius: isMobile ? 1 : 2 
+                        sx={{
+                          flex: '1 1 100%',
+                          maxWidth: '100%',
+                          mb: 1,
+                          cursor: 'pointer',
+                          position: 'relative',
+                          '&:hover::after': {
+                            content: '""',
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            bgcolor: 'rgba(0,0,0,0.08)',
+                            borderRadius: 2,
+                          },
                         }}
-                      />
+                        onClick={() => {
+                          setLightboxImages(post.images);
+                          setLightboxIndex(i);
+                          setLightboxOpen(true);
+                        }}
+                      >
+                        <img
+                          src={img}
+                          alt="Фото поста"
+                          style={{
+                            width: '100%',
+                            maxHeight: 400,
+                            objectFit: 'contain',
+                            borderRadius: 8,
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                            background: '#f5f5f5',
+                            display: 'block',
+                          }}
+                        />
+                      </Box>
                     ))}
                   </Box>
                 )}
@@ -1403,6 +1433,54 @@ const Feed = ({ onDataUpdate }) => {
         onClose={() => setSettingsOpen(false)}
         onSettingsChange={handleSettingsChange}
       />
+
+      {/* Lightbox Dialog */}
+      <Dialog
+        open={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        maxWidth="md"
+        PaperProps={{ sx: { bgcolor: '#111', boxShadow: 24, borderRadius: 2, p: 0 } }}
+      >
+        <Box sx={{ position: 'relative', bgcolor: '#111', p: 0 }}>
+          <IconButton
+            onClick={() => setLightboxOpen(false)}
+            sx={{ position: 'absolute', top: 8, right: 8, color: '#fff', zIndex: 2 }}
+          >
+            <CloseIcon />
+          </IconButton>
+          {lightboxImages.length > 0 && (
+            <img
+              src={lightboxImages[lightboxIndex]}
+              alt="Фото поста"
+              style={{
+                maxWidth: '90vw',
+                maxHeight: '80vh',
+                display: 'block',
+                margin: '0 auto',
+                borderRadius: 8,
+                background: '#222',
+              }}
+            />
+          )}
+          {/* Галерея: кнопки влево/вправо */}
+          {lightboxImages.length > 1 && (
+            <>
+              <IconButton
+                onClick={() => setLightboxIndex((lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length)}
+                sx={{ position: 'absolute', top: '50%', left: 8, color: '#fff', zIndex: 2, transform: 'translateY(-50%)' }}
+              >
+                {'<'}
+              </IconButton>
+              <IconButton
+                onClick={() => setLightboxIndex((lightboxIndex + 1) % lightboxImages.length)}
+                sx={{ position: 'absolute', top: '50%', right: 48, color: '#fff', zIndex: 2, transform: 'translateY(-50%)' }}
+              >
+                {'>'}
+              </IconButton>
+            </>
+          )}
+        </Box>
+      </Dialog>
     </Box>
   );
 };
