@@ -179,6 +179,8 @@ const PostCard = ({ post, compact = false }) => {
                   mb: 1,
                   cursor: 'pointer',
                   position: 'relative',
+                  bgcolor: theme => theme.palette.background.paper,
+                  borderRadius: 2,
                   '&:hover::after': {
                     content: '""',
                     position: 'absolute',
@@ -201,7 +203,7 @@ const PostCard = ({ post, compact = false }) => {
                     objectFit: 'contain',
                     borderRadius: 8,
                     boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                    background: '#f5f5f5',
+                    background: 'transparent',
                     display: 'block',
                   }}
                 />

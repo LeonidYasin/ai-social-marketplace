@@ -39,10 +39,12 @@ import {
   LightMode as LightModeIcon,
   ColorLens as ColorLensIcon,
   Edit as EditIcon,
+  EmojiEvents as EmojiEventsIcon,
 } from '@mui/icons-material';
 import { v4 as uuidv4 } from 'uuid';
 import DialogContentText from '@mui/material/DialogContentText';
 import PostCard from './PostCard';
+import Gamification from './Gamification';
 
 // Темы оформления
 const THEMES = {
@@ -88,7 +90,7 @@ const MOCK_POSTS = [
 ];
 
 const UserSettings = ({ open, onClose, onUserChange, posts = [] }) => {
-  const [activeTab, setActiveTab] = useState(0);
+  const [tab, setTab] = useState(0);
   const [profile, setProfile] = useState({
     name: 'Александр',
     email: 'alex@example.com',
@@ -120,6 +122,7 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [] }) => {
   const [editMode, setEditMode] = useState(false);
   const [editName, setEditName] = useState('');
   const [editEmail, setEditEmail] = useState('');
+  const [gamificationModalOpen, setGamificationModalOpen] = useState(false);
 
   // Загрузка настроек из localStorage
   useEffect(() => {
@@ -258,6 +261,16 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [] }) => {
 
   // --- My Posts ---
   const myPosts = currentUser ? posts.filter(p => p.userId === currentUser.id) : [];
+
+  // userStats для геймификации (пример)
+  const userStats = {
+    totalPosts: myPosts.length,
+    totalReactions: myPosts.reduce((sum, p) => sum + (p.reactions ? Object.values(p.reactions).reduce((a, b) => a + b, 0) : 0), 0),
+    totalComments: 0, // Можно добавить расчёт
+    totalXP: 450, // TODO: рассчитать на основе достижений
+    totalViews: 1234, // TODO: добавить просмотры
+    soldItems: 2, // TODO: добавить продажи
+  };
 
   const renderProfileTab = () => (
     <Box>
@@ -493,148 +506,59 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [] }) => {
     </Box>
   );
 
-  const tabs = [
-    { label: 'Профиль', icon: <PersonIcon />, content: renderProfileTab() },
-    { label: 'Внешний вид', icon: <PaletteIcon />, content: renderThemeTab() },
-    { label: 'Уведомления', icon: <NotificationsIcon />, content: renderNotificationsTab() },
-    { label: 'Фильтры', icon: <FilterIcon />, content: renderFiltersTab() },
-  ];
-
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Профиль пользователя</DialogTitle>
-      <DialogContent>
-        {currentUser ? (
-          <>
-            <Tabs value={activeTab} onChange={(e, v) => setActiveTab(v)} sx={{ mb: 2 }}>
-              <Tab label="Профиль" />
-              <Tab label="Мои посты" />
-              <Tab label="Достижения" />
-              <Tab label="Настройки" />
-            </Tabs>
-            {activeTab === 0 && (
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, mt: 1 }}>
-                <Avatar sx={{ width: 64, height: 64, mb: 1 }} src={currentUser.avatar}>
-                  {currentUser.name[0]}
-                </Avatar>
-                {editMode ? (
-                  <>
-                    <TextField label="Имя" value={editName} onChange={e => setEditName(e.target.value)} fullWidth sx={{ mb: 2 }} />
-                    <TextField label="Email" value={editEmail} onChange={e => setEditEmail(e.target.value)} fullWidth sx={{ mb: 2 }} />
-                    <Stack direction="row" spacing={2}>
-                      <Button variant="contained" onClick={saveEdit} disabled={!editName}>Сохранить</Button>
-                      <Button onClick={cancelEdit}>Отмена</Button>
-                    </Stack>
-                  </>
-                ) : (
-                  <>
-                    <Typography variant="h6">{currentUser.name}</Typography>
-                    <Typography variant="body2" color="text.secondary">{currentUser.email}</Typography>
-                    <Button startIcon={<EditIcon />} onClick={startEdit} sx={{ mt: 1 }}>Редактировать</Button>
-                  </>
-                )}
-                <Button variant="outlined" color="primary" onClick={() => setSelectOpen(true)} sx={{ mt: 2 }}>
-                  Сменить пользователя
-                </Button>
-                <Button variant="text" color="error" onClick={handleLogout} sx={{ mt: 1 }}>
-                  Выйти
-                </Button>
-              </Box>
-            )}
-            {activeTab === 1 && (
-              <Box sx={{ mt: 2 }}>
-                <Typography variant="h6" sx={{ mb: 2 }}>Мои посты</Typography>
-                {myPosts.length === 0 ? (
-                  <Typography color="text.secondary">У вас пока нет постов.</Typography>
-                ) : (
-                  myPosts.map(post => (
-                    <PostCard key={post.id} post={post} compact={true} />
-                  ))
-                )}
-              </Box>
-            )}
-            {activeTab === 2 && (
-              <Box sx={{ mt: 2 }}>
-                <Typography variant="h6">Достижения</Typography>
-                <Typography color="text.secondary">(Здесь будут ваши достижения и уровень)</Typography>
-              </Box>
-            )}
-            {activeTab === 3 && (
-              <Box sx={{ mt: 2 }}>
-                <Typography variant="h6">Настройки</Typography>
-                <Typography color="text.secondary">(Здесь будут настройки профиля и приватности)</Typography>
-              </Box>
-            )}
-          </>
-        ) : (
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, mt: 2 }}>
-            <Typography variant="body1" sx={{ mb: 2 }}>Регистрация нового пользователя</Typography>
-            <TextField
-              label="Имя"
-              value={registerName}
-              onChange={e => setRegisterName(e.target.value)}
-              fullWidth
-              sx={{ mb: 2 }}
-              autoFocus
-            />
-            <TextField
-              label="Email (необязательно)"
-              value={registerEmail}
-              onChange={e => setRegisterEmail(e.target.value)}
-              fullWidth
-              sx={{ mb: 2 }}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleRegister}
-              disabled={!registerName}
-              fullWidth
-            >
-              Зарегистрироваться
-            </Button>
+      <DialogTitle sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        Настройки
+        <Box>
+          <Tooltip title="Открыть геймификацию в отдельном окне">
+            <IconButton onClick={() => setGamificationModalOpen(true)} size="small" sx={{ ml: 1 }}>
+              <EmojiEventsIcon />
+            </IconButton>
+          </Tooltip>
+          <IconButton onClick={onClose} size="small" sx={{ ml: 1 }}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+      </DialogTitle>
+      <DialogContent
+        sx={{
+          maxHeight: { xs: '70vh', sm: '70vh', md: '70vh' },
+          overflowY: 'auto',
+          p: { xs: 1, sm: 2 },
+        }}
+      >
+        <Tabs
+          value={tab}
+          onChange={(_, v) => setTab(v)}
+          sx={{ mb: 2 }}
+          variant="scrollable"
+          scrollButtons="auto"
+          allowScrollButtonsMobile
+        >
+          <Tab label="Профиль" />
+          <Tab label="Внешний вид" />
+          <Tab label="Уведомления" />
+          <Tab label="Фильтры" />
+          <Tab label="Геймификация" />
+          {currentUser?.role === 'admin' && <Tab label="Администрирование" />}
+        </Tabs>
+        {tab === 0 && renderProfileTab()}
+        {tab === 1 && renderThemeTab()}
+        {tab === 2 && renderNotificationsTab()}
+        {tab === 3 && renderFiltersTab()}
+        {tab === 4 && (
+          <Gamification userStats={userStats} />
+        )}
+        {tab === 5 && currentUser?.role === 'admin' && (
+          <Box>
+            <Typography variant="h6" sx={{ mb: 2 }}>Администрирование</Typography>
+            <Typography variant="body2">Здесь будут настройки для администраторов системы.</Typography>
           </Box>
         )}
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Закрыть</Button>
-      </DialogActions>
-      {/* Диалог подтверждения выхода */}
-      <Dialog open={logoutConfirm} onClose={cancelLogout}>
-        <DialogTitle>Выйти из аккаунта?</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Вы уверены, что хотите выйти? Для продолжения потребуется выбрать или зарегистрировать нового пользователя.</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={cancelLogout}>Отмена</Button>
-          <Button onClick={confirmLogout} color="error">Выйти</Button>
-        </DialogActions>
-      </Dialog>
-      {/* Диалог выбора пользователя (оставляем как есть) */}
-      <Dialog open={selectOpen} onClose={() => setSelectOpen(false)} maxWidth="xs" fullWidth>
-        <DialogTitle>Сменить пользователя</DialogTitle>
-        <DialogContent>
-          <FormControl fullWidth sx={{ mt: 2 }}>
-            <InputLabel id="user-switch-label">Пользователь</InputLabel>
-            <Select
-              labelId="user-switch-label"
-              value={selectedUserId}
-              label="Пользователь"
-              onChange={(e) => {
-                handleUserSelect(e);
-                setSelectOpen(false);
-              }}
-            >
-              {MOCK_USERS.map(user => (
-                <MenuItem key={user.id} value={user.id}>{user.name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setSelectOpen(false)}>Отмена</Button>
-        </DialogActions>
-      </Dialog>
+      {/* Модальное окно геймификации */}
+      <Gamification open={gamificationModalOpen} onClose={() => setGamificationModalOpen(false)} userStats={userStats} />
     </Dialog>
   );
 };

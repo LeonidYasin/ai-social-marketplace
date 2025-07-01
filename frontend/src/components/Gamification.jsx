@@ -570,6 +570,39 @@ const Gamification = ({ open, onClose, userStats }) => {
     }
   };
 
+  if (typeof open === 'undefined') {
+    // Использование как вкладка: просто рендерим содержимое без Dialog
+    return (
+      <Box>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Stack direction="row" spacing={0}>
+            {tabs.map((tab, index) => (
+              <Button
+                key={tab.value}
+                onClick={() => setActiveTab(index)}
+                sx={{
+                  flex: 1,
+                  py: 2,
+                  borderRadius: 0,
+                  borderBottom: activeTab === index ? 2 : 0,
+                  borderColor: 'primary.main',
+                  color: activeTab === index ? 'primary.main' : 'text.secondary',
+                  fontWeight: activeTab === index ? 600 : 400,
+                  textTransform: 'none',
+                }}
+              >
+                {tab.label}
+              </Button>
+            ))}
+          </Stack>
+        </Box>
+        <Box sx={{ p: 3 }}>
+          {renderTabContent()}
+        </Box>
+      </Box>
+    );
+  }
+
   return (
     <>
       <Dialog

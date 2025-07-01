@@ -871,7 +871,7 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
       <Card sx={{ mb: 3, bgcolor: theme => theme.palette.background.paper, borderRadius: isMobile ? 2 : 3, boxShadow: 2, border: theme => theme.palette.mode === 'dark' ? '1.5px solid #00ffe7' : 'none' }}>
         <CardContent sx={{ display: 'flex', alignItems: 'center', gap: isMobile ? 1 : 2, p: isMobile ? 1.5 : 2 }}>
           <Avatar sx={{ bgcolor: 'primary.main', width: isMobile ? 36 : 44, height: isMobile ? 36 : 44, fontSize: isMobile ? 14 : 16 }}>
-            {userSettings?.profile?.name?.[0] || 'A'}
+            {currentUser?.name?.[0] || 'A'}
           </Avatar>
           <Button
             variant="outlined"
@@ -918,7 +918,7 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
         }}>
           <Stack direction="row" alignItems="center" gap={isMobile ? 1 : 2}>
             <Avatar sx={{ bgcolor: 'primary.main', width: isMobile ? 36 : 44, height: isMobile ? 36 : 44 }}>
-              {userSettings?.profile?.name?.[0] || 'A'}
+              {currentUser?.name?.[0] || 'A'}
             </Avatar>
             <Typography variant={isMobile ? "subtitle1" : "h6"}>Создать пост</Typography>
           </Stack>
