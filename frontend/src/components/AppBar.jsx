@@ -18,10 +18,12 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import NightlightIcon from '@mui/icons-material/Nightlight';
 import SearchDialog from './Search';
 import NotificationsManager from './Notifications';
 import Gamification from './Gamification';
 import Avatar from '@mui/material/Avatar';
+import { setThemeName } from '../App';
 
 const sections = [
   { key: 'home', label: 'Главная', icon: HomeIcon },
@@ -39,12 +41,13 @@ const notifications = [
   { id: 3, text: 'Появился новый пост в "Продам"' },
 ];
 
-const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGamificationOpen, onUserSettingsOpen, currentUser }) => {
+const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGamificationOpen, onUserSettingsOpen, currentUser, themeName, setThemeName }) => {
   const theme = useTheme();
   const [active, setActive] = useState('home');
   const [notifAnchor, setNotifAnchor] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [unread, setUnread] = useState(notifications.length);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleNotifClick = (event) => {
     setNotifAnchor(event.currentTarget);
@@ -54,6 +57,12 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
 
   const handleMenuClick = (event) => setMenuAnchor(event.currentTarget);
   const handleMenuClose = () => setMenuAnchor(null);
+
+  const handleThemeMenu = (event) => setAnchorEl(event.currentTarget);
+  const handleThemeChange = (theme) => {
+    setThemeName(theme);
+    setAnchorEl(null);
+  };
 
   return (
     <AppBar position="fixed" color="default" elevation={1} sx={{ zIndex: 1201 }}>
@@ -97,15 +106,19 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
               placeholder="Поиск..."
               onClick={onSearchOpen}
               sx={{ 
-                bgcolor: '#f0f2f5', 
+                bgcolor: theme => theme.palette.background.default, 
                 pl: 4, 
                 pr: 2, 
                 py: 0.5, 
                 borderRadius: 2, 
                 width: 180,
                 cursor: 'pointer',
+                boxShadow: theme => theme.palette.mode === 'dark' ? '0 0 8px #00ffe7' : undefined,
+                border: theme => theme.palette.mode === 'dark' ? '1.5px solid #00ffe7' : undefined,
                 '&:hover': {
-                  bgcolor: '#e4e6eb',
+                  bgcolor: theme => theme.palette.background.paper,
+                  boxShadow: theme => theme.palette.mode === 'dark' ? '0 0 16px #00ffe7' : undefined,
+                  border: theme => theme.palette.mode === 'dark' ? '1.5px solid #ff00c8' : undefined,
                 }
               }}
               inputProps={{ 
@@ -132,18 +145,10 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
               </Badge>
             </IconButton>
           </Tooltip>
-          <Tooltip title={theme.palette.mode === 'light' ? 'Темная тема' : 'Светлая тема'}>
-            <IconButton 
-              color="default" 
-              onClick={() => window.toggleTheme()}
-              sx={{
-                transition: 'transform 0.2s',
-                '&:hover': {
-                  transform: 'rotate(180deg)',
-                }
-              }}
-            >
-              {theme.palette.mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
+          <Tooltip title="Сменить стиль">
+            <IconButton color="inherit" onClick={handleThemeMenu}>
+              <LightModeIcon sx={{ display: themeName === 'facebook' ? 'inline' : 'none' }} />
+              <NightlightIcon sx={{ display: themeName === 'neon' ? 'inline' : 'none' }} />
             </IconButton>
           </Tooltip>
           <Menu anchorEl={notifAnchor} open={!!notifAnchor} onClose={handleNotifClose} PaperProps={{ sx: { mt: 1, borderRadius: 2 } }}>
@@ -184,6 +189,10 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
               <ListItemIcon><LogoutIcon fontSize="small" /></ListItemIcon>
               <ListItemText primary="Выйти" />
             </MenuItem>
+          </Menu>
+          <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
+            <MenuItem onClick={() => handleThemeChange('facebook')}>Facebook стиль</MenuItem>
+            <MenuItem onClick={() => handleThemeChange('neon')}>Неоновый стиль</MenuItem>
           </Menu>
         </Stack>
       </Toolbar>

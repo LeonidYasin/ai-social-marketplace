@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Card, CardContent, Typography, TextField, Button, Select, MenuItem, InputLabel, FormControl, CardMedia, Grid, Avatar, Dialog, DialogTitle, DialogContent, DialogActions, IconButton, Stack, Tabs, Tab, Divider, Tooltip, ToggleButtonGroup, ToggleButton, Popover, Chip, useTheme, useMediaQuery, Fab } from '@mui/material';
+import { Box, Card, CardContent, Typography, TextField, Button, Select, MenuItem, InputLabel, FormControl, CardMedia, Grid, Avatar, Dialog, DialogTitle, DialogContent, DialogActions, IconButton, Stack, Tabs, Tab, Divider, Tooltip, ToggleButtonGroup, ToggleButton, Popover, Chip, useTheme, useMediaQuery, Fab, InputBase } from '@mui/material';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
@@ -62,13 +62,14 @@ const REACTIONS = {
 // Компонент для комментариев с ветками
 const Comment = ({ comment, onReply, onSendReply, replyValue, setReplyValue, depth = 0, onLikeComment }) => {
   const [showReply, setShowReply] = useState(false);
+  const theme = useTheme();
   return (
     <Box sx={{ display: 'flex', alignItems: 'flex-start', mt: 1, ml: depth * 4 }}>
       <Avatar sx={{ width: 28, height: 28, bgcolor: comment.isAI ? 'primary.main' : 'grey.400', fontSize: 16, mr: 1 }}>
         {comment.isAI ? <SmartToyIcon fontSize="small" /> : (comment.author[0] || '?')}
       </Avatar>
       <Box sx={{ flex: 1 }}>
-        <Box sx={{ bgcolor: '#f0f2f5', borderRadius: 2, px: 2, py: 1, mb: 0.5 }}>
+        <Box sx={{ bgcolor: theme => theme.palette.background.default, borderRadius: 2, px: 2, py: 1, mb: 0.5 }}>
           <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: 14 }}>{comment.author}</Typography>
           <Typography variant="body2" sx={{ fontSize: 15 }}>{comment.text}</Typography>
           <Typography variant="caption" color="text.secondary">{comment.time}</Typography>
@@ -123,7 +124,7 @@ const Comment = ({ comment, onReply, onSendReply, replyValue, setReplyValue, dep
               placeholder="Ваш ответ..."
               value={replyValue}
               onChange={e => setReplyValue(e.target.value)}
-              sx={{ bgcolor: '#fff', borderRadius: 2, mr: 1 }}
+              sx={{ bgcolor: theme => theme.palette.background.paper, borderRadius: 2, mr: 1 }}
             />
             <Button variant="contained" size="small" onClick={onSendReply} disabled={!replyValue}>Отправить</Button>
           </Box>
@@ -720,7 +721,7 @@ const Feed = ({ onDataUpdate, currentUser }) => {
   const filteredPosts = getFilteredAndSortedPosts();
 
   return (
-    <Box>
+    <Box sx={{ bgcolor: theme => theme.palette.background.default }}>
       {/* Индикатор онлайн статуса и последнего обновления */}
       <Box sx={{ mb: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: isMobile ? 'wrap' : 'nowrap', gap: 1 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
@@ -851,7 +852,7 @@ const Feed = ({ onDataUpdate, currentUser }) => {
       )}
 
       {/* Facebook-style create post panel */}
-      <Card sx={{ mb: 3, bgcolor: '#fff', borderRadius: isMobile ? 2 : 3, boxShadow: 2 }}>
+      <Card sx={{ mb: 3, bgcolor: theme => theme.palette.background.paper, borderRadius: isMobile ? 2 : 3, boxShadow: 2, border: theme => theme.palette.mode === 'dark' ? '1.5px solid #00ffe7' : 'none' }}>
         <CardContent sx={{ display: 'flex', alignItems: 'center', gap: isMobile ? 1 : 2, p: isMobile ? 1.5 : 2 }}>
           <Avatar sx={{ bgcolor: 'primary.main', width: isMobile ? 36 : 44, height: isMobile ? 36 : 44, fontSize: isMobile ? 14 : 16 }}>
             {userSettings?.profile?.name?.[0] || 'A'}
@@ -863,7 +864,7 @@ const Feed = ({ onDataUpdate, currentUser }) => {
               flex: 1, 
               justifyContent: 'flex-start', 
               color: 'text.secondary', 
-              bgcolor: '#f0f2f5', 
+              bgcolor: theme => theme.palette.background.default, 
               textTransform: 'none', 
               pl: isMobile ? 1.5 : 2, 
               boxShadow: 0,
@@ -887,8 +888,9 @@ const Feed = ({ onDataUpdate, currentUser }) => {
           sx: { 
             borderRadius: isSmallMobile ? 0 : 3, 
             boxShadow: 3, 
-            bgcolor: '#fff',
+            bgcolor: theme => theme.palette.background.paper,
             height: isSmallMobile ? '100%' : 'auto',
+            border: theme => theme.palette.mode === 'dark' ? '1.5px solid #00ffe7' : 'none',
           } 
         }}
       >
@@ -920,7 +922,7 @@ const Feed = ({ onDataUpdate, currentUser }) => {
             sx={{ 
               mb: isMobile ? 1.5 : 2, 
               mt: 1, 
-              bgcolor: bg || '#fff', 
+              bgcolor: theme => theme.palette.background.default, 
               borderRadius: 2, 
               transition: 'background 0.3s' 
             }}
@@ -1075,7 +1077,7 @@ const Feed = ({ onDataUpdate, currentUser }) => {
             value={aiInput}
             onChange={e => setAIInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleAISend()}
-            sx={{ bgcolor: '#f0f2f5', borderRadius: 2 }}
+            sx={{ bgcolor: theme => theme.palette.background.paper, borderRadius: 2 }}
           />
           <Button color="primary" variant="contained" onClick={handleAISend} sx={{ minWidth: 40, ml: 1, borderRadius: 2 }}>
             <SmartToyIcon />

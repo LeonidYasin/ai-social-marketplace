@@ -4,7 +4,7 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import StarIcon from '@mui/icons-material/Star';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 
-const SidebarLeft = ({ chatList, onChatClick, searchChat, setSearchChat }) => (
+const SidebarLeft = ({ chatList, onChatClick, searchChat, setSearchChat, theme }) => (
   <Drawer
     variant="permanent"
     anchor="left"
@@ -12,7 +12,7 @@ const SidebarLeft = ({ chatList, onChatClick, searchChat, setSearchChat }) => (
       width: 220,
       boxSizing: 'border-box',
       top: 64,
-      bgcolor: '#fff',
+      bgcolor: theme => theme.palette.background.paper,
       borderRadius: '0 16px 16px 0',
       boxShadow: 3,
       border: 'none',
@@ -23,15 +23,15 @@ const SidebarLeft = ({ chatList, onChatClick, searchChat, setSearchChat }) => (
     <Box sx={{ mt: 2, px: 2 }}>
       {/* Основные разделы */}
       <List sx={{ mb: 1 }}>
-        <ListItem button sx={{ borderRadius: 2, mb: 0.5, '&:hover': { bgcolor: '#f0f2f5' } }}>
+        <ListItem button sx={{ borderRadius: 2, mb: 0.5, '&:hover': { bgcolor: theme => theme.palette.background.default } }}>
           <ListItemIcon><ListAltIcon /></ListItemIcon>
           <ListItemText primary="Лента" />
         </ListItem>
-        <ListItem button sx={{ borderRadius: 2, mb: 0.5, '&:hover': { bgcolor: '#f0f2f5' } }}>
+        <ListItem button sx={{ borderRadius: 2, mb: 0.5, '&:hover': { bgcolor: theme => theme.palette.background.default } }}>
           <ListItemIcon><StarIcon /></ListItemIcon>
           <ListItemText primary="Избранное" />
         </ListItem>
-        <ListItem button sx={{ borderRadius: 2, mb: 0.5, '&:hover': { bgcolor: '#f0f2f5' } }}>
+        <ListItem button sx={{ borderRadius: 2, mb: 0.5, '&:hover': { bgcolor: theme => theme.palette.background.default } }}>
           <ListItemIcon><SmartToyIcon /></ListItemIcon>
           <ListItemText primary="AI-чаты" />
         </ListItem>
@@ -43,11 +43,11 @@ const SidebarLeft = ({ chatList, onChatClick, searchChat, setSearchChat }) => (
         placeholder="Поиск чата..."
         value={searchChat}
         onChange={e => setSearchChat(e.target.value)}
-        sx={{ bgcolor: '#f0f2f5', borderRadius: 2, px: 2, py: 0.5, mb: 1, width: '100%' }}
+        sx={{ bgcolor: theme => theme.palette.background.default, borderRadius: 2, px: 2, py: 0.5, mb: 1, width: '100%' }}
       />
       <List>
         {chatList.map(chat => (
-          <ListItem button key={chat.userId} onClick={() => onChatClick(chat.userId)} sx={{ borderRadius: 2, mb: 0.5, '&:hover': { bgcolor: '#f0f2f5' } }}>
+          <ListItem button key={chat.userId} onClick={() => onChatClick(chat.userId)} sx={{ borderRadius: 2, mb: 0.5, '&:hover': { bgcolor: theme => theme.palette.background.default } }}>
             <ListItemIcon>
               {chat.isAI ? (
                 <Avatar sx={{ bgcolor: 'primary.main', width: 32, height: 32 }}>

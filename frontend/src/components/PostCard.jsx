@@ -93,7 +93,7 @@ const PostCard = ({ post, compact = false }) => {
         {comment.author[0] || '?'}
       </Avatar>
       <Box sx={{ flex: 1 }}>
-        <Box sx={{ bgcolor: '#f0f2f5', borderRadius: 2, px: 2, py: 1, mb: 0.5 }}>
+        <Box sx={{ bgcolor: theme => theme.palette.background.default, borderRadius: 2, px: 2, py: 1, mb: 0.5 }}>
           <Typography variant="subtitle2" sx={{ fontWeight: 600, fontSize: 14 }}>{comment.author}</Typography>
           <Typography variant="body2" sx={{ fontSize: 15 }}>{comment.text}</Typography>
           <Typography variant="caption" color="text.secondary">{comment.time}</Typography>
@@ -129,11 +129,11 @@ const PostCard = ({ post, compact = false }) => {
         {replyTo === comment.id && (
           <Box sx={{ mt: 1, mb: 1 }}>
             <TextField
-              size="small"
+              size={compact ? 'small' : 'medium'}
               placeholder="Ваш ответ..."
               value={replyValue}
               onChange={e => setReplyValue(e.target.value)}
-              sx={{ bgcolor: '#fff', borderRadius: 2, mr: 1 }}
+              sx={{ bgcolor: theme => theme.palette.background.paper, borderRadius: 2, mr: 1 }}
             />
             <Button variant="contained" size="small" onClick={() => handleAddReply(comment.id)} disabled={!replyValue}>Отправить</Button>
           </Box>
@@ -316,7 +316,7 @@ const PostCard = ({ post, compact = false }) => {
             placeholder="Написать комментарий..."
             value={commentValue}
             onChange={e => setCommentValue(e.target.value)}
-            sx={{ bgcolor: '#f0f2f5', borderRadius: 2, flex: 1 }}
+            sx={{ bgcolor: theme => theme.palette.background.default, borderRadius: 2, flex: 1 }}
           />
           <Button 
             variant="contained" 

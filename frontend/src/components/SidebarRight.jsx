@@ -10,7 +10,7 @@ const SidebarRight = ({ users, onUserClick }) => (
       width: 260,
       boxSizing: 'border-box',
       top: 64,
-      bgcolor: '#fff',
+      bgcolor: theme => theme.palette.background.paper,
       borderRadius: '16px 0 0 16px',
       boxShadow: 3,
       border: 'none',
@@ -22,7 +22,7 @@ const SidebarRight = ({ users, onUserClick }) => (
       <Typography variant="subtitle1">Онлайн-пользователи</Typography>
       <List>
         {users.map((user, i) => (
-          <ListItem key={user.id} button onClick={() => onUserClick(user.id)} sx={{ borderRadius: 2, mb: 0.5, '&:hover': { bgcolor: '#f0f2f5' } }}>
+          <ListItem key={user.id} button onClick={() => onUserClick(user.id)} sx={{ borderRadius: 2, mb: 0.5, '&:hover': { bgcolor: theme => theme.palette.background.default } }}>
             <ListItemIcon>
               {user.isAI ? (
                 <Avatar sx={{ bgcolor: 'primary.main', width: 32, height: 32 }}>
@@ -38,10 +38,10 @@ const SidebarRight = ({ users, onUserClick }) => (
       </List>
       <Typography variant="subtitle1" sx={{ mt: 2 }}>AI-рекомендации</Typography>
       <List>
-        <ListItem sx={{ borderRadius: 2, mb: 0.5, '&:hover': { bgcolor: '#f0f2f5' } }}>
+        <ListItem sx={{ borderRadius: 2, mb: 0.5, '&:hover': { bgcolor: theme => theme.palette.background.default } }}>
           <ListItemText primary="Вам может понравиться: iPhone 13" />
         </ListItem>
-        <ListItem sx={{ borderRadius: 2, mb: 0.5, '&:hover': { bgcolor: '#f0f2f5' } }}>
+        <ListItem sx={{ borderRadius: 2, mb: 0.5, '&:hover': { bgcolor: theme => theme.palette.background.default } }}>
           <ListItemText primary="Вам может понравиться: MacBook Air" />
         </ListItem>
       </List>

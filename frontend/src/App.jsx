@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, ThemeProvider, CssBaseline } from '@mui/material';
 import AppBarMain from './components/AppBar';
 import SidebarLeft from './components/SidebarLeft';
 import SidebarRight from './components/SidebarRight';
@@ -10,6 +10,7 @@ import SearchDialog from './components/Search';
 import NotificationsManager from './components/Notifications';
 import Gamification from './components/Gamification';
 import UserSettings from './components/UserSettings';
+import { facebookTheme, neonTheme } from './config/themes';
 
 const USERS = [
   { id: 'ai', name: 'AI Ассистент', isAI: true },
@@ -33,6 +34,12 @@ const App = ({ themeMode, onThemeToggle }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [themeName, setThemeName] = React.useState(() => localStorage.getItem('theme') || 'facebook');
+  const theme = themeName === 'neon' ? neonTheme : facebookTheme;
+
+  React.useEffect(() => {
+    localStorage.setItem('theme', themeName);
+  }, [themeName]);
 
   useEffect(() => {
     const saved = localStorage.getItem('currentUser');
@@ -92,87 +99,92 @@ const App = ({ themeMode, onThemeToggle }) => {
   if (loadingUser) return null;
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#f0f2f5' }}>
-      <Box sx={{ display: 'flex' }}>
-        <AppBarMain 
-          onAnalyticsOpen={() => setAnalyticsOpen(true)} 
-          onSearchOpen={() => setSearchOpen(true)} 
-          onNotificationsOpen={() => setNotificationsOpen(true)} 
-          onGamificationOpen={() => setGamificationOpen(true)} 
-          onUserSettingsOpen={() => setSettingsOpen(true)}
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Box sx={{ minHeight: '100vh', bgcolor: theme => theme.palette.background.default }}>
+        <Box sx={{ display: 'flex' }}>
+          <AppBarMain 
+            onAnalyticsOpen={() => setAnalyticsOpen(true)} 
+            onSearchOpen={() => setSearchOpen(true)} 
+            onNotificationsOpen={() => setNotificationsOpen(true)} 
+            onGamificationOpen={() => setGamificationOpen(true)} 
+            onUserSettingsOpen={() => setSettingsOpen(true)}
+            currentUser={currentUser}
+            themeName={themeName}
+            setThemeName={setThemeName}
+          />
+          <SidebarLeft
+            chatList={chatList}
+            onChatClick={setActiveChatId}
+            searchChat={searchChat}
+            setSearchChat={setSearchChat}
+          />
+          <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8, mb: 2, position: 'relative' }}>
+            <Feed onDataUpdate={setFeedData} currentUser={currentUser} />
+            {activeChatId && (
+              <ChatDialog
+                open={!!activeChatId}
+                onClose={() => setActiveChatId(null)}
+                user={USERS.find(u => u.id === activeChatId)}
+                messages={chats[activeChatId]?.messages || []}
+                onSend={text => sendMessage(activeChatId, text)}
+              />
+            )}
+          </Box>
+          <SidebarRight
+            users={USERS}
+            onUserClick={openChat}
+          />
+        </Box>
+        
+        {/* Аналитика */}
+        <Analytics
+          open={analyticsOpen}
+          onClose={() => setAnalyticsOpen(false)}
+          posts={feedData.posts}
+          userReactions={feedData.userReactions}
+          comments={feedData.comments}
+        />
+        
+        {/* Поиск */}
+        <SearchDialog
+          open={searchOpen}
+          onClose={() => setSearchOpen(false)}
+          onSearchResult={(results) => {
+            console.log('Search results:', results);
+            // TODO: Обработать результаты поиска
+          }}
+        />
+        
+        {/* Уведомления */}
+        <NotificationsManager
+          open={notificationsOpen}
+          onClose={() => setNotificationsOpen(false)}
           currentUser={currentUser}
         />
-        <SidebarLeft
-          chatList={chatList}
-          onChatClick={setActiveChatId}
-          searchChat={searchChat}
-          setSearchChat={setSearchChat}
+        
+        {/* Гамификация */}
+        <Gamification
+          open={gamificationOpen}
+          onClose={() => setGamificationOpen(false)}
+          userStats={{
+            totalPosts: feedData.posts.length,
+            totalReactions: Object.values(feedData.userReactions).filter(r => r).length,
+            totalComments: Object.values(feedData.comments).flat().length,
+            totalXP: 450, // TODO: Рассчитывать на основе достижений
+            totalViews: 1234, // TODO: Добавить просмотры
+            soldItems: 2, // TODO: Добавить продажи
+          }}
         />
-        <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8, mb: 2, position: 'relative' }}>
-          <Feed onDataUpdate={setFeedData} currentUser={currentUser} />
-          {activeChatId && (
-            <ChatDialog
-              open={!!activeChatId}
-              onClose={() => setActiveChatId(null)}
-              user={USERS.find(u => u.id === activeChatId)}
-              messages={chats[activeChatId]?.messages || []}
-              onSend={text => sendMessage(activeChatId, text)}
-            />
-          )}
-        </Box>
-        <SidebarRight
-          users={USERS}
-          onUserClick={openChat}
+        {/* Настройки пользователя и mock-логин */}
+        <UserSettings
+          open={settingsOpen}
+          onClose={() => setSettingsOpen(false)}
+          onUserChange={setCurrentUser}
+          posts={feedData.posts}
         />
       </Box>
-      
-      {/* Аналитика */}
-      <Analytics
-        open={analyticsOpen}
-        onClose={() => setAnalyticsOpen(false)}
-        posts={feedData.posts}
-        userReactions={feedData.userReactions}
-        comments={feedData.comments}
-      />
-      
-      {/* Поиск */}
-      <SearchDialog
-        open={searchOpen}
-        onClose={() => setSearchOpen(false)}
-        onSearchResult={(results) => {
-          console.log('Search results:', results);
-          // TODO: Обработать результаты поиска
-        }}
-      />
-      
-      {/* Уведомления */}
-      <NotificationsManager
-        open={notificationsOpen}
-        onClose={() => setNotificationsOpen(false)}
-        currentUser={currentUser}
-      />
-      
-      {/* Гамификация */}
-      <Gamification
-        open={gamificationOpen}
-        onClose={() => setGamificationOpen(false)}
-        userStats={{
-          totalPosts: feedData.posts.length,
-          totalReactions: Object.values(feedData.userReactions).filter(r => r).length,
-          totalComments: Object.values(feedData.comments).flat().length,
-          totalXP: 450, // TODO: Рассчитывать на основе достижений
-          totalViews: 1234, // TODO: Добавить просмотры
-          soldItems: 2, // TODO: Добавить продажи
-        }}
-      />
-      {/* Настройки пользователя и mock-логин */}
-      <UserSettings
-        open={settingsOpen}
-        onClose={() => setSettingsOpen(false)}
-        onUserChange={setCurrentUser}
-        posts={feedData.posts}
-      />
-    </Box>
+    </ThemeProvider>
   );
 };
 
