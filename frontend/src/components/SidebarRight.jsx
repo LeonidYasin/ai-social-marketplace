@@ -1,11 +1,15 @@
 import React from 'react';
 import { Drawer, Toolbar, Box, Typography, List, ListItem, ListItemText, ListItemIcon, Avatar } from '@mui/material';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import IconButton from '@mui/material/IconButton';
 
-const SidebarRight = ({ users, onUserClick }) => (
+const SidebarRight = ({ users, onUserClick, open = true, onClose, variant = 'permanent' }) => (
   <Drawer
-    variant="permanent"
+    variant={variant}
     anchor="right"
+    open={open}
+    onClose={onClose}
     sx={{ width: 260, flexShrink: 0, [`& .MuiDrawer-paper`]: {
       width: 260,
       boxSizing: 'border-box',
@@ -17,7 +21,11 @@ const SidebarRight = ({ users, onUserClick }) => (
       p: 0,
     } }}
   >
-    <Toolbar />
+    <Toolbar sx={{ minHeight: 64, display: 'flex', justifyContent: 'flex-start', p: 0 }}>
+      <IconButton onClick={onClose} size="small" sx={{ mr: 'auto', display: { xs: 'inline-flex', md: 'none' } }}>
+        <ChevronRightIcon />
+      </IconButton>
+    </Toolbar>
     <Box sx={{ p: 2 }}>
       <Typography variant="subtitle1">Онлайн-пользователи</Typography>
       <List>

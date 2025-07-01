@@ -3,11 +3,15 @@ import { Drawer, List, ListItem, ListItemIcon, ListItemText, Toolbar, Box, Typog
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import StarIcon from '@mui/icons-material/Star';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import IconButton from '@mui/material/IconButton';
 
-const SidebarLeft = ({ chatList, onChatClick, searchChat, setSearchChat, theme }) => (
+const SidebarLeft = ({ chatList, onChatClick, searchChat, setSearchChat, open = true, onClose, variant = 'permanent', theme }) => (
   <Drawer
-    variant="permanent"
+    variant={variant}
     anchor="left"
+    open={open}
+    onClose={onClose}
     sx={{ width: 220, flexShrink: 0, [`& .MuiDrawer-paper`]: {
       width: 220,
       boxSizing: 'border-box',
@@ -19,7 +23,11 @@ const SidebarLeft = ({ chatList, onChatClick, searchChat, setSearchChat, theme }
       p: 0,
     } }}
   >
-    <Toolbar />
+    <Toolbar sx={{ minHeight: 64, display: 'flex', justifyContent: 'flex-end', p: 0 }}>
+      <IconButton onClick={onClose} size="small" sx={{ ml: 'auto', display: { xs: 'inline-flex', md: 'none' } }}>
+        <ChevronLeftIcon />
+      </IconButton>
+    </Toolbar>
     <Box sx={{ mt: 2, px: 2 }}>
       {/* Основные разделы */}
       <List sx={{ mb: 1 }}>

@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Box, Typography, ThemeProvider, CssBaseline } from '@mui/material';
+import { Box, Typography, ThemeProvider, CssBaseline, IconButton } from '@mui/material';
 import AppBarMain from './components/AppBar';
 import SidebarLeft from './components/SidebarLeft';
 import SidebarRight from './components/SidebarRight';
@@ -11,6 +11,10 @@ import NotificationsManager from './components/Notifications';
 import Gamification from './components/Gamification';
 import UserSettings from './components/UserSettings';
 import { facebookTheme, neonTheme } from './config/themes';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const USERS = [
   { id: 'ai', name: 'AI Ассистент', isAI: true },
@@ -36,6 +40,9 @@ const App = ({ themeMode, onThemeToggle }) => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [themeName, setThemeName] = React.useState(() => localStorage.getItem('theme') || 'facebook');
   const theme = themeName === 'neon' ? neonTheme : facebookTheme;
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [leftSidebarOpen, setLeftSidebarOpen] = useState(!isMobile);
+  const [rightSidebarOpen, setRightSidebarOpen] = useState(!isMobile);
 
   React.useEffect(() => {
     localStorage.setItem('theme', themeName);
@@ -102,25 +109,37 @@ const App = ({ themeMode, onThemeToggle }) => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Box sx={{ minHeight: '100vh', bgcolor: theme => theme.palette.background.default }}>
+        {/* Всегда показываем верхнюю панель */}
+        <AppBarMain 
+          onAnalyticsOpen={() => setAnalyticsOpen(true)} 
+          onSearchOpen={() => setSearchOpen(true)} 
+          onNotificationsOpen={() => setNotificationsOpen(true)} 
+          onGamificationOpen={() => setGamificationOpen(true)} 
+          onUserSettingsOpen={() => setSettingsOpen(true)}
+          currentUser={currentUser}
+          themeName={themeName}
+          setThemeName={setThemeName}
+        />
         <Box sx={{ display: 'flex' }}>
-          <AppBarMain 
-            onAnalyticsOpen={() => setAnalyticsOpen(true)} 
-            onSearchOpen={() => setSearchOpen(true)} 
-            onNotificationsOpen={() => setNotificationsOpen(true)} 
-            onGamificationOpen={() => setGamificationOpen(true)} 
-            onUserSettingsOpen={() => setSettingsOpen(true)}
-            currentUser={currentUser}
-            themeName={themeName}
-            setThemeName={setThemeName}
-          />
           <SidebarLeft
             chatList={chatList}
             onChatClick={setActiveChatId}
             searchChat={searchChat}
             setSearchChat={setSearchChat}
+            open={leftSidebarOpen}
+            onClose={() => setLeftSidebarOpen(false)}
+            variant={isMobile ? 'temporary' : 'permanent'}
           />
           <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8, mb: 2, position: 'relative' }}>
-            <Feed onDataUpdate={setFeedData} currentUser={currentUser} />
+            <Feed 
+              onDataUpdate={setFeedData} 
+              currentUser={currentUser}
+              isMobile={isMobile}
+              leftSidebarOpen={leftSidebarOpen}
+              setLeftSidebarOpen={setLeftSidebarOpen}
+              rightSidebarOpen={rightSidebarOpen}
+              setRightSidebarOpen={setRightSidebarOpen}
+            />
             {activeChatId && (
               <ChatDialog
                 open={!!activeChatId}
@@ -134,6 +153,9 @@ const App = ({ themeMode, onThemeToggle }) => {
           <SidebarRight
             users={USERS}
             onUserClick={openChat}
+            open={rightSidebarOpen}
+            onClose={() => setRightSidebarOpen(false)}
+            variant={isMobile ? 'temporary' : 'permanent'}
           />
         </Box>
         

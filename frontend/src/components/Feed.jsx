@@ -17,6 +17,8 @@ import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import MoodBadIcon from '@mui/icons-material/MoodBad';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AddIcon from '@mui/icons-material/Add';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import UserSettings from './UserSettings';
 import PostCard from './PostCard';
 
@@ -147,9 +149,8 @@ const Comment = ({ comment, onReply, onSendReply, replyValue, setReplyValue, dep
   );
 };
 
-const Feed = ({ onDataUpdate, currentUser }) => {
+const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSidebarOpen, rightSidebarOpen, setRightSidebarOpen }) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const isSmallMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [posts, setPosts] = useState(initialPosts);
@@ -725,6 +726,12 @@ const Feed = ({ onDataUpdate, currentUser }) => {
       {/* Индикатор онлайн статуса и последнего обновления */}
       <Box sx={{ mb: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: isMobile ? 'wrap' : 'nowrap', gap: 1 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
+          {/* Кнопка открытия левой панели */}
+          {isMobile && !leftSidebarOpen && (
+            <IconButton size="small" onClick={() => setLeftSidebarOpen(true)}>
+              <MenuIcon />
+            </IconButton>
+          )}
           <Box sx={{ 
             width: 8, 
             height: 8, 
@@ -739,10 +746,13 @@ const Feed = ({ onDataUpdate, currentUser }) => {
           }} />
           <Typography variant="caption" color="text.secondary" sx={{ fontSize: isSmallMobile ? '0.7rem' : '0.75rem' }}>
             {isOnline ? 'Онлайн' : 'Офлайн'}
-            {!isSmallMobile && ` • Последнее обновление: ${lastUpdate.toLocaleTimeString()}`}
+            {' '}
+            {isMobile
+              ? `(${lastUpdate.toLocaleTimeString().slice(0,5)})`
+              : ` • Последнее обновление: ${lastUpdate.toLocaleTimeString()}`}
           </Typography>
         </Box>
-        <Box sx={{ display: 'flex', gap: 1, flexShrink: 0 }}>
+        <Box sx={{ display: 'flex', gap: 1, flexShrink: 0, alignItems: 'center' }}>
           {!isSmallMobile && (
             <Button
               size="small"
@@ -770,6 +780,12 @@ const Feed = ({ onDataUpdate, currentUser }) => {
               <SettingsIcon sx={{ fontSize: isSmallMobile ? 18 : 24 }} />
             </IconButton>
           </Tooltip>
+          {/* Кнопка открытия правой панели */}
+          {isMobile && !rightSidebarOpen && (
+            <IconButton size="small" onClick={() => setRightSidebarOpen(true)}>
+              <ChevronLeftIcon />
+            </IconButton>
+          )}
         </Box>
       </Box>
 

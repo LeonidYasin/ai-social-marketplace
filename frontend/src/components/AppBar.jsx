@@ -24,6 +24,14 @@ import NotificationsManager from './Notifications';
 import Gamification from './Gamification';
 import Avatar from '@mui/material/Avatar';
 import { setThemeName } from '../App';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Divider from '@mui/material/Divider';
+import MenuIcon from '@mui/icons-material/Menu';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 const sections = [
   { key: 'home', label: 'Главная', icon: HomeIcon },
@@ -43,11 +51,29 @@ const notifications = [
 
 const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGamificationOpen, onUserSettingsOpen, currentUser, themeName, setThemeName }) => {
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [active, setActive] = useState('home');
   const [notifAnchor, setNotifAnchor] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [unread, setUnread] = useState(notifications.length);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [moreAnchor, setMoreAnchor] = useState(null);
+
+  // Мобильная логика: показываем Home, активную вкладку (если не Home), остальные — в меню
+  let visibleSections = [{ key: 'home', label: 'Главная', icon: HomeIcon }];
+  let hiddenSections = sections.filter(s => s.key !== 'home');
+  if (isMobile) {
+    if (active !== 'home') {
+      const activeSection = sections.find(s => s.key === active);
+      if (activeSection && activeSection.key !== 'home') {
+        visibleSections.push(activeSection);
+        hiddenSections = hiddenSections.filter(s => s.key !== activeSection.key);
+      }
+    }
+  } else {
+    visibleSections = sections;
+    hiddenSections = [];
+  }
 
   const handleNotifClick = (event) => {
     setNotifAnchor(event.currentTarget);
@@ -64,31 +90,50 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
     setAnchorEl(null);
   };
 
+  const handleMoreMenu = (event) => setMoreAnchor(event.currentTarget);
+  const handleMoreClose = () => setMoreAnchor(null);
+
   return (
     <AppBar position="fixed" color="default" elevation={1} sx={{ zIndex: 1201 }}>
-      <Toolbar sx={{ minHeight: 64, justifyContent: 'space-between' }}>
-        {/* Логотип слева */}
-        <Box sx={{ fontWeight: 700, fontSize: 26, color: 'primary.main', mr: 2, letterSpacing: 1 }}>
+      <Toolbar sx={{ minHeight: 64, justifyContent: 'space-between', px: isMobile ? 1 : 2, position: 'relative' }}>
+        <Box sx={{ fontWeight: 700, fontSize: 24, color: 'primary.main', letterSpacing: 1, zIndex: 2 }}>
           M
         </Box>
-        {/* Центр: горизонтальный ряд иконок-разделов */}
-        <Stack direction="row" spacing={1.5} sx={{ flexGrow: 1, justifyContent: 'center' }}>
-          {sections.map(({ key, label, icon: Icon }) => {
+        <Stack
+          direction="row"
+          spacing={isMobile ? 0.5 : 1.5}
+          alignItems="center"
+          sx={
+            isMobile
+              ? { ml: 2, zIndex: 2 }
+              : {
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  margin: 'auto',
+                  width: 'fit-content',
+                  justifyContent: 'center',
+                  zIndex: 1,
+                }
+          }
+        >
+          {visibleSections.map(({ key, label, icon: Icon }) => {
             const isActive = active === key;
             return (
               <Tooltip key={key} title={label} arrow placement="bottom">
                 <IconButton
                   onClick={() => setActive(key)}
                   sx={{
-                    width: 48,
-                    height: 48,
+                    width: 44,
+                    height: 44,
                     borderRadius: '50%',
                     bgcolor: isActive ? 'primary.main' : 'transparent',
                     color: isActive ? 'common.white' : 'grey.700',
                     transition: 'background 0.2s, color 0.2s',
                     boxShadow: isActive ? 2 : 0,
+                    flex: '0 0 auto',
                     '&:hover': {
-                      bgcolor: isActive ? 'primary.dark' : alpha('#1976d2', 0.08),
+                      bgcolor: isActive ? 'primary.dark' : 'grey.100',
                       color: isActive ? 'common.white' : 'primary.main',
                     },
                   }}
@@ -98,44 +143,28 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
               </Tooltip>
             );
           })}
+          {isMobile && hiddenSections.length > 0 && (
+            <>
+              <Tooltip title="Ещё">
+                <IconButton onClick={handleMoreMenu}>
+                  <MoreVertIcon />
+                </IconButton>
+              </Tooltip>
+              <Menu anchorEl={moreAnchor} open={Boolean(moreAnchor)} onClose={handleMoreClose}>
+                {hiddenSections.map(({ key, label, icon: Icon }) => (
+                  <MenuItem key={key} onClick={() => { setActive(key); handleMoreClose(); }}>
+                    <ListItemIcon><Icon /></ListItemIcon>
+                    <ListItemText primary={label} />
+                  </MenuItem>
+                ))}
+              </Menu>
+            </>
+          )}
         </Stack>
-        {/* Справа: поиск, чаты, уведомления, профиль, меню */}
-        <Stack direction="row" alignItems="center" spacing={1}>
-          <Box sx={{ position: 'relative', mr: 1 }}>
-            <InputBase
-              placeholder="Поиск..."
-              onClick={onSearchOpen}
-              sx={{ 
-                bgcolor: theme => theme.palette.background.default, 
-                pl: 4, 
-                pr: 2, 
-                py: 0.5, 
-                borderRadius: 2, 
-                width: 180,
-                cursor: 'pointer',
-                boxShadow: theme => theme.palette.mode === 'dark' ? '0 0 8px #00ffe7' : undefined,
-                border: theme => theme.palette.mode === 'dark' ? '1.5px solid #00ffe7' : undefined,
-                '&:hover': {
-                  bgcolor: theme => theme.palette.background.paper,
-                  boxShadow: theme => theme.palette.mode === 'dark' ? '0 0 16px #00ffe7' : undefined,
-                  border: theme => theme.palette.mode === 'dark' ? '1.5px solid #ff00c8' : undefined,
-                }
-              }}
-              inputProps={{ 
-                'aria-label': 'search',
-                readOnly: true,
-              }}
-            />
-            <SearchIcon sx={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', color: 'grey.500' }} />
-          </Box>
-          <Tooltip title="Чаты">
-            <IconButton color="default">
-              <ChatIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Аналитика">
-            <IconButton color="default" onClick={onAnalyticsOpen}>
-              <TrendingUpIcon />
+        <Stack direction="row" alignItems="center" spacing={1} sx={{ ml: 'auto', flexShrink: 0 }}>
+          <Tooltip title="Поиск">
+            <IconButton color="default" onClick={onSearchOpen}>
+              <SearchIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Уведомления">
@@ -151,14 +180,9 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
               <NightlightIcon sx={{ display: themeName === 'neon' ? 'inline' : 'none' }} />
             </IconButton>
           </Tooltip>
-          <Menu anchorEl={notifAnchor} open={!!notifAnchor} onClose={handleNotifClose} PaperProps={{ sx: { mt: 1, borderRadius: 2 } }}>
-            {notifications.length === 0 ? (
-              <MenuItem disabled>Нет новых уведомлений</MenuItem>
-            ) : (
-              notifications.map(n => (
-                <MenuItem key={n.id} onClick={handleNotifClose}>{n.text}</MenuItem>
-              ))
-            )}
+          <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
+            <MenuItem onClick={() => handleThemeChange('facebook')}>Facebook стиль</MenuItem>
+            <MenuItem onClick={() => handleThemeChange('neon')}>Неоновый стиль</MenuItem>
           </Menu>
           <Tooltip title={currentUser && currentUser.name ? currentUser.name : 'Войти'}>
             <IconButton color="default" onClick={onUserSettingsOpen}>
@@ -171,29 +195,6 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
               )}
             </IconButton>
           </Tooltip>
-          <Tooltip title="Меню">
-            <IconButton color="default" onClick={handleMenuClick}>
-              <MoreVertIcon />
-            </IconButton>
-          </Tooltip>
-          <Menu anchorEl={menuAnchor} open={!!menuAnchor} onClose={handleMenuClose} PaperProps={{ sx: { mt: 1, borderRadius: 2 } }}>
-            <MenuItem onClick={onGamificationOpen}>
-              <ListItemIcon><EmojiEventsIcon fontSize="small" /></ListItemIcon>
-              <ListItemText primary="Гамификация" />
-            </MenuItem>
-            <MenuItem onClick={handleMenuClose}>
-              <ListItemIcon><SettingsIcon fontSize="small" /></ListItemIcon>
-              <ListItemText primary="Настройки" />
-            </MenuItem>
-            <MenuItem onClick={handleMenuClose}>
-              <ListItemIcon><LogoutIcon fontSize="small" /></ListItemIcon>
-              <ListItemText primary="Выйти" />
-            </MenuItem>
-          </Menu>
-          <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
-            <MenuItem onClick={() => handleThemeChange('facebook')}>Facebook стиль</MenuItem>
-            <MenuItem onClick={() => handleThemeChange('neon')}>Неоновый стиль</MenuItem>
-          </Menu>
         </Stack>
       </Toolbar>
     </AppBar>
