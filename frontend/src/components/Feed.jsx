@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Card, CardContent, Typography, TextField, Button, Select, MenuItem, InputLabel, FormControl, CardMedia, Grid, Avatar, Dialog, DialogTitle, DialogContent, DialogActions, IconButton, Stack, Tabs, Tab, Divider, Tooltip, ToggleButtonGroup, ToggleButton, Popover, Chip, useTheme, useMediaQuery, Fab, InputBase } from '@mui/material';
+import { Box, Card, CardContent, Typography, TextField, Button, Select, MenuItem, InputLabel, FormControl, CardMedia, Grid, Avatar, Dialog, DialogTitle, DialogContent, DialogActions, IconButton, Stack, Tabs, Tab, Divider, Tooltip, ToggleButtonGroup, ToggleButton, Popover, Chip, useTheme, useMediaQuery, Fab, InputBase, CircularProgress } from '@mui/material';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
@@ -21,6 +21,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import UserSettings from './UserSettings';
 import PostCard from './PostCard';
+import { postsAPI } from '../services/api';
 
 const initialPosts = [
   { id: 1, text: 'Продаю iPhone 13', images: [], video: null, doc: null, bg: '', section: 'sell', privacy: 'all', reactions: { like: 3, love: 2, laugh: 1, wow: 0, sad: 0, angry: 0 } },
@@ -153,7 +154,9 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
   const theme = useTheme();
   const isSmallMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const [posts, setPosts] = useState(initialPosts);
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [text, setText] = useState('');
   const [images, setImages] = useState([]);
   const [video, setVideo] = useState(null);
@@ -188,6 +191,55 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxImages, setLightboxImages] = useState([]);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  // Загрузка постов с backend
+  const loadPosts = async () => {
+    try {
+      console.log('loadPosts: Starting to load posts');
+      setLoading(true);
+      setError(null);
+      console.log('loadPosts: Calling postsAPI.getPosts()');
+      const response = await postsAPI.getPosts();
+      console.log('loadPosts: Received response:', response);
+      const backendPosts = response.posts.map(post => ({
+        id: post.id,
+        text: post.content,
+        images: post.media_urls || [],
+        video: null,
+        doc: null,
+        bg: post.background_color || '',
+        section: post.section || 'general',
+        privacy: post.privacy || 'public',
+        reactions: post.reactions.reduce((acc, reaction) => {
+          acc[reaction.reaction_type] = parseInt(reaction.count);
+          return acc;
+        }, { like: 0, love: 0, laugh: 0, wow: 0, sad: 0, angry: 0 }),
+        user: {
+          id: post.user_id,
+          name: `${post.first_name} ${post.last_name}`,
+          avatar: post.avatar_url,
+          username: post.username
+        },
+        createdAt: post.created_at,
+        commentCount: parseInt(post.comment_count) || 0,
+        reactionCount: parseInt(post.reaction_count) || 0
+      }));
+      console.log('loadPosts: Mapped posts:', backendPosts);
+      setPosts(backendPosts);
+    } catch (err) {
+      console.error('Ошибка загрузки постов:', err);
+      setError('Не удалось загрузить посты');
+      // Fallback к локальным данным
+      setPosts(initialPosts);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Загрузка постов при монтировании компонента
+  useEffect(() => {
+    loadPosts();
+  }, []);
 
   // Загрузка реакций из localStorage
   useEffect(() => {
@@ -372,10 +424,27 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
     setDoc(e.target.files[0]);
   };
 
-  const handlePost = (aiDialog = null) => {
-    setPosts([
-      {
-        id: Date.now(),
+  const handlePost = async (aiDialog = null) => {
+    if (!text.trim() && images.length === 0 && !video && !doc) return;
+
+    try {
+      const postData = {
+        user_id: currentUser?.id || 1,
+        content: aiDialog ? aiDialog.map(m => (m.isUser ? 'Вы: ' : 'AI: ') + m.text).join('\n') : text,
+        media_urls: images.map(f => URL.createObjectURL(f)),
+        media_type: video ? 'video' : doc ? 'document' : images.length > 0 ? 'image' : null,
+        background_color: bg,
+        privacy: privacy === 'all' ? 'public' : privacy === 'friends' ? 'friends' : 'private',
+        section: section,
+        location: null,
+        is_ai_generated: !!aiDialog,
+        ai_prompt: aiDialog ? aiInput : null
+      };
+
+      const response = await postsAPI.create(postData);
+      
+      const newPost = {
+        id: response.post.id,
         userId: currentUser?.id,
         text: aiDialog ? aiDialog.map(m => (m.isUser ? 'Вы: ' : 'AI: ') + m.text).join('\n') : text,
         images: images.map(f => URL.createObjectURL(f)),
@@ -385,21 +454,33 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
         section,
         privacy,
         reactions: { like: 0, love: 0, laugh: 0, wow: 0, sad: 0, angry: 0 },
-        createdAt: new Date().toISOString(),
-      },
-      ...posts,
-    ]);
-    setText('');
-    setImages([]);
-    setVideo(null);
-    setDoc(null);
-    setPrivacy('all');
-    setSection('tribune');
-    setBg('');
-    setAIMessages(initialAIMessages);
-    setAIInput('');
-    setOpen(false);
-    setAIOpen(false);
+        createdAt: response.post.created_at,
+      };
+
+      setPosts(prev => [newPost, ...prev]);
+      setText('');
+      setImages([]);
+      setVideo(null);
+      setDoc(null);
+      setPrivacy('all');
+      setSection('tribune');
+      setBg('');
+      setAIMessages(initialAIMessages);
+      setAIInput('');
+      setOpen(false);
+      setAIOpen(false);
+
+      // Симуляция уведомления
+      addNotification('Пост опубликован!');
+
+      // Обновление данных для родительского компонента
+      if (onDataUpdate) {
+        onDataUpdate({ type: 'post_created', post: newPost });
+      }
+    } catch (err) {
+      console.error('Ошибка создания поста:', err);
+      addNotification('Ошибка при создании поста');
+    }
   };
 
   const handleAISend = () => {
@@ -1105,13 +1186,25 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
         </Button>
       </Dialog>
       {/* Лента постов */}
-      <Grid container spacing={isMobile ? 1 : 2}>
-        {filteredPosts.map(post => (
-          <Grid item xs={12} key={post.id}>
-            <PostCard post={post} compact={false} />
-          </Grid>
-        ))}
-      </Grid>
+      {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', py: 4 }}>
+          <CircularProgress />
+          <Typography sx={{ ml: 2 }}>Загрузка постов...</Typography>
+        </Box>
+      ) : error ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', py: 4 }}>
+          <Typography color="error">{error}</Typography>
+          <Button sx={{ ml: 2 }} onClick={loadPosts}>Повторить</Button>
+        </Box>
+      ) : (
+        <Grid container spacing={isMobile ? 1 : 2}>
+          {filteredPosts.map(post => (
+            <Grid item xs={12} key={post.id}>
+              <PostCard post={post} compact={false} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
 
       {/* Плавающая кнопка для создания постов на мобильных */}
       {isMobile && (

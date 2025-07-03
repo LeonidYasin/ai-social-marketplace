@@ -49,7 +49,7 @@ const notifications = [
   { id: 3, text: 'Появился новый пост в "Продам"' },
 ];
 
-const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGamificationOpen, onUserSettingsOpen, currentUser, themeName, setThemeName }) => {
+const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGamificationOpen, onUserSettingsOpen, currentUser, themeName, setThemeName, onLogout, onDebugUsers }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [active, setActive] = useState('home');
@@ -174,6 +174,11 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
               </Badge>
             </IconButton>
           </Tooltip>
+          <Tooltip title="Отладка пользователей">
+            <IconButton color="inherit" onClick={onDebugUsers}>
+              <AccountCircleIcon />
+            </IconButton>
+          </Tooltip>
           <Tooltip title="Сменить стиль">
             <IconButton color="inherit" onClick={handleThemeMenu}>
               <LightModeIcon sx={{ display: themeName === 'facebook' ? 'inline' : 'none' }} />
@@ -184,6 +189,13 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
             <MenuItem onClick={() => handleThemeChange('facebook')}>Facebook стиль</MenuItem>
             <MenuItem onClick={() => handleThemeChange('neon')}>Неоновый стиль</MenuItem>
           </Menu>
+          {currentUser && currentUser.name && (
+            <Tooltip title="Выйти">
+              <IconButton color="default" onClick={onLogout}>
+                <LogoutIcon />
+              </IconButton>
+            </Tooltip>
+          )}
           <Tooltip title={currentUser && currentUser.name ? currentUser.name : 'Войти'}>
             <IconButton color="default" onClick={onUserSettingsOpen}>
               {currentUser && currentUser.name ? (

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        pre { background: #f8f9fa; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>API Connection Test</h1>
+    
+    <div class="test-section">
+        <h3>Test Posts API</h3>
+        <button onclick="testPostsAPI()">Test GET /api/posts</button>
+        <div id="posts-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>Test Users API</h3>
+        <button onclick="testUsersAPI()">Test GET /api/users</button>
+        <div id="users-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>Test Auth API</h3>
+        <button onclick="testAuthAPI()">Test GET /api/auth/me</button>
+        <div id="auth-result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000/api';
+
+        async function testAPI(endpoint, resultId) {
+            const resultDiv = document.getElementById(resultId);
+            resultDiv.innerHTML = '<p>Testing...</p>';
+            
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                resultDiv.className = 'test-section success';
+                resultDiv.innerHTML = `
+                    <h4>✅ Success (${response.status})</h4>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.className = 'test-section error';
+                resultDiv.innerHTML = `
+                    <h4>❌ Error</h4>
+                    <p>${error.message}</p>
+                `;
+            }
+        }
+
+        function testPostsAPI() {
+            testAPI('/posts', 'posts-result');
+        }
+
+        function testUsersAPI() {
+            testAPI('/users', 'users-result');
+        }
+
+        function testAuthAPI() {
+            testAPI('/auth/me', 'auth-result');
+        }
+
+        // Auto-test on load
+        window.onload = function() {
+            setTimeout(() => {
+                testPostsAPI();
+            }, 1000);
+        };
+    </script>
+</body>
+</html> 

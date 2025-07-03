@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Users API</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .user { border: 1px solid #ccc; margin: 10px 0; padding: 10px; }
+        .current-user { background-color: #e8f5e8; }
+    </style>
+</head>
+<body>
+    <h1>Test Users API</h1>
+    <button onclick="loadUsers()">Load Users</button>
+    <button onclick="checkCurrentUser()">Check Current User</button>
+    <div id="output"></div>
+
+    <script>
+        async function loadUsers() {
+            try {
+                const response = await fetch('http://localhost:8000/api/users');
+                const users = await response.json();
+                
+                let html = '<h2>Users from API:</h2>';
+                users.forEach(user => {
+                    html += `
+                        <div class="user">
+                            <strong>ID:</strong> ${user.id}<br>
+                            <strong>Username:</strong> ${user.username}<br>
+                            <strong>Name:</strong> ${user.first_name} ${user.last_name}<br>
+                            <strong>Email:</strong> ${user.email}<br>
+                        </div>
+                    `;
+                });
+                
+                document.getElementById('output').innerHTML = html;
+            } catch (error) {
+                document.getElementById('output').innerHTML = `<p>Error: ${error.message}</p>`;
+            }
+        }
+
+        function checkCurrentUser() {
+            const currentUser = localStorage.getItem('currentUser');
+            let html = '<h2>Current User from localStorage:</h2>';
+            
+            if (currentUser) {
+                const user = JSON.parse(currentUser);
+                html += `
+                    <div class="user current-user">
+                        <strong>ID:</strong> ${user.id}<br>
+                        <strong>Username:</strong> ${user.username}<br>
+                        <strong>Name:</strong> ${user.name}<br>
+                        <strong>Email:</strong> ${user.email}<br>
+                        <strong>First Name:</strong> ${user.first_name || 'N/A'}<br>
+                        <strong>Last Name:</strong> ${user.last_name || 'N/A'}<br>
+                    </div>
+                `;
+            } else {
+                html += '<p>No current user found in localStorage</p>';
+            }
+            
+            document.getElementById('output').innerHTML += html;
+        }
+    </script>
+</body>
+</html> 

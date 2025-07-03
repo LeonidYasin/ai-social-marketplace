@@ -1,0 +1,20 @@
+[2025-07-02T23:13:32.831Z] [Page1] API Request: OPTIONS http://localhost:8000/api/posts
+[2025-07-02T23:13:32.833Z] [Page1] API Response: 204 http://localhost:8000/api/posts
+[2025-07-02T23:13:32.888Z] [Page1] API Request: GET http://localhost:8000/api/posts
+[2025-07-02T23:13:32.936Z] [Page1] API Request: GET http://localhost:8000/api/posts
+[2025-07-02T23:13:33.126Z] [Page1] API Response: 200 http://localhost:8000/api/posts
+[2025-07-02T23:13:33.130Z] [Page1] API Response: 200 http://localhost:8000/api/posts
+[2025-07-02T23:13:36.127Z] [Page2] API Request: GET http://localhost:8000/api/posts
+[2025-07-02T23:13:36.157Z] [Page2] API Request: GET http://localhost:8000/api/posts
+[2025-07-02T23:13:36.163Z] [Page2] API Response: 200 http://localhost:8000/api/posts
+[2025-07-02T23:13:36.168Z] [Page2] API Response: 200 http://localhost:8000/api/posts
+[2025-07-02T23:14:20.504Z] [Page1] API вызовов: 4
+[2025-07-02T23:14:20.506Z] [Page1] API Request: GET http://localhost:8000/api/posts
+[2025-07-02T23:14:20.512Z] [Page1] API Request: GET http://localhost:8000/api/posts
+[2025-07-02T23:14:20.517Z] [Page1] API Response: 200 http://localhost:8000/api/posts
+[2025-07-02T23:14:20.522Z] [Page1] API Response: 200 http://localhost:8000/api/posts
+[2025-07-02T23:14:23.556Z] [Page2] API вызовов: 4
+[2025-07-02T23:14:23.557Z] [Page2] API Request: GET http://localhost:8000/api/posts
+[2025-07-02T23:14:23.560Z] [Page2] API Request: GET http://localhost:8000/api/posts
+[2025-07-02T23:14:23.562Z] [Page2] API Response: 200 http://localhost:8000/api/posts
+[2025-07-02T23:14:23.563Z] [Page2] API Response: 200 http://localhost:8000/api/posts

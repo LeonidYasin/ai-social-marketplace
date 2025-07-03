@@ -1,0 +1,37 @@
+{
+  "name": "1",
+  "version": "1.0.0",
+  "description": "- **Фронтенд:** React + Material-UI (уже реализован)\r - **Бэкенд:** Node.js (Express или NestJS)\r - **База данных:** PostgreSQL (Supabase, Railway, ElephantSQL — бесплатные тарифы)\r - **Хранение медиа:** Cloudinary, Supabase Storage, Firebase Storage (бесплатные лимиты)\r - **CDN:** Cloudflare (бесплатно)\r - **OAuth:** passport.js (Google, Facebook, Telegram, Twitter и др.)\r - **AI/ML:** можно добавить отдельным сервисом на Python при необходимости\r - **Telegram-бот:** не требуется для основной работы, можно добавить позже",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leonidyasin/ai-social-marketplace.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leonidyasin/ai-social-marketplace/issues"
+  },
+  "homepage": "https://github.com/leonidyasin/ai-social-marketplace#readme",
+  "dependencies": {
+    "cloudinary": "^2.7.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.0.1",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "multer": "^2.0.1",
+    "node-fetch": "^3.3.2",
+    "passport": "^0.7.0",
+    "passport-facebook": "^3.0.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-twitter": "^1.0.4",
+    "pg": "^8.16.3",
+    "puppeteer": "^24.11.2",
+    "socket.io": "^4.8.1",
+    "tesseract.js": "^6.0.1"
+  }
+}
