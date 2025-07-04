@@ -1,0 +1,81 @@
+{
+  "name": "ocr-testing-bot",
+  "version": "1.0.0",
+  "description": "Универсальный OCR бот для визуального тестирования веб-приложений",
+  "main": "RUN_OCR_TESTS.js",
+  "scripts": {
+    "test": "node RUN_OCR_TESTS.js",
+    "test:basic": "node RUN_OCR_TESTS.js --scenarios basic",
+    "test:advanced": "node RUN_OCR_TESTS.js --scenarios advanced",
+    "test:auth": "node RUN_OCR_TESTS.js --scenarios auth",
+    "test:post": "node RUN_OCR_TESTS.js --scenarios post",
+    "test:chat": "node RUN_OCR_TESTS.js --scenarios chat",
+    "test:multiuser": "node RUN_OCR_TESTS.js --scenarios multiuser",
+    "test:mobile": "node RUN_OCR_TESTS.js --device mobile",
+    "test:headless": "node RUN_OCR_TESTS.js --headless",
+    "test:slow": "node RUN_OCR_TESTS.js --slow 200",
+    "install:tesseract": "npm run install:tesseract:win || npm run install:tesseract:linux || npm run install:tesseract:mac",
+    "install:tesseract:win": "powershell -ExecutionPolicy Bypass -File install-tesseract.ps1",
+    "install:tesseract:linux": "bash install-tesseract.sh",
+    "install:tesseract:mac": "brew install tesseract tesseract-lang",
+    "setup": "npm install && npm run install:tesseract",
+    "report": "open reports/latest/report.html",
+    "clean": "rimraf reports/screenshots/* reports/logs/*",
+    "help": "node RUN_OCR_TESTS.js --help"
+  },
+  "keywords": [
+    "ocr",
+    "testing",
+    "automation",
+    "visual",
+    "puppeteer",
+    "tesseract",
+    "bot",
+    "qa"
+  ],
+  "author": "OCR Bot Team",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^21.0.0",
+    "node-tesseract-ocr": "^2.2.1",
+    "fs-extra": "^11.0.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "rimraf": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/ocr-testing-bot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/ocr-testing-bot/issues"
+  },
+  "homepage": "https://github.com/your-org/ocr-testing-bot#readme",
+  "files": [
+    "OCR_BOT_IMPLEMENTATION.js",
+    "TEST_SCENARIOS.js",
+    "RUN_OCR_TESTS.js",
+    "FRONTEND_BACKEND_INTERACTION.md",
+    "MULTIUSER_SCENARIOS.md",
+    "OCR_BOT_TESTING_MODULE.md",
+    "reports/",
+    "tessdata/"
+  ],
+  "bin": {
+    "ocr-bot": "./RUN_OCR_TESTS.js"
+  },
+  "preferGlobal": true,
+  "os": [
+    "win32",
+    "linux",
+    "darwin"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ]
+} 
