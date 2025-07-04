@@ -1,4 +1,0 @@
-[2025-07-02T23:13:47.428Z] ❌ Ошибка регистрации Пользователь 1: Waiting for selector `[data-testid="user-settings-dialog"]` failed: Waiting failed: 10000ms exceeded
-[2025-07-02T23:13:57.448Z] ❌ Ошибка регистрации Пользователь 2: Waiting for selector `[data-testid="user-settings-dialog"]` failed: Waiting failed: 10000ms exceeded
-[2025-07-02T23:14:07.459Z] ❌ Ошибка проверки пользователей [Page1]: Waiting failed: 10000ms exceeded
-[2025-07-02T23:14:17.473Z] ❌ Ошибка проверки пользователей [Page2]: Waiting failed: 10000ms exceeded

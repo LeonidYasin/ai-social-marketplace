@@ -123,31 +123,41 @@ const getPostById = async (req, res) => {
 const createPost = async (req, res) => {
   try {
     const { 
-      user_id, content, media_urls, media_type, background_color, 
+      content, media_urls, media_type, background_color, 
       privacy, section, location, is_ai_generated, ai_prompt 
     } = req.body;
     
-    if (!user_id || !content) {
-      return res.status(400).json({ error: 'user_id и content обязательны' });
+    if (!content) {
+      return res.status(400).json({ error: 'content обязателен' });
     }
     
+    const userId = req.user.id; // ID из JWT токена
+    // Преобразуем media_urls в формат '{"url1","url2"}' для PostgreSQL
+    let mediaUrlsPg = null;
+    if (Array.isArray(media_urls)) {
+      mediaUrlsPg = '{' + media_urls.map(url => '"' + url.replace(/"/g, '\"') + '"').join(',') + '}';
+    }
     const result = await query(
       `INSERT INTO posts (
         user_id, content, media_urls, media_type, background_color,
-        privacy, section, location, is_ai_generated, ai_prompt
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-      RETURNING id, content, created_at`,
+        privacy, section, location, is_ai_generated, ai_prompt,
+        created_at, updated_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+      RETURNING *`,
       [
-        user_id, content, media_urls || null, media_type || null,
-        background_color || null, privacy || 'public', section || null,
-        location || null, is_ai_generated || false, ai_prompt || null
+        userId, content, 
+        mediaUrlsPg,
+        media_type || null,
+        background_color || null,
+        privacy || 'public',
+        section || null,
+        location || null,
+        is_ai_generated || false,
+        ai_prompt || null
       ]
     );
     
-    res.status(201).json({
-      message: 'Пост успешно создан',
-      post: result.rows[0]
-    });
+    res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error('Ошибка при создании поста:', error);
     res.status(500).json({ error: 'Внутренняя ошибка сервера' });

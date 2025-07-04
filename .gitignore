@@ -1,9 +1,72 @@
-# Node
+# Screenshots and images
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.svg
+documentation_screenshots/
+test_screenshots/
+reports/screenshots/
+
+# Archives
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+
+# Logs
+*.log
+test_logs/
+logs/
+
+# Node modules
 node_modules/
+*/node_modules/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Test outputs
+test_logs/
+reports/
+output.txt
+output.tsv
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Training data files
+*.traineddata
+eng.traineddata
+rus.traineddata
+
+# Node
 build/
 dist/
-.env
-.DS_Store
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log* 

@@ -120,14 +120,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// ВРЕМЕННО: middleware для тестовой аутентификации (заменить на реальную)
-app.use((req, res, next) => {
-  // Например, из заголовка X-User-Role
-  const role = req.headers['x-user-role'] || 'member';
-  req.user = { id: 1, username: 'admin', role };
-  next();
-});
-
 // Проверка здоровья API
 app.get('/api/health', (req, res) => {
   res.json({ 

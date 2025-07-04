@@ -63,11 +63,31 @@ const checkAdmin = async (req, res, next) => {
 // Middleware для проверки аутентификации (без проверки роли)
 const requireAuth = async (req, res, next) => {
   try {
-    await verifyToken(req, res, () => {});
+    const authHeader = req.headers.authorization;
+    
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Токен не предоставлен' });
+    }
+    
+    const token = authHeader.split(' ')[1];
+    
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+    
+    // Получаем актуальные данные пользователя из БД
+    const result = await query(
+      'SELECT id, username, email, first_name, last_name FROM users WHERE id = $1',
+      [decoded.id]
+    );
+    
+    if (result.rows.length === 0) {
+      return res.status(401).json({ error: 'Пользователь не найден' });
+    }
+    
+    req.user = result.rows[0];
     next();
   } catch (error) {
-    console.error('Auth check error:', error);
-    return res.status(401).json({ error: 'Требуется авторизация' });
+    console.error('Ошибка аутентификации:', error);
+    return res.status(401).json({ error: 'Недействительный токен' });
   }
 };
 
