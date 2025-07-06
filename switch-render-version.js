@@ -13,7 +13,9 @@ if (!version) {
   console.log('  working  - render-working.yaml (рабочая версия)');
   console.log('  ultra    - render-ultra-simple.yaml (ультра-простая)');
   console.log('  final    - render-final.yaml (финальная версия)');
-  console.log('\nПример: node switch-render-version.js final');
+  console.log('  correct  - render-correct.yaml (правильная версия)');
+  console.log('  no-db    - render-no-db.yaml (без базы данных)');
+  console.log('\nПример: node switch-render-version.js no-db');
   process.exit(1);
 }
 
@@ -23,7 +25,9 @@ const versions = {
   minimal: 'render-minimal.yaml',
   working: 'render-working.yaml',
   ultra: 'render-ultra-simple.yaml',
-  final: 'render-final.yaml'
+  final: 'render-final.yaml',
+  correct: 'render-correct.yaml',
+  'no-db': 'render-no-db.yaml'
 };
 
 const targetFile = versions[version];
@@ -57,6 +61,11 @@ try {
   console.log('   git push origin main');
   console.log('');
   console.log('2. Попробуйте развёртывание в Render Dashboard');
+
+  if (version === 'no-db') {
+    console.log('\n⚠️  Внимание: Эта версия не включает базу данных!');
+    console.log('Создайте PostgreSQL Database отдельно в Render Dashboard.');
+  }
 
 } catch (error) {
   console.error('❌ Ошибка при переключении:', error.message);

@@ -1,4 +1,10 @@
 services:
+  - type: pserv
+    name: social-marketplace-db
+    runtime: postgresql
+    plan: free
+    startCommand: "echo 'PostgreSQL database is ready'"
+
   - type: web
     name: social-marketplace-backend
     env: node
