@@ -1,73 +1,62 @@
 const fs = require('fs');
 const path = require('path');
 
+const versions = {
+  'corrected-final': 'render-corrected-final.yaml',
+  'correct': 'render-correct.yaml', 
+  'no-db': 'render-no-db.yaml',
+  'working': 'render-working.yaml',
+  'final': 'render-final.yaml',
+  'ultra-simple': 'render-ultra-simple.yaml',
+  'minimal': 'render-minimal.yaml'
+};
+
+function switchVersion(versionName) {
+  if (!versions[versionName]) {
+    console.log('❌ Invalid version. Available versions:');
+    Object.keys(versions).forEach(v => console.log(`  - ${v}`));
+    return;
+  }
+
+  const sourceFile = versions[versionName];
+  const targetFile = 'render.yaml';
+
+  if (!fs.existsSync(sourceFile)) {
+    console.log(`❌ Source file ${sourceFile} not found`);
+    return;
+  }
+
+  try {
+    fs.copyFileSync(sourceFile, targetFile);
+    console.log(`✅ Switched to ${versionName} version`);
+    console.log(`📁 ${sourceFile} → ${targetFile}`);
+    
+    // Show the current configuration
+    const content = fs.readFileSync(targetFile, 'utf8');
+    console.log('\n📋 Current render.yaml content:');
+    console.log('─'.repeat(50));
+    console.log(content);
+    console.log('─'.repeat(50));
+    
+  } catch (error) {
+    console.log(`❌ Error switching version: ${error.message}`);
+  }
+}
+
+// Get version from command line argument
 const version = process.argv[2];
 
 if (!version) {
-  console.log('🔧 Переключение версии render.yaml\n');
-  console.log('Использование: node switch-render-version.js <version>');
-  console.log('\nДоступные версии:');
-  console.log('  full     - render.yaml (полная версия)');
-  console.log('  auto     - render-auto.yaml (упрощённая)');
-  console.log('  minimal  - render-minimal.yaml (минимальная)');
-  console.log('  working  - render-working.yaml (рабочая версия)');
-  console.log('  ultra    - render-ultra-simple.yaml (ультра-простая)');
-  console.log('  final    - render-final.yaml (финальная версия)');
-  console.log('  correct  - render-correct.yaml (правильная версия)');
-  console.log('  no-db    - render-no-db.yaml (без базы данных)');
-  console.log('\nПример: node switch-render-version.js no-db');
-  process.exit(1);
-}
-
-const versions = {
-  full: 'render.yaml',
-  auto: 'render-auto.yaml',
-  minimal: 'render-minimal.yaml',
-  working: 'render-working.yaml',
-  ultra: 'render-ultra-simple.yaml',
-  final: 'render-final.yaml',
-  correct: 'render-correct.yaml',
-  'no-db': 'render-no-db.yaml'
-};
-
-const targetFile = versions[version];
-
-if (!targetFile) {
-  console.log('❌ Неизвестная версия:', version);
-  console.log('Доступные версии:', Object.keys(versions).join(', '));
-  process.exit(1);
-}
-
-if (!fs.existsSync(targetFile)) {
-  console.log('❌ Файл не найден:', targetFile);
-  process.exit(1);
-}
-
-try {
-  // Создаём резервную копию текущего
-  if (fs.existsSync('render.yaml')) {
-    fs.copyFileSync('render.yaml', 'render.yaml.backup');
-    console.log('✅ Создана резервная копия: render.yaml.backup');
-  }
-
-  // Копируем нужную версию
-  fs.copyFileSync(targetFile, 'render.yaml');
-  console.log(`✅ Активирована версия: ${targetFile}`);
-
-  console.log('\n📋 Следующие шаги:');
-  console.log('1. Закоммитьте изменения:');
-  console.log('   git add .');
-  console.log(`   git commit -m "Switch to ${version} render.yaml version"`);
-  console.log('   git push origin main');
-  console.log('');
-  console.log('2. Попробуйте развёртывание в Render Dashboard');
-
-  if (version === 'no-db') {
-    console.log('\n⚠️  Внимание: Эта версия не включает базу данных!');
-    console.log('Создайте PostgreSQL Database отдельно в Render Dashboard.');
-  }
-
-} catch (error) {
-  console.error('❌ Ошибка при переключении:', error.message);
-  process.exit(1);
+  console.log('🔧 Render.yaml Version Switcher');
+  console.log('Usage: node switch-render-version.js <version>');
+  console.log('\nAvailable versions:');
+  Object.keys(versions).forEach(v => {
+    const status = fs.existsSync(versions[v]) ? '✅' : '❌';
+    console.log(`  ${status} ${v} (${versions[v]})`);
+  });
+  console.log('\nExamples:');
+  console.log('  node switch-render-version.js corrected-final');
+  console.log('  node switch-render-version.js no-db');
+} else {
+  switchVersion(version);
 } 
