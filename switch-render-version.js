@@ -12,7 +12,8 @@ if (!version) {
   console.log('  minimal  - render-minimal.yaml (минимальная)');
   console.log('  working  - render-working.yaml (рабочая версия)');
   console.log('  ultra    - render-ultra-simple.yaml (ультра-простая)');
-  console.log('\nПример: node switch-render-version.js ultra');
+  console.log('  final    - render-final.yaml (финальная версия)');
+  console.log('\nПример: node switch-render-version.js final');
   process.exit(1);
 }
 
@@ -21,7 +22,8 @@ const versions = {
   auto: 'render-auto.yaml',
   minimal: 'render-minimal.yaml',
   working: 'render-working.yaml',
-  ultra: 'render-ultra-simple.yaml'
+  ultra: 'render-ultra-simple.yaml',
+  final: 'render-final.yaml'
 };
 
 const targetFile = versions[version];
