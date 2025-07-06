@@ -13,7 +13,6 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SettingsIcon from '@mui/icons-material/Settings';
-import LogoutIcon from '@mui/icons-material/Logout';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import LightModeIcon from '@mui/icons-material/LightMode';
@@ -50,7 +49,7 @@ const notifications = [
   { id: 3, text: 'Появился новый пост в "Продам"' },
 ];
 
-const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGamificationOpen, onUserSettingsOpen, currentUser, themeName, setThemeName, onLogout, onDebugUsers, socket }) => {
+const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGamificationOpen, onUserSettingsOpen, currentUser, themeName, setThemeName, onDebugUsers, socket }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [active, setActive] = useState('home');
@@ -179,13 +178,6 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
             <MenuItem onClick={() => handleThemeChange('facebook')}>Facebook стиль</MenuItem>
             <MenuItem onClick={() => handleThemeChange('neon')}>Неоновый стиль</MenuItem>
           </Menu>
-          {currentUser && currentUser.name && (
-            <Tooltip title="Выйти">
-              <IconButton color="default" onClick={onLogout}>
-                <LogoutIcon />
-              </IconButton>
-            </Tooltip>
-          )}
           <Tooltip title={currentUser && currentUser.name ? currentUser.name : 'Войти'}>
             <IconButton 
               color="default" 

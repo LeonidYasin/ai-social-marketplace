@@ -19,6 +19,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { v4 as uuidv4 } from 'uuid';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { authAPI } from './services/api';
 
 // const USERS = [
 //   { id: 'ai', name: 'AI Ассистент', isAI: true },
@@ -420,8 +421,15 @@ const App = ({ themeMode, onThemeToggle }) => {
 
   // Функция выхода пользователя
   const handleLogout = () => {
+    // Используем функцию из API для правильного выхода
+    authAPI.logout();
     setCurrentUser(null);
-    localStorage.removeItem('currentUser');
+    // Закрываем все модальные окна
+    setSettingsOpen(false);
+    setAnalyticsOpen(false);
+    setSearchOpen(false);
+    setNotificationsOpen(false);
+    setGamificationOpen(false);
   };
 
   // Функция для отладки пользователей
@@ -473,7 +481,6 @@ const App = ({ themeMode, onThemeToggle }) => {
                 currentUser={currentUser}
                 themeName={themeName}
                 setThemeName={setThemeName}
-                onLogout={handleLogout}
                 onDebugUsers={debugUsers}
                 socket={socket}
               />
