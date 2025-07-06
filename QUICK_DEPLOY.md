@@ -13,32 +13,29 @@ git commit -m "Ready for deployment"
 git push origin main
 ```
 
-### 2. Создание сервисов в Render (3 минуты)
+### 2. Создание проекта в Render (3 минуты)
 
-#### База данных PostgreSQL:
-- **New +** → **PostgreSQL**
-- **Name**: `social-marketplace-db`
-- **Plan**: Free
-- **Create Database**
+#### Вариант A: Автоматическое развёртывание (рекомендуется)
+1. Войдите в [Render Dashboard](https://dashboard.render.com/)
+2. Нажмите **"New +"** → **"Blueprint"**
+3. Подключите ваш GitHub репозиторий
+4. Render автоматически создаст один проект с тремя сервисами:
+   - **PostgreSQL Database** (`social-marketplace-db`)
+   - **Web Service** (`social-marketplace-backend`)
+   - **Static Site** (`social-marketplace-frontend`)
+5. Нажмите **"Create Blueprint Instance"**
 
-#### Backend API:
-- **New +** → **Web Service**
-- **Connect Repository** → выберите ваш репозиторий
-- **Name**: `social-marketplace-backend`
-- **Environment**: Node
-- **Build Command**: `cd backend && npm install`
-- **Start Command**: `cd backend && npm start`
-- **Plan**: Free
-- **Create Web Service**
+#### Вариант B: Ручное создание
+1. **Создайте проект:**
+   - **New +** → **"Blueprint"** или **"Web Service"**
+   - Подключите ваш GitHub репозиторий
+   - **Name**: `social-marketplace`
+   - **Plan**: Free
 
-#### Frontend:
-- **New +** → **Static Site**
-- **Connect Repository** → выберите ваш репозиторий
-- **Name**: `social-marketplace-frontend`
-- **Build Command**: `cd frontend && npm install && npm run build`
-- **Publish Directory**: `frontend/build`
-- **Plan**: Free
-- **Create Static Site**
+2. **В рамках этого проекта создайте сервисы:**
+   - **New +** → **PostgreSQL** (в том же проекте)
+   - **New +** → **Web Service** (в том же проекте)
+   - **New +** → **Static Site** (в том же проекте)
 
 ### 3. Настройка переменных окружения (1 минута)
 
@@ -86,7 +83,7 @@ REACT_APP_WS_URL=https://ваш-backend-url.onrender.com
 
 ## 📞 Поддержка
 
-- **Логи**: Render Dashboard → ваш сервис → Logs
+- **Логи**: Render Dashboard → ваш проект → сервис → Logs
 - **Документация**: `DEPLOYMENT_GUIDE.md`
 - **Render Docs**: https://render.com/docs
 
