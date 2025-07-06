@@ -4,7 +4,6 @@ services:
     name: social-marketplace-db
     env: postgresql
     plan: free
-    startCommand: "echo 'PostgreSQL database is ready'"
 
   # Backend API Service
   - type: web
@@ -47,15 +46,4 @@ services:
     env: static
     plan: free
     buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: ./frontend/build
-    envVars:
-      - key: REACT_APP_API_URL
-        fromService:
-          type: web
-          name: social-marketplace-backend
-          envVarKey: RENDER_EXTERNAL_URL
-      - key: REACT_APP_WS_URL
-        fromService:
-          type: web
-          name: social-marketplace-backend
-          envVarKey: RENDER_EXTERNAL_URL 
+    staticPublishPath: ./frontend/build 
