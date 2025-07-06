@@ -1,0 +1,29 @@
+services:
+  # PostgreSQL Database
+  - type: pserv
+    name: social-marketplace-db
+    env: postgresql
+    plan: free
+
+  # Backend API Service
+  - type: web
+    name: social-marketplace-backend
+    env: node
+    plan: free
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 8000
+      - key: HOST
+        value: 0.0.0.0
+
+  # Frontend Static Site
+  - type: web
+    name: social-marketplace-frontend
+    env: static
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/build 
