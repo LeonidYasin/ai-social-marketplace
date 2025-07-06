@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const versions = {
+  'free': 'render-free.yaml',
   'corrected-final': 'render-corrected-final.yaml',
   'correct': 'render-correct.yaml', 
   'no-db': 'render-no-db.yaml',
@@ -55,6 +56,7 @@ if (!version) {
     console.log(`  ${status} ${v} (${versions[v]})`);
   });
   console.log('\nExamples:');
+  console.log('  node switch-render-version.js free');
   console.log('  node switch-render-version.js corrected-final');
   console.log('  node switch-render-version.js no-db');
 } else {
