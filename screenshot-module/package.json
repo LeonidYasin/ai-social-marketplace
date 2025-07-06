@@ -1,0 +1,17 @@
+{
+  "name": "screenshot-module",
+  "version": "1.0.0",
+  "description": "Модуль для автоматизированного создания и анализа скриншотов с поддержкой OCR и DOM.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "puppeteer": "^21.3.8"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "author": "",
+  "license": "MIT"
+} 
