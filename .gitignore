@@ -20,6 +20,8 @@ reports/screenshots/
 *.log
 test_logs/
 logs/
+backend/logs/
+frontend/logs/
 
 # Node modules
 node_modules/
