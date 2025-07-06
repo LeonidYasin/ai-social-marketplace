@@ -1,0 +1,297 @@
+{
+  "timestamp": "2025-07-05T00:22:57.851Z",
+  "url": "http://localhost:3000/",
+  "totalButtons": 29,
+  "coordinates": [
+    {
+      "index": 8,
+      "text": "3",
+      "selector": ".MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium.css-78trlr-MuiButtonBase-root-MuiIconButton-root",
+      "x": 1732,
+      "y": 32,
+      "width": 40,
+      "height": 40,
+      "area": 1600
+    },
+    {
+      "index": 13,
+      "text": "Лента",
+      "selector": ".MuiButtonBase-root.MuiListItem-root.MuiListItem-gutters.MuiListItem-padding.MuiListItem-button.css-1psgdzu-MuiButtonBase-root-MuiListItem-root",
+      "x": 110,
+      "y": 176,
+      "width": 188,
+      "height": 48,
+      "area": 9024
+    },
+    {
+      "index": 14,
+      "text": "Избранное",
+      "selector": ".MuiButtonBase-root.MuiListItem-root.MuiListItem-gutters.MuiListItem-padding.MuiListItem-button.css-1psgdzu-MuiButtonBase-root-MuiListItem-root",
+      "x": 110,
+      "y": 228,
+      "width": 188,
+      "height": 48,
+      "area": 9024
+    },
+    {
+      "index": 15,
+      "text": "AI-чаты",
+      "selector": ".MuiButtonBase-root.MuiListItem-root.MuiListItem-gutters.MuiListItem-padding.MuiListItem-button.css-1psgdzu-MuiButtonBase-root-MuiListItem-root",
+      "x": 110,
+      "y": 280,
+      "width": 188,
+      "height": 48,
+      "area": 9024
+    },
+    {
+      "index": 16,
+      "text": "aaiЗдравствуйте! Чем могу помочь?",
+      "selector": ".MuiButtonBase-root.MuiListItem-root.MuiListItem-gutters.MuiListItem-padding.MuiListItem-button.css-1psgdzu-MuiButtonBase-root-MuiListItem-root",
+      "x": 110,
+      "y": 460,
+      "width": 188,
+      "height": 71,
+      "area": 13269
+    },
+    {
+      "index": 17,
+      "text": "Отключить реальное время",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-outlined.MuiButton-outlinedPrimary.MuiButton-sizeSmall.MuiButton-outlinedSizeSmall.MuiButton-colorPrimary.MuiButton-root.MuiButton-outlined.MuiButton-outlinedPrimary.MuiButton-sizeSmall.MuiButton-outlinedSizeSmall.MuiButton-colorPrimary.css-3xzre1-MuiButtonBase-root-MuiButton-root",
+      "x": 1440,
+      "y": 108,
+      "width": 175,
+      "height": 29,
+      "area": 5076
+    },
+    {
+      "index": 19,
+      "text": "Что у вас нового?",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-outlined.MuiButton-outlinedPrimary.MuiButton-sizeMedium.MuiButton-outlinedSizeMedium.MuiButton-colorPrimary.MuiButton-root.MuiButton-outlined.MuiButton-outlinedPrimary.MuiButton-sizeMedium.MuiButton-outlinedSizeMedium.MuiButton-colorPrimary.css-1w9axbq-MuiButtonBase-root-MuiButton-root",
+      "x": 940,
+      "y": 187,
+      "width": 1240,
+      "height": 54,
+      "area": 66960
+    },
+    {
+      "index": 20,
+      "text": "👍Нравится",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "x": 321,
+      "y": 354,
+      "width": 122,
+      "height": 38,
+      "area": 4653
+    },
+    {
+      "index": 21,
+      "text": "Отправить",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.Mui-disabled.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "x": 1502,
+      "y": 418,
+      "width": 116,
+      "height": 37,
+      "area": 4248
+    },
+    {
+      "index": 22,
+      "text": "👍Нравится",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "x": 321,
+      "y": 594,
+      "width": 122,
+      "height": 38,
+      "area": 4653
+    },
+    {
+      "index": 23,
+      "text": "Отправить",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.Mui-disabled.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "x": 1502,
+      "y": 658,
+      "width": 116,
+      "height": 37,
+      "area": 4248
+    },
+    {
+      "index": 24,
+      "text": "👍Нравится",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "x": 321,
+      "y": 834,
+      "width": 122,
+      "height": 38,
+      "area": 4653
+    },
+    {
+      "index": 25,
+      "text": "Отправить",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.Mui-disabled.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "x": 1502,
+      "y": 898,
+      "width": 116,
+      "height": 37,
+      "area": 4248
+    },
+    {
+      "index": 26,
+      "text": "👍Нравится",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "x": 321,
+      "y": 1074,
+      "width": 122,
+      "height": 38,
+      "area": 4653
+    },
+    {
+      "index": 27,
+      "text": "Отправить",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.Mui-disabled.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "x": 1502,
+      "y": 1138,
+      "width": 116,
+      "height": 37,
+      "area": 4248
+    },
+    {
+      "index": 28,
+      "text": "👍Нравится",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "x": 321,
+      "y": 1314,
+      "width": 122,
+      "height": 38,
+      "area": 4653
+    },
+    {
+      "index": 29,
+      "text": "Отправить",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.Mui-disabled.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "x": 1502,
+      "y": 1378,
+      "width": 116,
+      "height": 37,
+      "area": 4248
+    },
+    {
+      "index": 30,
+      "text": "👍Нравится",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "x": 321,
+      "y": 1554,
+      "width": 122,
+      "height": 38,
+      "area": 4653
+    },
+    {
+      "index": 31,
+      "text": "Отправить",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.Mui-disabled.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "x": 1502,
+      "y": 1618,
+      "width": 116,
+      "height": 37,
+      "area": 4248
+    },
+    {
+      "index": 32,
+      "text": "👍Нравится",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "x": 321,
+      "y": 1842,
+      "width": 122,
+      "height": 38,
+      "area": 4653
+    },
+    {
+      "index": 33,
+      "text": "Отправить",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.Mui-disabled.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "x": 1502,
+      "y": 1906,
+      "width": 116,
+      "height": 37,
+      "area": 4248
+    },
+    {
+      "index": 34,
+      "text": "👍Нравится",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "x": 321,
+      "y": 2082,
+      "width": 122,
+      "height": 38,
+      "area": 4653
+    },
+    {
+      "index": 35,
+      "text": "Отправить",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.Mui-disabled.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "x": 1502,
+      "y": 2146,
+      "width": 116,
+      "height": 37,
+      "area": 4248
+    },
+    {
+      "index": 36,
+      "text": "👍Нравится",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "x": 321,
+      "y": 2322,
+      "width": 122,
+      "height": 38,
+      "area": 4653
+    },
+    {
+      "index": 37,
+      "text": "Отправить",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.Mui-disabled.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "x": 1502,
+      "y": 2386,
+      "width": 116,
+      "height": 37,
+      "area": 4248
+    },
+    {
+      "index": 38,
+      "text": "👍Нравится",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-colorPrimary.css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "x": 321,
+      "y": 2562,
+      "width": 122,
+      "height": 38,
+      "area": 4653
+    },
+    {
+      "index": 39,
+      "text": "Отправить",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.Mui-disabled.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "x": 1502,
+      "y": 2626,
+      "width": 116,
+      "height": 37,
+      "area": 4248
+    },
+    {
+      "index": 46,
+      "text": "Войти в систему",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeLarge.MuiButton-containedSizeLarge.MuiButton-colorPrimary.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeLarge.MuiButton-containedSizeLarge.MuiButton-colorPrimary.css-1qpvomx-MuiButtonBase-root-MuiButton-root",
+      "x": 960,
+      "y": 585,
+      "width": 400,
+      "height": 50,
+      "area": 20100
+    },
+    {
+      "index": 47,
+      "text": "Продолжить как гость",
+      "selector": ".MuiButtonBase-root.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeLarge.MuiButton-textSizeLarge.MuiButton-colorPrimary.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeLarge.MuiButton-textSizeLarge.MuiButton-colorPrimary.css-1fyyz36-MuiButtonBase-root-MuiButton-root",
+      "x": 960,
+      "y": 652,
+      "width": 400,
+      "height": 50,
+      "area": 20100
+    }
+  ]
+}

@@ -1,0 +1,637 @@
+{
+  "timestamp": "2025-07-05T03-09-38-922Z",
+  "url": "http://localhost:3000",
+  "ocrText": "Добро пожаловать х\nВойдите в систему или продолжите как гость\nво Написать комментарий. ОТПРАВИТЬ\nПост в разделе новостей [7]\nob Нравится 0 реакций\nНаписать комментарий. ОТПРАВИТЬ,\nПриватный пост только для друзей (@)\nob Нравится 0 реакций\nНаписать комментарий. ОТПРАВИТЬ,\nВторой пост с медиа контентом 8\n>\n\\2Фото поста\nob Нравится 0 реакций\nНаписать комментарий. ОТПРАВИТЬ,\nПервый тестовый пост от пользователя 11 As\nob Нравится 0 реакций\nНаписать комментарий. ОТПРАВИТЬ,\nПост с Al генерацией '&\nob Нравится 0 реакций\nНаписать комментарий. ОТПРАВИТЬ,\nПост в разделе новостей [7]\nob Нравится 0 реакций\nНаписать комментарий. ОТПРАВИТЬ,\n",
+  "coordinates": [
+    {
+      "text": "3",
+      "x": 1732,
+      "y": 32,
+      "width": 40,
+      "height": 40,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root",
+      "id": ""
+    },
+    {
+      "text": "Отключить реальное время",
+      "x": 1440,
+      "y": 108,
+      "width": 175,
+      "height": 29,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeSmall MuiButton-outlinedSizeSmall MuiButton-colorPrimary MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeSmall MuiButton-outlinedSizeSmall MuiButton-colorPrimary css-3xzre1-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Что у вас нового?",
+      "x": 940,
+      "y": 187,
+      "width": 1240,
+      "height": 54,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary css-1w9axbq-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "👍Нравится",
+      "x": 321,
+      "y": 354,
+      "width": 122,
+      "height": 38,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Отправить",
+      "x": 1502,
+      "y": 418,
+      "width": 116,
+      "height": 37,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "👍Нравится",
+      "x": 321,
+      "y": 594,
+      "width": 122,
+      "height": 38,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Отправить",
+      "x": 1502,
+      "y": 658,
+      "width": 116,
+      "height": 37,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "👍Нравится",
+      "x": 321,
+      "y": 834,
+      "width": 122,
+      "height": 38,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Отправить",
+      "x": 1502,
+      "y": 898,
+      "width": 116,
+      "height": 37,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "👍Нравится",
+      "x": 321,
+      "y": 1074,
+      "width": 122,
+      "height": 38,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Отправить",
+      "x": 1502,
+      "y": 1138,
+      "width": 116,
+      "height": 37,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "👍Нравится",
+      "x": 321,
+      "y": 1314,
+      "width": 122,
+      "height": 38,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Отправить",
+      "x": 1502,
+      "y": 1378,
+      "width": 116,
+      "height": 37,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "👍Нравится",
+      "x": 321,
+      "y": 1554,
+      "width": 122,
+      "height": 38,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Отправить",
+      "x": 1502,
+      "y": 1618,
+      "width": 116,
+      "height": 37,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "👍Нравится",
+      "x": 321,
+      "y": 1842,
+      "width": 122,
+      "height": 38,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Отправить",
+      "x": 1502,
+      "y": 1906,
+      "width": 116,
+      "height": 37,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "👍Нравится",
+      "x": 321,
+      "y": 2082,
+      "width": 122,
+      "height": 38,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Отправить",
+      "x": 1502,
+      "y": 2146,
+      "width": 116,
+      "height": 37,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "👍Нравится",
+      "x": 321,
+      "y": 2322,
+      "width": 122,
+      "height": 38,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Отправить",
+      "x": 1502,
+      "y": 2386,
+      "width": 116,
+      "height": 37,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "👍Нравится",
+      "x": 321,
+      "y": 2562,
+      "width": 122,
+      "height": 38,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Отправить",
+      "x": 1502,
+      "y": 2626,
+      "width": 116,
+      "height": 37,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Войти в систему",
+      "x": 960,
+      "y": 585,
+      "width": 400,
+      "height": 50,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-colorPrimary css-1qpvomx-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Продолжить как гость",
+      "x": 960,
+      "y": 652,
+      "width": 400,
+      "height": 50,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButton-colorPrimary css-1fyyz36-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Лента",
+      "x": 110,
+      "y": 176,
+      "width": 188,
+      "height": 48,
+      "tagName": "div",
+      "className": "MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-1psgdzu-MuiButtonBase-root-MuiListItem-root",
+      "id": ""
+    },
+    {
+      "text": "Избранное",
+      "x": 110,
+      "y": 228,
+      "width": 188,
+      "height": 48,
+      "tagName": "div",
+      "className": "MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-1psgdzu-MuiButtonBase-root-MuiListItem-root",
+      "id": ""
+    },
+    {
+      "text": "AI-чаты",
+      "x": 110,
+      "y": 280,
+      "width": 188,
+      "height": 48,
+      "tagName": "div",
+      "className": "MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-1psgdzu-MuiButtonBase-root-MuiListItem-root",
+      "id": ""
+    },
+    {
+      "text": "aaiЗдравствуйте! Чем могу помочь?",
+      "x": 110,
+      "y": 460,
+      "width": 188,
+      "height": 71,
+      "tagName": "div",
+      "className": "MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-1psgdzu-MuiButtonBase-root-MuiListItem-root",
+      "id": ""
+    },
+    {
+      "text": "3",
+      "x": 1732,
+      "y": 32,
+      "width": 40,
+      "height": 40,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root",
+      "id": ""
+    },
+    {
+      "text": "Лента",
+      "x": 110,
+      "y": 176,
+      "width": 188,
+      "height": 48,
+      "tagName": "div",
+      "className": "MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-1psgdzu-MuiButtonBase-root-MuiListItem-root",
+      "id": ""
+    },
+    {
+      "text": "Избранное",
+      "x": 110,
+      "y": 228,
+      "width": 188,
+      "height": 48,
+      "tagName": "div",
+      "className": "MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-1psgdzu-MuiButtonBase-root-MuiListItem-root",
+      "id": ""
+    },
+    {
+      "text": "AI-чаты",
+      "x": 110,
+      "y": 280,
+      "width": 188,
+      "height": 48,
+      "tagName": "div",
+      "className": "MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-1psgdzu-MuiButtonBase-root-MuiListItem-root",
+      "id": ""
+    },
+    {
+      "text": "aaiЗдравствуйте! Чем могу помочь?",
+      "x": 110,
+      "y": 460,
+      "width": 188,
+      "height": 71,
+      "tagName": "div",
+      "className": "MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-1psgdzu-MuiButtonBase-root-MuiListItem-root",
+      "id": ""
+    },
+    {
+      "text": "Отключить реальное время",
+      "x": 1440,
+      "y": 108,
+      "width": 175,
+      "height": 29,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeSmall MuiButton-outlinedSizeSmall MuiButton-colorPrimary MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeSmall MuiButton-outlinedSizeSmall MuiButton-colorPrimary css-3xzre1-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Что у вас нового?",
+      "x": 940,
+      "y": 187,
+      "width": 1240,
+      "height": 54,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary css-1w9axbq-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "👍Нравится",
+      "x": 321,
+      "y": 354,
+      "width": 122,
+      "height": 38,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Отправить",
+      "x": 1502,
+      "y": 418,
+      "width": 116,
+      "height": 37,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "👍Нравится",
+      "x": 321,
+      "y": 594,
+      "width": 122,
+      "height": 38,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Отправить",
+      "x": 1502,
+      "y": 658,
+      "width": 116,
+      "height": 37,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "👍Нравится",
+      "x": 321,
+      "y": 834,
+      "width": 122,
+      "height": 38,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Отправить",
+      "x": 1502,
+      "y": 898,
+      "width": 116,
+      "height": 37,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "👍Нравится",
+      "x": 321,
+      "y": 1074,
+      "width": 122,
+      "height": 38,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Отправить",
+      "x": 1502,
+      "y": 1138,
+      "width": 116,
+      "height": 37,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "👍Нравится",
+      "x": 321,
+      "y": 1314,
+      "width": 122,
+      "height": 38,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Отправить",
+      "x": 1502,
+      "y": 1378,
+      "width": 116,
+      "height": 37,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "👍Нравится",
+      "x": 321,
+      "y": 1554,
+      "width": 122,
+      "height": 38,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Отправить",
+      "x": 1502,
+      "y": 1618,
+      "width": 116,
+      "height": 37,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "👍Нравится",
+      "x": 321,
+      "y": 1842,
+      "width": 122,
+      "height": 38,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Отправить",
+      "x": 1502,
+      "y": 1906,
+      "width": 116,
+      "height": 37,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "👍Нравится",
+      "x": 321,
+      "y": 2082,
+      "width": 122,
+      "height": 38,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Отправить",
+      "x": 1502,
+      "y": 2146,
+      "width": 116,
+      "height": 37,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "👍Нравится",
+      "x": 321,
+      "y": 2322,
+      "width": 122,
+      "height": 38,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Отправить",
+      "x": 1502,
+      "y": 2386,
+      "width": 116,
+      "height": 37,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "👍Нравится",
+      "x": 321,
+      "y": 2562,
+      "width": 122,
+      "height": 38,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-hftj5k-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Отправить",
+      "x": 1502,
+      "y": 2626,
+      "width": 116,
+      "height": 37,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-e0dt5v-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Добро пожаловатьДобро пожаловать!Войдите в систему или продолжите как гостьВойти в системуПродолжить как гость",
+      "x": 960,
+      "y": 540,
+      "width": 1920,
+      "height": 1080,
+      "tagName": "div",
+      "className": "MuiDialog-container MuiDialog-scrollPaper css-hz1bth-MuiDialog-container",
+      "id": ""
+    },
+    {
+      "text": "Войти в систему",
+      "x": 960,
+      "y": 585,
+      "width": 400,
+      "height": 50,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-colorPrimary css-1qpvomx-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Продолжить как гость",
+      "x": 960,
+      "y": 652,
+      "width": 400,
+      "height": 50,
+      "tagName": "button",
+      "className": "MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButton-colorPrimary css-1fyyz36-MuiButtonBase-root-MuiButton-root",
+      "id": ""
+    },
+    {
+      "text": "Лента",
+      "x": 110,
+      "y": 176,
+      "width": 188,
+      "height": 48,
+      "tagName": "div",
+      "className": "MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-1psgdzu-MuiButtonBase-root-MuiListItem-root",
+      "id": ""
+    },
+    {
+      "text": "Избранное",
+      "x": 110,
+      "y": 228,
+      "width": 188,
+      "height": 48,
+      "tagName": "div",
+      "className": "MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-1psgdzu-MuiButtonBase-root-MuiListItem-root",
+      "id": ""
+    },
+    {
+      "text": "AI-чаты",
+      "x": 110,
+      "y": 280,
+      "width": 188,
+      "height": 48,
+      "tagName": "div",
+      "className": "MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-1psgdzu-MuiButtonBase-root-MuiListItem-root",
+      "id": ""
+    },
+    {
+      "text": "aaiЗдравствуйте! Чем могу помочь?",
+      "x": 110,
+      "y": 460,
+      "width": 188,
+      "height": 71,
+      "tagName": "div",
+      "className": "MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-1psgdzu-MuiButtonBase-root-MuiListItem-root",
+      "id": ""
+    }
+  ]
+}

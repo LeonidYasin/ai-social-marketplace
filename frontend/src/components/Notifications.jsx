@@ -430,7 +430,7 @@ const NotificationsManager = ({ socket, currentUser }) => {
           </Card>
 
           {/* Действия */}
-          {notifications.length > 0 && (
+          {(notifications || []).length > 0 && (
             <Box sx={{ p: 2, pb: 1 }}>
               <Stack direction="row" spacing={1}>
                 <Button 
@@ -454,7 +454,7 @@ const NotificationsManager = ({ socket, currentUser }) => {
           )}
 
           {/* Список уведомлений */}
-          {notifications.length === 0 ? (
+          {(notifications || []).length === 0 ? (
             <Box sx={{ textAlign: 'center', py: 4 }}>
               <NotificationsOffIcon sx={{ fontSize: 64, color: 'grey.400', mb: 2 }} />
               <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
@@ -534,7 +534,7 @@ const NotificationsManager = ({ socket, currentUser }) => {
                       </Stack>
                     </ListItemSecondaryAction>
                   </ListItem>
-                  {index < notifications.length - 1 && <Divider />}
+                  {index < (notifications || []).length - 1 && <Divider />}
                 </React.Fragment>
               ))}
             </List>

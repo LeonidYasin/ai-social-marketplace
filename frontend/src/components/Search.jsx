@@ -212,19 +212,19 @@ const SearchDialog = ({ open, onClose, onSearchResult }) => {
           <HistoryIcon />
           История поиска
         </Typography>
-        {searchHistory.length > 0 && (
+        {(searchHistory || []).length > 0 && (
           <Button size="small" onClick={clearHistory} color="error">
             Очистить
           </Button>
         )}
       </Box>
-      {searchHistory.length === 0 ? (
+      {(searchHistory || []).length === 0 ? (
         <Typography color="text.secondary" sx={{ textAlign: 'center', py: 2 }}>
           История поиска пуста
         </Typography>
       ) : (
         <List>
-          {searchHistory.map((item, index) => (
+          {(searchHistory || []).map((item, index) => (
             <ListItem
               key={index}
               button
@@ -371,7 +371,7 @@ const SearchDialog = ({ open, onClose, onSearchResult }) => {
     }
 
     const { posts, users } = searchResults;
-    const hasResults = posts.length > 0 || users.length > 0;
+    const hasResults = (posts || []).length > 0 || (users || []).length > 0;
 
     if (!hasResults) {
       return (
@@ -394,14 +394,14 @@ const SearchDialog = ({ open, onClose, onSearchResult }) => {
           ))}
         </Tabs>
 
-        {(activeTab === 0 || activeTab === 1) && posts.length > 0 && (
+        {(activeTab === 0 || activeTab === 1) && (posts || []).length > 0 && (
           <Box sx={{ mb: 3 }}>
             <Typography variant="h6" sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
               <ArticleIcon />
-              Посты ({posts.length})
+              Посты ({(posts || []).length})
             </Typography>
             <List>
-              {posts.map(post => (
+              {(posts || []).map(post => (
                 <ListItem key={post.id} button sx={{ borderRadius: 1, mb: 1 }}>
                   <ListItemAvatar>
                     <Avatar sx={{ bgcolor: 'primary.main' }}>
@@ -435,14 +435,14 @@ const SearchDialog = ({ open, onClose, onSearchResult }) => {
           </Box>
         )}
 
-        {(activeTab === 0 || activeTab === 2) && users.length > 0 && (
+        {(activeTab === 0 || activeTab === 2) && (users || []).length > 0 && (
           <Box>
             <Typography variant="h6" sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
               <PersonIcon />
-              Пользователи ({users.length})
+                              Пользователи ({(users || []).length})
             </Typography>
             <List>
-              {users.map(user => (
+              {(users || []).map(user => (
                 <ListItem key={user.id} button sx={{ borderRadius: 1, mb: 1 }}>
                   <ListItemAvatar>
                     <Avatar sx={{ bgcolor: 'secondary.main' }}>

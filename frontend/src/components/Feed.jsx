@@ -204,7 +204,11 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
       const backendPosts = response.posts.map(post => ({
         id: post.id,
         text: post.content,
-        images: post.media_urls || [],
+        images: post.media_urls ? post.media_urls.map(url => 
+          url.startsWith('blob:') ? url : 
+          url.startsWith('http') ? url : 
+          `https://via.placeholder.com/400x300/cccccc/666666?text=${encodeURIComponent(url)}`
+        ) : [],
         video: null,
         doc: null,
         bg: post.background_color || '',
@@ -239,6 +243,25 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
   // Загрузка постов при монтировании компонента
   useEffect(() => {
     loadPosts();
+    
+    // Очистка blob URL при размонтировании
+    return () => {
+      posts.forEach(post => {
+        if (post.images) {
+          post.images.forEach(url => {
+            if (url.startsWith('blob:')) {
+              URL.revokeObjectURL(url);
+            }
+          });
+        }
+        if (post.video && post.video.startsWith('blob:')) {
+          URL.revokeObjectURL(post.video);
+        }
+        if (post.doc && post.doc.startsWith('blob:')) {
+          URL.revokeObjectURL(post.doc);
+        }
+      });
+    };
   }, []);
 
   // Загрузка реакций из localStorage
@@ -337,9 +360,9 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
 
   // Симуляция новой реакции от другого пользователя
   const simulateNewReaction = () => {
-    if (posts.length === 0) return;
+    if ((posts || []).length === 0) return;
 
-    const randomPost = posts[Math.floor(Math.random() * posts.length)];
+    const randomPost = (posts || [])[Math.floor(Math.random() * (posts || []).length)];
     const reactionTypes = Object.keys(REACTIONS);
     const randomReaction = reactionTypes[Math.floor(Math.random() * reactionTypes.length)];
 
@@ -362,7 +385,7 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
 
   // Симуляция нового комментария от другого пользователя
   const simulateNewComment = () => {
-    if (posts.length === 0) return;
+    if ((posts || []).length === 0) return;
 
     const fakeUsers = ['Анна', 'Михаил', 'Елена', 'Дмитрий', 'Ольга'];
     const fakeComments = [
@@ -376,7 +399,7 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
       'В каком районе?'
     ];
 
-    const randomPost = posts[Math.floor(Math.random() * posts.length)];
+    const randomPost = (posts || [])[Math.floor(Math.random() * (posts || []).length)];
     const newComment = {
       id: Date.now() + Math.random(),
       author: fakeUsers[Math.floor(Math.random() * fakeUsers.length)],
@@ -425,13 +448,13 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
   };
 
   const handlePost = async (aiDialog = null) => {
-    if (!text.trim() && images.length === 0 && !video && !doc) return;
+    if (!text.trim() && (images || []).length === 0 && !video && !doc) return;
 
     try {
       const postData = {
         content: aiDialog ? aiDialog.map(m => (m.isUser ? 'Вы: ' : 'AI: ') + m.text).join('\n') : text,
-        media_urls: images.map(f => f.name || 'image.jpg'),
-        media_type: video ? 'video' : doc ? 'document' : images.length > 0 ? 'image' : null,
+        media_urls: (images || []).map(f => f.name || 'image.jpg'),
+        media_type: video ? 'video' : doc ? 'document' : (images || []).length > 0 ? 'image' : null,
         background_color: bg,
         privacy: privacy === 'all' ? 'public' : privacy === 'friends' ? 'friends' : 'private',
         section: section,
@@ -446,9 +469,9 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
         id: response.post.id,
         userId: currentUser?.id,
         text: aiDialog ? aiDialog.map(m => (m.isUser ? 'Вы: ' : 'AI: ') + m.text).join('\n') : text,
-        images: images.map(f => f.name || 'image.jpg'),
-        video: video ? (video.name || 'video.mp4') : null,
-        doc: doc ? doc.name : null,
+        images: (images || []).map(f => URL.createObjectURL(f)),
+        video: video ? URL.createObjectURL(video) : null,
+        doc: doc ? URL.createObjectURL(doc) : null,
         bg,
         section,
         privacy,

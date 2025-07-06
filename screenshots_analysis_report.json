@@ -1,0 +1,2278 @@
+{
+  "timestamp": "2025-07-05T01:06:20.482Z",
+  "totalScreenshots": 58,
+  "categories": {
+    "states": [
+      {
+        "filename": "01_initial_page.png",
+        "relativePath": "states/01_initial_page.png",
+        "fullPath": "documentation_screenshots\\states\\01_initial_page.png",
+        "timestamp": "2025-07-05T01:09:23.727Z",
+        "ocrText": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nКонкурентный пост 1 от admin_user\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+        "uiElements": [
+          {
+            "type": "button",
+            "text": "ОТПРАВИТЬ",
+            "count": 7
+          },
+          {
+            "type": "input",
+            "text": "пост",
+            "count": 8
+          },
+          {
+            "type": "text",
+            "text": "Добро пожаловать",
+            "count": 1
+          }
+        ],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": true,
+          "hasFeed": true,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [
+            "Гостевой вход",
+            "Лента постов"
+          ],
+          "textContent": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nКонкурентный пост 1 от admin_user\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комме..."
+        }
+      },
+      {
+        "filename": "02_guest_mode.png",
+        "relativePath": "states/02_guest_mode.png",
+        "fullPath": "documentation_screenshots\\states\\02_guest_mode.png",
+        "timestamp": "2025-07-05T01:09:27.250Z",
+        "ocrText": "",
+        "uiElements": [],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": false,
+          "hasFeed": false,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [],
+          "textContent": ""
+        }
+      },
+      {
+        "filename": "03_login_form.png",
+        "relativePath": "states/03_login_form.png",
+        "fullPath": "documentation_screenshots\\states\\03_login_form.png",
+        "timestamp": "2025-07-05T01:09:37.314Z",
+        "ocrText": "",
+        "uiElements": [],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": false,
+          "hasFeed": false,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [],
+          "textContent": ""
+        }
+      },
+      {
+        "filename": "03_post_creation.png",
+        "relativePath": "states/03_post_creation.png",
+        "fullPath": "documentation_screenshots\\states\\03_post_creation.png",
+        "timestamp": "2025-07-05T01:09:47.385Z",
+        "ocrText": "",
+        "uiElements": [],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": false,
+          "hasFeed": false,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [],
+          "textContent": ""
+        }
+      },
+      {
+        "filename": "04_login_form_filled.png",
+        "relativePath": "states/04_login_form_filled.png",
+        "fullPath": "documentation_screenshots\\states\\04_login_form_filled.png",
+        "timestamp": "2025-07-05T01:09:57.466Z",
+        "ocrText": "",
+        "uiElements": [],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": false,
+          "hasFeed": false,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [],
+          "textContent": ""
+        }
+      },
+      {
+        "filename": "04_main_page.png",
+        "relativePath": "states/04_main_page.png",
+        "fullPath": "documentation_screenshots\\states\\04_main_page.png",
+        "timestamp": "2025-07-05T01:10:07.537Z",
+        "ocrText": "",
+        "uiElements": [],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": false,
+          "hasFeed": false,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [],
+          "textContent": ""
+        }
+      },
+      {
+        "filename": "04_menu_open.png",
+        "relativePath": "states/04_menu_open.png",
+        "fullPath": "documentation_screenshots\\states\\04_menu_open.png",
+        "timestamp": "2025-07-05T01:10:17.606Z",
+        "ocrText": "",
+        "uiElements": [],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": false,
+          "hasFeed": false,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [],
+          "textContent": ""
+        }
+      },
+      {
+        "filename": "05_chat_open.png",
+        "relativePath": "states/05_chat_open.png",
+        "fullPath": "documentation_screenshots\\states\\05_chat_open.png",
+        "timestamp": "2025-07-05T01:10:27.677Z",
+        "ocrText": "",
+        "uiElements": [],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": false,
+          "hasFeed": false,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [],
+          "textContent": ""
+        }
+      },
+      {
+        "filename": "05_post_creation.png",
+        "relativePath": "states/05_post_creation.png",
+        "fullPath": "documentation_screenshots\\states\\05_post_creation.png",
+        "timestamp": "2025-07-05T01:10:37.753Z",
+        "ocrText": "Создать пост x\r\nТекст поста\r\nФон публикации\r\nПриватность Раздел\r\nВсе м Трибуна =\r\no oC 8\r\nОПУБЛИКОВАТЬ\r\n® нравится — Ореакций\r\nНаписать комментарий ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий ОТПРАВИТЬ",
+        "uiElements": [
+          {
+            "type": "button",
+            "text": "Создать",
+            "count": 1
+          },
+          {
+            "type": "button",
+            "text": "ОТПРАВИТЬ",
+            "count": 7
+          },
+          {
+            "type": "input",
+            "text": "пост",
+            "count": 9
+          }
+        ],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": false,
+          "hasFeed": true,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": true,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [
+            "Лента постов",
+            "Создание поста"
+          ],
+          "textContent": "Создать пост x\r\nТекст поста\r\nФон публикации\r\nПриватность Раздел\r\nВсе м Трибуна =\r\no oC 8\r\nОПУБЛИКОВАТЬ\r\n® нравится — Ореакций\r\nНаписать комментарий ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комм..."
+        }
+      },
+      {
+        "filename": "06_menu_open.png",
+        "relativePath": "states/06_menu_open.png",
+        "fullPath": "documentation_screenshots\\states\\06_menu_open.png",
+        "timestamp": "2025-07-05T01:10:41.429Z",
+        "ocrText": "",
+        "uiElements": [],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": false,
+          "hasFeed": false,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [],
+          "textContent": ""
+        }
+      },
+      {
+        "filename": "07_chat_open.png",
+        "relativePath": "states/07_chat_open.png",
+        "fullPath": "documentation_screenshots\\states\\07_chat_open.png",
+        "timestamp": "2025-07-05T01:10:51.491Z",
+        "ocrText": "",
+        "uiElements": [],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": false,
+          "hasFeed": false,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [],
+          "textContent": ""
+        }
+      },
+      {
+        "filename": "08_profile_page.png",
+        "relativePath": "states/08_profile_page.png",
+        "fullPath": "documentation_screenshots\\states\\08_profile_page.png",
+        "timestamp": "2025-07-05T01:11:01.546Z",
+        "ocrText": "® Онлайн - Последнее обновление: 03:14:25 ed\r\nНастройки ex\r\nГость 8a8b [выйти |\r\nguest_8a8bf38f-b4bd-4533-a9bb-c9899dd2Ic71@example.com ae\r\n< ВНЕШНИЙ ВИД УВЕДОМЛЕНИЯ ФИЛЬТРЫ ГЕЙМИФИКАЦИЯ ПОЛЬЗОВАТЕЛИ >\r\nПрофиль пользователя\r\nГость Зав 6\r\nguest_8a8bf38f-b4bd-4533-a9bb-c9899dd2Ic71@example.com\r\nvine\r\nГость 8a8b\r\nEmail\r\nguest_8a8bf38f-b4bd-4533-a9bb-c9899dd2fc7 1 @example.com\r\nО себе\r\nЛюблю технологии и новые знакомства\r\nКонкурентный пост 1 от admin_user\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+        "uiElements": [
+          {
+            "type": "button",
+            "text": "ОТПРАВИТЬ",
+            "count": 6
+          },
+          {
+            "type": "input",
+            "text": "Email",
+            "count": 1
+          },
+          {
+            "type": "input",
+            "text": "пост",
+            "count": 7
+          },
+          {
+            "type": "text",
+            "text": "Профиль",
+            "count": 1
+          }
+        ],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": true,
+          "hasGuestButton": true,
+          "hasFeed": true,
+          "hasChat": false,
+          "hasProfile": true,
+          "hasPostCreation": false,
+          "hasNotifications": true,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [
+            "Форма входа",
+            "Гостевой вход",
+            "Лента постов",
+            "Профиль",
+            "Уведомления"
+          ],
+          "textContent": "® Онлайн - Последнее обновление: 03:14:25 ed\r\nНастройки ex\r\nГость 8a8b [выйти |\r\nguest_8a8bf38f-b4bd-4533-a9bb-c9899dd2Ic71@example.com ae\r\n< ВНЕШНИЙ ВИД УВЕДОМЛЕНИЯ ФИЛЬТРЫ ГЕЙМИФИКАЦИЯ ПОЛЬЗОВАТЕЛИ >\r\nПрофиль пользователя\r\nГость Зав 6\r\nguest_8a8bf38f-b4bd-4533-a9bb-c9899dd2Ic71@example.com\r\nvine\r\nГость 8a8b\r\nEmail\r\nguest_8a8bf38f-b4bd-4533-a9bb-c9899dd2fc7 1 @example.com\r\nО себе\r\nЛюблю технологии и новые знакомства\r\nКонкурентный пост 1 от admin_user\r\n® нравится — Ореакций\r\nНаписать комментарий..."
+        }
+      },
+      {
+        "filename": "analyze_after_Клик_по_кнопке_входа_в_систему.png",
+        "relativePath": "states/analyze_after_Клик_по_кнопке_входа_в_систему.png",
+        "fullPath": "documentation_screenshots\\states\\analyze_after_Клик_по_кнопке_входа_в_систему.png",
+        "timestamp": "2025-07-05T01:11:06.101Z",
+        "ocrText": "",
+        "uiElements": [],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": false,
+          "hasFeed": false,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [],
+          "textContent": ""
+        }
+      },
+      {
+        "filename": "analyze_after_Клик_по_кнопке_гостевого_входа.png",
+        "relativePath": "states/analyze_after_Клик_по_кнопке_гостевого_входа.png",
+        "fullPath": "documentation_screenshots\\states\\analyze_after_Клик_по_кнопке_гостевого_входа.png",
+        "timestamp": "2025-07-05T01:11:16.173Z",
+        "ocrText": "",
+        "uiElements": [],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": false,
+          "hasFeed": false,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [],
+          "textContent": ""
+        }
+      },
+      {
+        "filename": "analyze_before_Клик_по_вкладке_чатов.png",
+        "relativePath": "states/analyze_before_Клик_по_вкладке_чатов.png",
+        "fullPath": "documentation_screenshots\\states\\analyze_before_Клик_по_вкладке_чатов.png",
+        "timestamp": "2025-07-05T01:11:26.982Z",
+        "ocrText": "",
+        "uiElements": [],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": false,
+          "hasFeed": false,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [],
+          "textContent": ""
+        }
+      },
+      {
+        "filename": "analyze_before_Клик_по_кнопке_входа_в_систему.png",
+        "relativePath": "states/analyze_before_Клик_по_кнопке_входа_в_систему.png",
+        "fullPath": "documentation_screenshots\\states\\analyze_before_Клик_по_кнопке_входа_в_систему.png",
+        "timestamp": "2025-07-05T01:11:37.195Z",
+        "ocrText": "",
+        "uiElements": [],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": false,
+          "hasFeed": false,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [],
+          "textContent": ""
+        }
+      },
+      {
+        "filename": "analyze_before_Клик_по_кнопке_гостевого_входа.png",
+        "relativePath": "states/analyze_before_Клик_по_кнопке_гостевого_входа.png",
+        "fullPath": "documentation_screenshots\\states\\analyze_before_Клик_по_кнопке_гостевого_входа.png",
+        "timestamp": "2025-07-05T01:11:47.260Z",
+        "ocrText": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+        "uiElements": [
+          {
+            "type": "button",
+            "text": "ОТПРАВИТЬ",
+            "count": 7
+          },
+          {
+            "type": "input",
+            "text": "Пост",
+            "count": 7
+          },
+          {
+            "type": "text",
+            "text": "Добро пожаловать",
+            "count": 1
+          }
+        ],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": true,
+          "hasFeed": true,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [
+            "Гостевой вход",
+            "Лента постов"
+          ],
+          "textContent": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый ..."
+        }
+      },
+      {
+        "filename": "analyze_before_Клик_по_кнопке_меню.png",
+        "relativePath": "states/analyze_before_Клик_по_кнопке_меню.png",
+        "fullPath": "documentation_screenshots\\states\\analyze_before_Клик_по_кнопке_меню.png",
+        "timestamp": "2025-07-05T01:11:50.989Z",
+        "ocrText": "",
+        "uiElements": [],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": false,
+          "hasFeed": false,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [],
+          "textContent": ""
+        }
+      },
+      {
+        "filename": "analyze_before_Клик_по_полю_создания_поста.png",
+        "relativePath": "states/analyze_before_Клик_по_полю_создания_поста.png",
+        "fullPath": "documentation_screenshots\\states\\analyze_before_Клик_по_полю_создания_поста.png",
+        "timestamp": "2025-07-05T01:12:01.054Z",
+        "ocrText": "",
+        "uiElements": [],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": false,
+          "hasFeed": false,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [],
+          "textContent": ""
+        }
+      },
+      {
+        "filename": "analyze_initial.png",
+        "relativePath": "states/analyze_initial.png",
+        "fullPath": "documentation_screenshots\\states\\analyze_initial.png",
+        "timestamp": "2025-07-05T01:12:11.115Z",
+        "ocrText": "",
+        "uiElements": [],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": false,
+          "hasFeed": false,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [],
+          "textContent": ""
+        }
+      }
+    ],
+    "components": [
+      {
+        "filename": "01_appbar.png",
+        "relativePath": "components/01_appbar.png",
+        "fullPath": "documentation_screenshots\\components\\01_appbar.png",
+        "timestamp": "2025-07-05T01:12:21.175Z",
+        "ocrText": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+        "uiElements": [
+          {
+            "type": "button",
+            "text": "ОТПРАВИТЬ",
+            "count": 7
+          },
+          {
+            "type": "input",
+            "text": "Пост",
+            "count": 7
+          },
+          {
+            "type": "text",
+            "text": "Добро пожаловать",
+            "count": 1
+          }
+        ],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": true,
+          "hasFeed": true,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [
+            "Гостевой вход",
+            "Лента постов"
+          ],
+          "textContent": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией..."
+        }
+      },
+      {
+        "filename": "02_sidebar_left.png",
+        "relativePath": "components/02_sidebar_left.png",
+        "fullPath": "documentation_screenshots\\components\\02_sidebar_left.png",
+        "timestamp": "2025-07-05T01:12:24.895Z",
+        "ocrText": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+        "uiElements": [
+          {
+            "type": "button",
+            "text": "ОТПРАВИТЬ",
+            "count": 7
+          },
+          {
+            "type": "input",
+            "text": "Пост",
+            "count": 7
+          },
+          {
+            "type": "text",
+            "text": "Добро пожаловать",
+            "count": 1
+          }
+        ],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": true,
+          "hasFeed": true,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [
+            "Гостевой вход",
+            "Лента постов"
+          ],
+          "textContent": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией..."
+        }
+      },
+      {
+        "filename": "03_sidebar_right.png",
+        "relativePath": "components/03_sidebar_right.png",
+        "fullPath": "documentation_screenshots\\components\\03_sidebar_right.png",
+        "timestamp": "2025-07-05T01:12:28.580Z",
+        "ocrText": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+        "uiElements": [
+          {
+            "type": "button",
+            "text": "ОТПРАВИТЬ",
+            "count": 7
+          },
+          {
+            "type": "input",
+            "text": "Пост",
+            "count": 7
+          },
+          {
+            "type": "text",
+            "text": "Добро пожаловать",
+            "count": 1
+          }
+        ],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": true,
+          "hasFeed": true,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [
+            "Гостевой вход",
+            "Лента постов"
+          ],
+          "textContent": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией..."
+        }
+      },
+      {
+        "filename": "04_feed.png",
+        "relativePath": "components/04_feed.png",
+        "fullPath": "documentation_screenshots\\components\\04_feed.png",
+        "timestamp": "2025-07-05T01:12:32.018Z",
+        "ocrText": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+        "uiElements": [
+          {
+            "type": "button",
+            "text": "ОТПРАВИТЬ",
+            "count": 7
+          },
+          {
+            "type": "input",
+            "text": "Пост",
+            "count": 7
+          },
+          {
+            "type": "text",
+            "text": "Добро пожаловать",
+            "count": 1
+          }
+        ],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": true,
+          "hasFeed": true,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [
+            "Гостевой вход",
+            "Лента постов"
+          ],
+          "textContent": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией..."
+        }
+      },
+      {
+        "filename": "06_chat_dialog.png",
+        "relativePath": "components/06_chat_dialog.png",
+        "fullPath": "documentation_screenshots\\components\\06_chat_dialog.png",
+        "timestamp": "2025-07-05T01:12:35.434Z",
+        "ocrText": "м (^ ЖА: о Pe * e\r\n. Пользователи (0)\r\n® Онлайн « Последнее обновление: 23:58:43 a\r\nВ лена\r\nЕ 6 Что у вас нового? 'А|-рекомендации\r\n% — Избранное\r\nAl Ассистент\r\ncs Готов помочь с (№\r\nАГ-чаты и\r\nКонкурентный пост 3 от moderator_user опросами\r\nЧаты Bs © peanut\r\njpasicn  Ореакций\r\nПоиск чата. a\r\n[в] | Написать комментарий. ОТПРАВИТЬ\r\nо.\r\nЗдравствуйте. У\r\nКонкурентный пост 2 от admin_user\r\n0 Нравится — Ореакций\r\n[в] | Написать комментарий. ОТПРАВИТЬ\r\nКонкурентный пост 1 от admin_user\r\n0 Нравится — Ореакций\r\n[в] | Написать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {7\r\n0 Нравится — Ореакций\r\n_.„ [в] | Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей\r\n0 Нравится — Ореакций\r\n[в] | Написать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n0 Нравится — Ореакций\r\n[в] | Написать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>,\r\nФото поста\r\n0 Нравится — Ореакций\r\n[в] | Написать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 11 &\r\n0 Нравится — Ореакций\r\n[в] | Написать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {7\r\n0 Нравится — Ореакций\r\n[в] | Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей\r\n0 Нравится — Ореакций\r\n[в] | Написать комментарий. ОТПРАВИТЬ",
+        "uiElements": [
+          {
+            "type": "button",
+            "text": "ОТПРАВИТЬ",
+            "count": 10
+          },
+          {
+            "type": "button",
+            "text": "Поиск",
+            "count": 1
+          },
+          {
+            "type": "input",
+            "text": "пост",
+            "count": 11
+          },
+          {
+            "type": "text",
+            "text": "чат",
+            "count": 3
+          }
+        ],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": false,
+          "hasFeed": true,
+          "hasChat": true,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": true,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [
+            "Лента постов",
+            "Чат",
+            "Поиск"
+          ],
+          "textContent": "м (^ ЖА: о Pe * e\r\n. Пользователи (0)\r\n® Онлайн « Последнее обновление: 23:58:43 a\r\nВ лена\r\nЕ 6 Что у вас нового? 'А|-рекомендации\r\n% — Избранное\r\nAl Ассистент\r\ncs Готов помочь с (№\r\nАГ-чаты и\r\nКонкурентный пост 3 от moderator_user опросами\r\nЧаты Bs © peanut\r\njpasicn  Ореакций\r\nПоиск чата. a\r\n[в] | Написать комментарий. ОТПРАВИТЬ\r\nо.\r\nЗдравствуйте. У\r\nКонкурентный пост 2 от admin_user\r\n0 Нравится — Ореакций\r\n[в] | Написать комментарий. ОТПРАВИТЬ\r\nКонкурентный пост 1 от admin_user\r\n0 Нравится — О..."
+        }
+      },
+      {
+        "filename": "07_notifications.png",
+        "relativePath": "components/07_notifications.png",
+        "fullPath": "documentation_screenshots\\components\\07_notifications.png",
+        "timestamp": "2025-07-05T01:12:43.309Z",
+        "ocrText": "№ Уведомления (3) am x\r\nDN враузерные уведомления отключены\r\n| очистить BCE |\r\nНовое сообщение\r\nЕ anna отправила вам сообщение х\r\n2 минуты назад\r\nНовая реакция\r\n1@® михаил поставил лайк вашему посту х\r\n5 минут назад\r\nНовый комментарий\r\nЕ елена прокомментировала ваш пост х\r\n10 минут назад\r\nНовый подписчик\r\n+2 Merp подписался на вас х\r\nчас назад\r\nПопулярный пост\r\n^7 Baul nocr стал популярным в разделе \"Продам\" х\r\n2 часа назад\r\n® нравится — Ореакций\r\nНаписать комментарий ОТПРАВИТЬ\r\nПост в разделе новостей (J\r\n® нравится — Ореакций\r\nНаписать комментарий ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\n\\#@oTo поста\r\n® нравится — Ореакций\r\nНаписать комментарий ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий ОТПРАВИТЬ\r\nПост с А! генерацией\r\n® нравится — Ореакций\r\nНаписать комментарий ОТПРАВИТЬ\r\nПост в разделе новостей (J\r\n® нравится — Ореакций\r\nНаписать комментарий ОТПРАВИТЬ",
+        "uiElements": [
+          {
+            "type": "button",
+            "text": "ОТПРАВИТЬ",
+            "count": 7
+          },
+          {
+            "type": "button",
+            "text": "лайк",
+            "count": 1
+          },
+          {
+            "type": "input",
+            "text": "сообщение",
+            "count": 2
+          },
+          {
+            "type": "input",
+            "text": "пост",
+            "count": 11
+          }
+        ],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": false,
+          "hasFeed": true,
+          "hasChat": true,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": true,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [
+            "Лента постов",
+            "Чат",
+            "Уведомления"
+          ],
+          "textContent": "№ Уведомления (3) am x\r\nDN враузерные уведомления отключены\r\n| очистить BCE |\r\nНовое сообщение\r\nЕ anna отправила вам сообщение х\r\n2 минуты назад\r\nНовая реакция\r\n1@® михаил поставил лайк вашему посту х\r\n5 минут назад\r\nНовый комментарий\r\nЕ елена прокомментировала ваш пост х\r\n10 минут назад\r\nНовый подписчик\r\n+2 Merp подписался на вас х\r\nчас назад\r\nПопулярный пост\r\n^7 Baul nocr стал популярным в разделе \"Продам\" х\r\n2 часа назад\r\n® нравится — Ореакций\r\nНаписать комментарий ОТПРАВИТЬ\r\nПост в разделе н..."
+        }
+      },
+      {
+        "filename": "08_search.png",
+        "relativePath": "components/08_search.png",
+        "fullPath": "documentation_screenshots\\components\\08_search.png",
+        "timestamp": "2025-07-05T01:12:47.765Z",
+        "ocrText": "м (^ ЖА: о Pe % e\r\n| поль ФА ли (0\r\n® Онлайн « Последнее обновление: 23:58:43 a\r\nЛента\r\n'А!-рекомендации\r\nи »\r\nte Избранное 6 ( Что y Bac нового? )\r\n\\ yy Al Ассистент\r\nAsan ог о\r\nвопросами\r\nЧаты Конкурентный пост 3 от moderator_user\r\nПоиск чата. .\r\n0 Нравится — Ореакций\r\nai\r\nЗдравствуйте © | Hanncar. комментарий ОТПРАВИТЬ\r\nКонкурентный пост 2 от admin_user\r\n0 Нравится — Ореакций\r\n[в] | Написать комментарий. ОТПРАВИТЬ\r\nКонкурентный пост 1 от admin_user\r\n0 Нравится — Ореакций\r\n[в] | Написать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {7\r\n0 Нравится — Ореакций\r\n[в] | Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей\r\n0 Нравится — Ореакций\r\n[в] | Написать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n0 Нравится — Ореакций\r\n[в] | Написать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>,\r\nФото поста\r\n0 Нравится — Ореакций\r\n[в] | Написать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 11 &\r\n0 Нравится — Ореакций\r\n[в] | Написать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {7\r\n0 Нравится — Ореакций\r\n[в] | Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей\r\n0 Нравится — Ореакций\r\n[в] | Написать комментарий. ОТПРАВИТЬ",
+        "uiElements": [
+          {
+            "type": "button",
+            "text": "ОТПРАВИТЬ",
+            "count": 10
+          },
+          {
+            "type": "button",
+            "text": "Поиск",
+            "count": 1
+          },
+          {
+            "type": "input",
+            "text": "пост",
+            "count": 11
+          },
+          {
+            "type": "text",
+            "text": "Лента",
+            "count": 1
+          },
+          {
+            "type": "text",
+            "text": "Чат",
+            "count": 2
+          }
+        ],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": false,
+          "hasFeed": true,
+          "hasChat": true,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": true,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [
+            "Лента постов",
+            "Чат",
+            "Поиск"
+          ],
+          "textContent": "м (^ ЖА: о Pe % e\r\n| поль ФА ли (0\r\n® Онлайн « Последнее обновление: 23:58:43 a\r\nЛента\r\n'А!-рекомендации\r\nи »\r\nte Избранное 6 ( Что y Bac нового? )\r\n\\ yy Al Ассистент\r\nAsan ог о\r\nвопросами\r\nЧаты Конкурентный пост 3 от moderator_user\r\nПоиск чата. .\r\n0 Нравится — Ореакций\r\nai\r\nЗдравствуйте © | Hanncar. комментарий ОТПРАВИТЬ\r\nКонкурентный пост 2 от admin_user\r\n0 Нравится — Ореакций\r\n[в] | Написать комментарий. ОТПРАВИТЬ\r\nКонкурентный пост 1 от admin_user\r\n0 Нравится — Ореакций\r\n[в] | Написать комме..."
+        }
+      }
+    ],
+    "interactions": [
+      {
+        "filename": "01_before_like.png",
+        "relativePath": "interactions/01_before_like.png",
+        "fullPath": "documentation_screenshots\\interactions\\01_before_like.png",
+        "timestamp": "2025-07-05T01:12:53.338Z",
+        "ocrText": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+        "uiElements": [
+          {
+            "type": "button",
+            "text": "ОТПРАВИТЬ",
+            "count": 7
+          },
+          {
+            "type": "input",
+            "text": "Пост",
+            "count": 7
+          },
+          {
+            "type": "text",
+            "text": "Добро пожаловать",
+            "count": 1
+          }
+        ],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": true,
+          "hasFeed": true,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [
+            "Гостевой вход",
+            "Лента постов"
+          ],
+          "textContent": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией..."
+        }
+      },
+      {
+        "filename": "02_after_like.png",
+        "relativePath": "interactions/02_after_like.png",
+        "fullPath": "documentation_screenshots\\interactions\\02_after_like.png",
+        "timestamp": "2025-07-05T01:12:56.756Z",
+        "ocrText": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+        "uiElements": [
+          {
+            "type": "button",
+            "text": "ОТПРАВИТЬ",
+            "count": 7
+          },
+          {
+            "type": "input",
+            "text": "Пост",
+            "count": 7
+          },
+          {
+            "type": "text",
+            "text": "Добро пожаловать",
+            "count": 1
+          }
+        ],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": true,
+          "hasFeed": true,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [
+            "Гостевой вход",
+            "Лента постов"
+          ],
+          "textContent": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией..."
+        }
+      },
+      {
+        "filename": "05_post_field_focused.png",
+        "relativePath": "interactions/05_post_field_focused.png",
+        "fullPath": "documentation_screenshots\\interactions\\05_post_field_focused.png",
+        "timestamp": "2025-07-05T01:13:00.211Z",
+        "ocrText": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+        "uiElements": [
+          {
+            "type": "button",
+            "text": "ОТПРАВИТЬ",
+            "count": 7
+          },
+          {
+            "type": "input",
+            "text": "Пост",
+            "count": 7
+          },
+          {
+            "type": "text",
+            "text": "Добро пожаловать",
+            "count": 1
+          }
+        ],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": true,
+          "hasFeed": true,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [
+            "Гостевой вход",
+            "Лента постов"
+          ],
+          "textContent": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией..."
+        }
+      },
+      {
+        "filename": "06_post_with_text.png",
+        "relativePath": "interactions/06_post_with_text.png",
+        "fullPath": "documentation_screenshots\\interactions\\06_post_with_text.png",
+        "timestamp": "2025-07-05T01:13:03.644Z",
+        "ocrText": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+        "uiElements": [
+          {
+            "type": "button",
+            "text": "ОТПРАВИТЬ",
+            "count": 7
+          },
+          {
+            "type": "input",
+            "text": "Пост",
+            "count": 7
+          },
+          {
+            "type": "text",
+            "text": "Добро пожаловать",
+            "count": 1
+          }
+        ],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": true,
+          "hasFeed": true,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [
+            "Гостевой вход",
+            "Лента постов"
+          ],
+          "textContent": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией..."
+        }
+      }
+    ],
+    "multiuser": [
+      {
+        "filename": "01_user1_initial.png",
+        "relativePath": "multiuser/01_user1_initial.png",
+        "fullPath": "documentation_screenshots\\multiuser\\01_user1_initial.png",
+        "timestamp": "2025-07-05T01:13:07.068Z",
+        "ocrText": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+        "uiElements": [
+          {
+            "type": "button",
+            "text": "ОТПРАВИТЬ",
+            "count": 7
+          },
+          {
+            "type": "input",
+            "text": "Пост",
+            "count": 7
+          },
+          {
+            "type": "text",
+            "text": "Добро пожаловать",
+            "count": 1
+          }
+        ],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": true,
+          "hasFeed": true,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [
+            "Гостевой вход",
+            "Лента постов"
+          ],
+          "textContent": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией..."
+        }
+      },
+      {
+        "filename": "02_user2_initial.png",
+        "relativePath": "multiuser/02_user2_initial.png",
+        "fullPath": "documentation_screenshots\\multiuser\\02_user2_initial.png",
+        "timestamp": "2025-07-05T01:13:10.512Z",
+        "ocrText": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+        "uiElements": [
+          {
+            "type": "button",
+            "text": "ОТПРАВИТЬ",
+            "count": 7
+          },
+          {
+            "type": "input",
+            "text": "Пост",
+            "count": 7
+          },
+          {
+            "type": "text",
+            "text": "Добро пожаловать",
+            "count": 1
+          }
+        ],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": true,
+          "hasFeed": true,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [
+            "Гостевой вход",
+            "Лента постов"
+          ],
+          "textContent": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией..."
+        }
+      },
+      {
+        "filename": "04_user2_sees_post.png",
+        "relativePath": "multiuser/04_user2_sees_post.png",
+        "fullPath": "documentation_screenshots\\multiuser\\04_user2_sees_post.png",
+        "timestamp": "2025-07-05T01:13:13.950Z",
+        "ocrText": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+        "uiElements": [
+          {
+            "type": "button",
+            "text": "ОТПРАВИТЬ",
+            "count": 7
+          },
+          {
+            "type": "input",
+            "text": "Пост",
+            "count": 7
+          },
+          {
+            "type": "text",
+            "text": "Добро пожаловать",
+            "count": 1
+          }
+        ],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": true,
+          "hasFeed": true,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [
+            "Гостевой вход",
+            "Лента постов"
+          ],
+          "textContent": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией..."
+        }
+      },
+      {
+        "filename": "05_user2_liked_post.png",
+        "relativePath": "multiuser/05_user2_liked_post.png",
+        "fullPath": "documentation_screenshots\\multiuser\\05_user2_liked_post.png",
+        "timestamp": "2025-07-05T01:13:17.397Z",
+        "ocrText": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+        "uiElements": [
+          {
+            "type": "button",
+            "text": "ОТПРАВИТЬ",
+            "count": 7
+          },
+          {
+            "type": "input",
+            "text": "Пост",
+            "count": 7
+          },
+          {
+            "type": "text",
+            "text": "Добро пожаловать",
+            "count": 1
+          }
+        ],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": true,
+          "hasFeed": true,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [
+            "Гостевой вход",
+            "Лента постов"
+          ],
+          "textContent": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией..."
+        }
+      },
+      {
+        "filename": "06_user1_sees_like.png",
+        "relativePath": "multiuser/06_user1_sees_like.png",
+        "fullPath": "documentation_screenshots\\multiuser\\06_user1_sees_like.png",
+        "timestamp": "2025-07-05T01:13:21.567Z",
+        "ocrText": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+        "uiElements": [
+          {
+            "type": "button",
+            "text": "ОТПРАВИТЬ",
+            "count": 7
+          },
+          {
+            "type": "input",
+            "text": "Пост",
+            "count": 7
+          },
+          {
+            "type": "text",
+            "text": "Добро пожаловать",
+            "count": 1
+          }
+        ],
+        "colors": {
+          "colorspace": "unknown"
+        },
+        "dimensions": {
+          "width": 0,
+          "height": 0
+        },
+        "analysis": {
+          "hasLoginForm": false,
+          "hasGuestButton": true,
+          "hasFeed": true,
+          "hasChat": false,
+          "hasProfile": false,
+          "hasPostCreation": false,
+          "hasNotifications": false,
+          "hasSearch": false,
+          "hasSidebar": false,
+          "isMobile": false,
+          "detectedFeatures": [
+            "Гостевой вход",
+            "Лента постов"
+          ],
+          "textContent": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией..."
+        }
+      }
+    ]
+  },
+  "detailedAnalysis": [
+    {
+      "filename": "01_main_page.png",
+      "relativePath": "01_main_page.png",
+      "fullPath": "documentation_screenshots\\01_main_page.png",
+      "timestamp": "2025-07-05T01:06:20.483Z",
+      "ocrText": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+      "uiElements": [
+        {
+          "type": "button",
+          "text": "ОТПРАВИТЬ",
+          "count": 7
+        },
+        {
+          "type": "input",
+          "text": "Пост",
+          "count": 7
+        },
+        {
+          "type": "text",
+          "text": "Добро пожаловать",
+          "count": 1
+        }
+      ],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": false,
+        "hasGuestButton": true,
+        "hasFeed": true,
+        "hasChat": false,
+        "hasProfile": false,
+        "hasPostCreation": false,
+        "hasNotifications": false,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": false,
+        "detectedFeatures": [
+          "Гостевой вход",
+          "Лента постов"
+        ],
+        "textContent": "Добро пожаловать x\r\nВойдите в систему или продолжите как гость\r\nВ Написать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией..."
+      }
+    },
+    {
+      "filename": "02_guest_login_clicked.png",
+      "relativePath": "02_guest_login_clicked.png",
+      "fullPath": "documentation_screenshots\\02_guest_login_clicked.png",
+      "timestamp": "2025-07-05T01:06:24.020Z",
+      "ocrText": "",
+      "uiElements": [],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": false,
+        "hasGuestButton": false,
+        "hasFeed": false,
+        "hasChat": false,
+        "hasProfile": false,
+        "hasPostCreation": false,
+        "hasNotifications": false,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": false,
+        "detectedFeatures": [],
+        "textContent": ""
+      }
+    },
+    {
+      "filename": "03_guest_form.png",
+      "relativePath": "03_guest_form.png",
+      "fullPath": "documentation_screenshots\\03_guest_form.png",
+      "timestamp": "2025-07-05T01:06:34.084Z",
+      "ocrText": "",
+      "uiElements": [],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": false,
+        "hasGuestButton": false,
+        "hasFeed": false,
+        "hasChat": false,
+        "hasProfile": false,
+        "hasPostCreation": false,
+        "hasNotifications": false,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": false,
+        "detectedFeatures": [],
+        "textContent": ""
+      }
+    },
+    {
+      "filename": "04_login_form.png",
+      "relativePath": "04_login_form.png",
+      "fullPath": "documentation_screenshots\\04_login_form.png",
+      "timestamp": "2025-07-05T01:06:44.147Z",
+      "ocrText": "",
+      "uiElements": [],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": false,
+        "hasGuestButton": false,
+        "hasFeed": false,
+        "hasChat": false,
+        "hasProfile": false,
+        "hasPostCreation": false,
+        "hasNotifications": false,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": false,
+        "detectedFeatures": [],
+        "textContent": ""
+      }
+    },
+    {
+      "filename": "05_login_form_filled.png",
+      "relativePath": "05_login_form_filled.png",
+      "fullPath": "documentation_screenshots\\05_login_form_filled.png",
+      "timestamp": "2025-07-05T01:06:54.216Z",
+      "ocrText": "",
+      "uiElements": [],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": false,
+        "hasGuestButton": false,
+        "hasFeed": false,
+        "hasChat": false,
+        "hasProfile": false,
+        "hasPostCreation": false,
+        "hasNotifications": false,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": false,
+        "detectedFeatures": [],
+        "textContent": ""
+      }
+    },
+    {
+      "filename": "06_after_login.png",
+      "relativePath": "06_after_login.png",
+      "fullPath": "documentation_screenshots\\06_after_login.png",
+      "timestamp": "2025-07-05T01:07:04.284Z",
+      "ocrText": "",
+      "uiElements": [],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": false,
+        "hasGuestButton": false,
+        "hasFeed": false,
+        "hasChat": false,
+        "hasProfile": false,
+        "hasPostCreation": false,
+        "hasNotifications": false,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": false,
+        "detectedFeatures": [],
+        "textContent": ""
+      }
+    },
+    {
+      "filename": "07_user_profile.png",
+      "relativePath": "07_user_profile.png",
+      "fullPath": "documentation_screenshots\\07_user_profile.png",
+      "timestamp": "2025-07-05T01:07:14.350Z",
+      "ocrText": "Настройки ex\r\nToct 5403 [выйти |\r\nguest_5403ebfd-ad4c-414f-bbe2-962a9758b3e4@example.com ae\r\n< ВНЕШНИЙ ВИД УВЕДОМЛЕНИЯ ФИЛЬТРЫ ГЕЙМИФИКАЦИЯ ПОЛЬЗОВАТЕЛИ >\r\nПрофиль пользователя\r\nГость 5403\r\nguest_5403ebfd-ad4c-414f-bbe2-962a9758b3e4@example.com\r\nvine\r\nToct 5403\r\nEmail\r\nguest_5403ebfd-ad4c-414f- bbe2-962a9758b3e4@example.com\r\nО себе\r\nЛюблю технологии и новые знакомства\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+      "uiElements": [
+        {
+          "type": "button",
+          "text": "ОТПРАВИТЬ",
+          "count": 7
+        },
+        {
+          "type": "input",
+          "text": "Email",
+          "count": 1
+        },
+        {
+          "type": "input",
+          "text": "Пост",
+          "count": 7
+        },
+        {
+          "type": "text",
+          "text": "Профиль",
+          "count": 1
+        }
+      ],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": true,
+        "hasGuestButton": true,
+        "hasFeed": true,
+        "hasChat": false,
+        "hasProfile": true,
+        "hasPostCreation": false,
+        "hasNotifications": true,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": false,
+        "detectedFeatures": [
+          "Форма входа",
+          "Гостевой вход",
+          "Лента постов",
+          "Профиль",
+          "Уведомления"
+        ],
+        "textContent": "Настройки ex\r\nToct 5403 [выйти |\r\nguest_5403ebfd-ad4c-414f-bbe2-962a9758b3e4@example.com ae\r\n< ВНЕШНИЙ ВИД УВЕДОМЛЕНИЯ ФИЛЬТРЫ ГЕЙМИФИКАЦИЯ ПОЛЬЗОВАТЕЛИ >\r\nПрофиль пользователя\r\nГость 5403\r\nguest_5403ebfd-ad4c-414f-bbe2-962a9758b3e4@example.com\r\nvine\r\nToct 5403\r\nEmail\r\nguest_5403ebfd-ad4c-414f- bbe2-962a9758b3e4@example.com\r\nО себе\r\nЛюблю технологии и новые знакомства\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. О..."
+      }
+    },
+    {
+      "filename": "09_feed_page.png",
+      "relativePath": "09_feed_page.png",
+      "fullPath": "documentation_screenshots\\09_feed_page.png",
+      "timestamp": "2025-07-05T01:07:19.722Z",
+      "ocrText": "Настройки ex\r\nToct 5403 [выйти |\r\nguest_5403ebfd-ad4c-414f-bbe2-962a9758b3e4@example.com ae\r\n< ВНЕШНИЙ ВИД УВЕДОМЛЕНИЯ ФИЛЬТРЫ ГЕЙМИФИКАЦИЯ ПОЛЬЗОВАТЕЛИ >\r\nПрофиль пользователя\r\nГость 5403\r\nguest_5403ebfd-ad4c-414f-bbe2-962a9758b3e4@example.com\r\nvine\r\nToct 5403\r\nEmail\r\nguest_5403ebfd-ad4c-414f- bbe2-962a9758b3e4@example.com\r\nО себе\r\nЛюблю технологии и новые знакомства\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+      "uiElements": [
+        {
+          "type": "button",
+          "text": "ОТПРАВИТЬ",
+          "count": 7
+        },
+        {
+          "type": "input",
+          "text": "Email",
+          "count": 1
+        },
+        {
+          "type": "input",
+          "text": "Пост",
+          "count": 7
+        },
+        {
+          "type": "text",
+          "text": "Профиль",
+          "count": 1
+        }
+      ],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": true,
+        "hasGuestButton": true,
+        "hasFeed": true,
+        "hasChat": false,
+        "hasProfile": true,
+        "hasPostCreation": false,
+        "hasNotifications": true,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": false,
+        "detectedFeatures": [
+          "Форма входа",
+          "Гостевой вход",
+          "Лента постов",
+          "Профиль",
+          "Уведомления"
+        ],
+        "textContent": "Настройки ex\r\nToct 5403 [выйти |\r\nguest_5403ebfd-ad4c-414f-bbe2-962a9758b3e4@example.com ae\r\n< ВНЕШНИЙ ВИД УВЕДОМЛЕНИЯ ФИЛЬТРЫ ГЕЙМИФИКАЦИЯ ПОЛЬЗОВАТЕЛИ >\r\nПрофиль пользователя\r\nГость 5403\r\nguest_5403ebfd-ad4c-414f-bbe2-962a9758b3e4@example.com\r\nvine\r\nToct 5403\r\nEmail\r\nguest_5403ebfd-ad4c-414f- bbe2-962a9758b3e4@example.com\r\nО себе\r\nЛюблю технологии и новые знакомства\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. О..."
+      }
+    },
+    {
+      "filename": "10_feed_scrolled.png",
+      "relativePath": "10_feed_scrolled.png",
+      "fullPath": "documentation_screenshots\\10_feed_scrolled.png",
+      "timestamp": "2025-07-05T01:07:24.403Z",
+      "ocrText": "® Онлайн « Последнее обновление: 00:34:27 ed\r\nЧто y Bac нового?\r\nМихаил 05.07.2025, 00:34:27\r\n`Отдам бесплатно книги\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nНастройки ex\r\nToct 5403 [выйти |\r\nguest_5403ebfd-ad4c-414f-bbe2-962a9758b3e4@example.com ae\r\n< ВНЕШНИЙ ВИД УВЕДОМЛЕНИЯ ФИЛЬТРЫ ГЕЙМИФИКАЦИЯ ПОЛЬЗОВАТЕЛИ >\r\nПрофиль пользователя\r\nГость 5403\r\nguest_5403ebfd-ad4c-414f-bbe2-962a9758b3e4@example.com\r\nvine\r\nToct 5403\r\nEmail\r\nguest_5403ebfd-ad4c-414f- bbe2-962a9758b3e4@example.com\r\nО себе\r\nЛюблю технологии и новые знакомства\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+      "uiElements": [
+        {
+          "type": "button",
+          "text": "ОТПРАВИТЬ",
+          "count": 6
+        },
+        {
+          "type": "input",
+          "text": "Email",
+          "count": 1
+        },
+        {
+          "type": "input",
+          "text": "пост",
+          "count": 5
+        },
+        {
+          "type": "text",
+          "text": "Профиль",
+          "count": 1
+        }
+      ],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": true,
+        "hasGuestButton": true,
+        "hasFeed": true,
+        "hasChat": false,
+        "hasProfile": true,
+        "hasPostCreation": false,
+        "hasNotifications": true,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": false,
+        "detectedFeatures": [
+          "Форма входа",
+          "Гостевой вход",
+          "Лента постов",
+          "Профиль",
+          "Уведомления"
+        ],
+        "textContent": "® Онлайн « Последнее обновление: 00:34:27 ed\r\nЧто y Bac нового?\r\nМихаил 05.07.2025, 00:34:27\r\n`Отдам бесплатно книги\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nНастройки ex\r\nToct 5403 [выйти |\r\nguest_5403ebfd-ad4c-414f-bbe2-962a9758b3e4@example.com ae\r\n< ВНЕШНИЙ ВИД УВЕДОМЛЕНИЯ ФИЛЬТРЫ ГЕЙМИФИКАЦИЯ ПОЛЬЗОВАТЕЛИ >\r\nПрофиль пользователя\r\nГость 5403\r\nguest_5403ebfd-ad4c-414f-bbe2-962a9758b3e4@example.com\r\nvine\r\nToct 5403\r\nEmail\r\nguest_5403ebfd-ad4c-414f- bbe2-962a9758b3e4@example.com\r..."
+      }
+    },
+    {
+      "filename": "11_create_post_form.png",
+      "relativePath": "11_create_post_form.png",
+      "fullPath": "documentation_screenshots\\11_create_post_form.png",
+      "timestamp": "2025-07-05T01:07:28.887Z",
+      "ocrText": "Настройки ex\r\nToct 5403 [выйти |\r\nguest_5403ebfd-ad4c-414f-bbe2-962a9758b3e4@example.com ae\r\n< ВНЕШНИЙ ВИД УВЕДОМЛЕНИЯ ФИЛЬТРЫ ГЕЙМИФИКАЦИЯ ПОЛЬЗОВАТЕЛИ >\r\nПрофиль пользователя\r\nГость 5403\r\nguest_5403ebfd-ad4c-414f-bbe2-962a9758b3e4@example.com\r\nvine\r\nToct 5403\r\nEmail\r\nguest_5403ebfd-ad4c-414f- bbe2-962a9758b3e4@example.com\r\nО себе\r\nЛюблю технологии и новые знакомства\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+      "uiElements": [
+        {
+          "type": "button",
+          "text": "ОТПРАВИТЬ",
+          "count": 7
+        },
+        {
+          "type": "input",
+          "text": "Email",
+          "count": 1
+        },
+        {
+          "type": "input",
+          "text": "Пост",
+          "count": 7
+        },
+        {
+          "type": "text",
+          "text": "Профиль",
+          "count": 1
+        }
+      ],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": true,
+        "hasGuestButton": true,
+        "hasFeed": true,
+        "hasChat": false,
+        "hasProfile": true,
+        "hasPostCreation": false,
+        "hasNotifications": true,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": false,
+        "detectedFeatures": [
+          "Форма входа",
+          "Гостевой вход",
+          "Лента постов",
+          "Профиль",
+          "Уведомления"
+        ],
+        "textContent": "Настройки ex\r\nToct 5403 [выйти |\r\nguest_5403ebfd-ad4c-414f-bbe2-962a9758b3e4@example.com ae\r\n< ВНЕШНИЙ ВИД УВЕДОМЛЕНИЯ ФИЛЬТРЫ ГЕЙМИФИКАЦИЯ ПОЛЬЗОВАТЕЛИ >\r\nПрофиль пользователя\r\nГость 5403\r\nguest_5403ebfd-ad4c-414f-bbe2-962a9758b3e4@example.com\r\nvine\r\nToct 5403\r\nEmail\r\nguest_5403ebfd-ad4c-414f- bbe2-962a9758b3e4@example.com\r\nО себе\r\nЛюблю технологии и новые знакомства\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. О..."
+      }
+    },
+    {
+      "filename": "12_post_form_filled.png",
+      "relativePath": "12_post_form_filled.png",
+      "fullPath": "documentation_screenshots\\12_post_form_filled.png",
+      "timestamp": "2025-07-05T01:07:33.298Z",
+      "ocrText": "Настройки ex\r\nToct 5403 [выйти |\r\nguest_5403ebfd-ad4c-414f-bbe2-962a9758b3e4@example.com ae\r\n< ВНЕШНИЙ ВИД УВЕДОМЛЕНИЯ ФИЛЬТРЫ ГЕЙМИФИКАЦИЯ ПОЛЬЗОВАТЕЛИ >\r\nПрофиль пользователя\r\nГость 5403\r\nguest_5403ebfd-ad4c-414f-bbe2-962a9758b3e4@example.com\r\nvine\r\nToct 5403\r\nEmail\r\nguest_5403ebfd-ad4c-414f- bbe2-962a9758b3e4@example.com\r\nО себе\r\nЛюблю технологии и новые знакомства\r\nКонкурентный пост 2 от admin_user\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nКонкурентный пост 1 от admin_user\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост с Al генерацией {87\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПост в разделе новостей [5]\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПриватный пост только для друзей @\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nВторой пост с медиа контентом ва\r\n>\r\nФото поста\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nПервый тестовый пост от пользователя 1! №\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ",
+      "uiElements": [
+        {
+          "type": "button",
+          "text": "ОТПРАВИТЬ",
+          "count": 7
+        },
+        {
+          "type": "input",
+          "text": "Email",
+          "count": 1
+        },
+        {
+          "type": "input",
+          "text": "пост",
+          "count": 8
+        },
+        {
+          "type": "text",
+          "text": "Профиль",
+          "count": 1
+        }
+      ],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": true,
+        "hasGuestButton": true,
+        "hasFeed": true,
+        "hasChat": false,
+        "hasProfile": true,
+        "hasPostCreation": false,
+        "hasNotifications": true,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": false,
+        "detectedFeatures": [
+          "Форма входа",
+          "Гостевой вход",
+          "Лента постов",
+          "Профиль",
+          "Уведомления"
+        ],
+        "textContent": "Настройки ex\r\nToct 5403 [выйти |\r\nguest_5403ebfd-ad4c-414f-bbe2-962a9758b3e4@example.com ae\r\n< ВНЕШНИЙ ВИД УВЕДОМЛЕНИЯ ФИЛЬТРЫ ГЕЙМИФИКАЦИЯ ПОЛЬЗОВАТЕЛИ >\r\nПрофиль пользователя\r\nГость 5403\r\nguest_5403ebfd-ad4c-414f-bbe2-962a9758b3e4@example.com\r\nvine\r\nToct 5403\r\nEmail\r\nguest_5403ebfd-ad4c-414f- bbe2-962a9758b3e4@example.com\r\nО себе\r\nЛюблю технологии и новые знакомства\r\nКонкурентный пост 2 от admin_user\r\n® нравится — Ореакций\r\nНаписать комментарий. ОТПРАВИТЬ\r\nКонкурентный пост 1 от admin_user\r\n® ..."
+      }
+    },
+    {
+      "filename": "13_post_created.png",
+      "relativePath": "13_post_created.png",
+      "fullPath": "documentation_screenshots\\13_post_created.png",
+      "timestamp": "2025-07-05T01:07:37.905Z",
+      "ocrText": "",
+      "uiElements": [],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": false,
+        "hasGuestButton": false,
+        "hasFeed": false,
+        "hasChat": false,
+        "hasProfile": false,
+        "hasPostCreation": false,
+        "hasNotifications": false,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": false,
+        "detectedFeatures": [],
+        "textContent": ""
+      }
+    },
+    {
+      "filename": "14_chat_page.png",
+      "relativePath": "14_chat_page.png",
+      "fullPath": "documentation_screenshots\\14_chat_page.png",
+      "timestamp": "2025-07-05T01:07:47.963Z",
+      "ocrText": "",
+      "uiElements": [],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": false,
+        "hasGuestButton": false,
+        "hasFeed": false,
+        "hasChat": false,
+        "hasProfile": false,
+        "hasPostCreation": false,
+        "hasNotifications": false,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": false,
+        "detectedFeatures": [],
+        "textContent": ""
+      }
+    },
+    {
+      "filename": "15_chat_conversation.png",
+      "relativePath": "15_chat_conversation.png",
+      "fullPath": "documentation_screenshots\\15_chat_conversation.png",
+      "timestamp": "2025-07-05T01:07:58.035Z",
+      "ocrText": "",
+      "uiElements": [],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": false,
+        "hasGuestButton": false,
+        "hasFeed": false,
+        "hasChat": false,
+        "hasProfile": false,
+        "hasPostCreation": false,
+        "hasNotifications": false,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": false,
+        "detectedFeatures": [],
+        "textContent": ""
+      }
+    },
+    {
+      "filename": "16_message_typing.png",
+      "relativePath": "16_message_typing.png",
+      "fullPath": "documentation_screenshots\\16_message_typing.png",
+      "timestamp": "2025-07-05T01:08:08.100Z",
+      "ocrText": "",
+      "uiElements": [],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": false,
+        "hasGuestButton": false,
+        "hasFeed": false,
+        "hasChat": false,
+        "hasProfile": false,
+        "hasPostCreation": false,
+        "hasNotifications": false,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": false,
+        "detectedFeatures": [],
+        "textContent": ""
+      }
+    },
+    {
+      "filename": "17_message_sent.png",
+      "relativePath": "17_message_sent.png",
+      "fullPath": "documentation_screenshots\\17_message_sent.png",
+      "timestamp": "2025-07-05T01:08:18.172Z",
+      "ocrText": "",
+      "uiElements": [],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": false,
+        "hasGuestButton": false,
+        "hasFeed": false,
+        "hasChat": false,
+        "hasProfile": false,
+        "hasPostCreation": false,
+        "hasNotifications": false,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": false,
+        "detectedFeatures": [],
+        "textContent": ""
+      }
+    },
+    {
+      "filename": "18_left_sidebar.png",
+      "relativePath": "18_left_sidebar.png",
+      "fullPath": "documentation_screenshots\\18_left_sidebar.png",
+      "timestamp": "2025-07-05T01:08:28.319Z",
+      "ocrText": "",
+      "uiElements": [],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": false,
+        "hasGuestButton": false,
+        "hasFeed": false,
+        "hasChat": false,
+        "hasProfile": false,
+        "hasPostCreation": false,
+        "hasNotifications": false,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": false,
+        "detectedFeatures": [],
+        "textContent": ""
+      }
+    },
+    {
+      "filename": "19_right_sidebar.png",
+      "relativePath": "19_right_sidebar.png",
+      "fullPath": "documentation_screenshots\\19_right_sidebar.png",
+      "timestamp": "2025-07-05T01:08:38.401Z",
+      "ocrText": "",
+      "uiElements": [],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": false,
+        "hasGuestButton": false,
+        "hasFeed": false,
+        "hasChat": false,
+        "hasProfile": false,
+        "hasPostCreation": false,
+        "hasNotifications": false,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": false,
+        "detectedFeatures": [],
+        "textContent": ""
+      }
+    },
+    {
+      "filename": "21_notifications_panel.png",
+      "relativePath": "21_notifications_panel.png",
+      "fullPath": "documentation_screenshots\\21_notifications_panel.png",
+      "timestamp": "2025-07-05T01:08:48.482Z",
+      "ocrText": "",
+      "uiElements": [],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": false,
+        "hasGuestButton": false,
+        "hasFeed": false,
+        "hasChat": false,
+        "hasProfile": false,
+        "hasPostCreation": false,
+        "hasNotifications": false,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": false,
+        "detectedFeatures": [],
+        "textContent": ""
+      }
+    },
+    {
+      "filename": "22_search_form.png",
+      "relativePath": "22_search_form.png",
+      "fullPath": "documentation_screenshots\\22_search_form.png",
+      "timestamp": "2025-07-05T01:08:58.560Z",
+      "ocrText": "",
+      "uiElements": [],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": false,
+        "hasGuestButton": false,
+        "hasFeed": false,
+        "hasChat": false,
+        "hasProfile": false,
+        "hasPostCreation": false,
+        "hasNotifications": false,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": false,
+        "detectedFeatures": [],
+        "textContent": ""
+      }
+    },
+    {
+      "filename": "23_search_results.png",
+      "relativePath": "23_search_results.png",
+      "fullPath": "documentation_screenshots\\23_search_results.png",
+      "timestamp": "2025-07-05T01:09:08.635Z",
+      "ocrText": "",
+      "uiElements": [],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": false,
+        "hasGuestButton": false,
+        "hasFeed": false,
+        "hasChat": false,
+        "hasProfile": false,
+        "hasPostCreation": false,
+        "hasNotifications": false,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": false,
+        "detectedFeatures": [],
+        "textContent": ""
+      }
+    },
+    {
+      "filename": "24_mobile_main.png",
+      "relativePath": "24_mobile_main.png",
+      "fullPath": "documentation_screenshots\\24_mobile_main.png",
+      "timestamp": "2025-07-05T01:09:18.702Z",
+      "ocrText": "мО: < Фбехь\r\nПользователи (45)\r\n© Гость 5403 (Вы) @\r\nЭтовы\r\n© Гость 6939\r\nРеальный пользователь\r\n© Гость 4с26\r\nРеальный пользователь\r\n© Гость 8492\r\nРеальный пользователь\r\n© Гость 0534\r\nРеальный пользователь\r\n© Гость а5а!\r\nРеальный пользователь\r\n© Гость 4d4c\r\nРеальный пользователь\r\n—\r\nий\r\n[в] Написать ко || ОТПРАВИТЬ\r\nКонкурентный пост 3 от\r\nmoderator_user\r\n® Нравится 0 реакций.\r\n[в] Написать ко || ОТПРАВИТЬ\r\nКонкурентный пост 2 от admin_user\r\n® Нравится 0 реакций.\r\n[в] Написать ко || ОТПРАВИТЬ\r\nКонкурентный пост 1 от admin_user\r\n® Нравится 0 реакций.\r\n[в] Написать ко || ОТПРАВИТЬ\r\nПост с А! генерацией\r\n® Нравится 0 реакций.\r\n[в] Написать ко || ОТПРАВИТЬ\r\nПост в разделе новостей (J\r\n® Нравится 0 реакций.\r\n[в] Написать ко || ОТПРАВИТЬ\r\nПриватный пост только для друзей\r\n® Нравится 0 реакций.\r\n[в] Написать ко || ОТПРАВИТЬ\r\nВторой пост с медиа контентом в\r\n>\r\n\\>.Фото поста\r\n® Нравится 0 реакций.\r\n[в] Написать ко || ОТПРАВИТЬ\r\nПервый тестовый пост от\r\nпользователя 1! fe\r\n® Нравится 0 реакций.\r\n[в] Написать ко || ОТПРАВИТЬ",
+      "uiElements": [
+        {
+          "type": "button",
+          "text": "ОТПРАВИТЬ",
+          "count": 9
+        },
+        {
+          "type": "input",
+          "text": "пост",
+          "count": 9
+        }
+      ],
+      "colors": {
+        "colorspace": "unknown"
+      },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
+      "analysis": {
+        "hasLoginForm": false,
+        "hasGuestButton": true,
+        "hasFeed": true,
+        "hasChat": false,
+        "hasProfile": false,
+        "hasPostCreation": false,
+        "hasNotifications": false,
+        "hasSearch": false,
+        "hasSidebar": false,
+        "isMobile": true,
+        "detectedFeatures": [
+          "Гостевой вход",
+          "Лента постов",
+          "Мобильная версия"
+        ],
+        "textContent": "мО: < Фбехь\r\nПользователи (45)\r\n© Гость 5403 (Вы) @\r\nЭтовы\r\n© Гость 6939\r\nРеальный пользователь\r\n© Гость 4с26\r\nРеальный пользователь\r\n© Гость 8492\r\nРеальный пользователь\r\n© Гость 0534\r\nРеальный пользователь\r\n© Гость а5а!\r\nРеальный пользователь\r\n© Гость 4d4c\r\nРеальный пользователь\r\n—\r\nий\r\n[в] Написать ко || ОТПРАВИТЬ\r\nКонкурентный пост 3 от\r\nmoderator_user\r\n® Нравится 0 реакций.\r\n[в] Написать ко || ОТПРАВИТЬ\r\nКонкурентный пост 2 от admin_user\r\n® Нравится 0 реакций.\r\n[в] Написать ко || ОТПРАВИТЬ\r\n..."
+      }
+    }
+  ]
+}

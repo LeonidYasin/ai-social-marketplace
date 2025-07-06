@@ -144,7 +144,7 @@ const App = ({ themeMode, onThemeToggle }) => {
   const allUsers = useMemo(() => {
     const usersList = [
       // ...USERS, // убрано, чтобы не было демо-пользователей
-      ...realUsers
+      ...(realUsers || [])
     ];
 
     // Проверяем, есть ли текущий пользователь в списке
@@ -436,10 +436,10 @@ const App = ({ themeMode, onThemeToggle }) => {
 
   // Список чатов для левого сайдбара (фильтрация по поиску)
   const chatList = useMemo(() => {
-    return Object.values(chats)
+    return Object.values(chats || {})
       .map(chat => {
         const user = allUsers.find(u => u.id === chat.userId);
-        const lastMsg = chat.messages[chat.messages.length - 1];
+        const lastMsg = chat.messages && chat.messages.length > 0 ? chat.messages[chat.messages.length - 1] : null;
         return {
           userId: chat.userId,
           name: user?.name || chat.userId,
@@ -448,8 +448,8 @@ const App = ({ themeMode, onThemeToggle }) => {
         };
       })
       .filter(chat =>
-        chat.name.toLowerCase().includes(searchChat.toLowerCase()) ||
-        chat.lastMsg.toLowerCase().includes(searchChat.toLowerCase())
+        chat.name.toLowerCase().includes((searchChat || '').toLowerCase()) ||
+        chat.lastMsg.toLowerCase().includes((searchChat || '').toLowerCase())
       );
   }, [chats, searchChat, allUsers]);
 
@@ -548,9 +548,9 @@ const App = ({ themeMode, onThemeToggle }) => {
                 open={gamificationOpen}
                 onClose={() => setGamificationOpen(false)}
                 userStats={{
-                  totalPosts: feedData.posts.length,
-                  totalReactions: Object.values(feedData.userReactions).filter(r => r).length,
-                  totalComments: Object.values(feedData.comments).flat().length,
+                  totalPosts: feedData.posts?.length || 0,
+                  totalReactions: Object.values(feedData.userReactions || {}).filter(r => r).length,
+                  totalComments: Object.values(feedData.comments || {}).flat().length,
                   totalXP: 450, // TODO: Рассчитывать на основе достижений
                   totalViews: 1234, // TODO: Добавить просмотры
                   soldItems: 2, // TODO: Добавить продажи

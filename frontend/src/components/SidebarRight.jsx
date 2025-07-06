@@ -47,7 +47,7 @@ const SidebarRight = ({ users, onUserClick, open = true, onClose, variant = 'per
       </Toolbar>
       <Box sx={{ p: 2 }}>
         <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600 }}>
-          Пользователи ({users.length})
+          Пользователи ({users?.length || 0})
         </Typography>
         
         {loading ? (
@@ -56,7 +56,7 @@ const SidebarRight = ({ users, onUserClick, open = true, onClose, variant = 'per
           </Box>
         ) : (
           <List>
-            {users.map((user, i) => {
+            {(users || []).map((user, i) => {
               console.log(`Rendering user ${i}:`, user);
               return (
                 <ListItem 

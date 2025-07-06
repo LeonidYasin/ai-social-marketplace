@@ -126,7 +126,7 @@ const MessageNotifications = ({ currentUser, socket }) => {
             <ListItem>
               <CircularProgress size={24} />
             </ListItem>
-          ) : notifications.length === 0 ? (
+          ) : (notifications || []).length === 0 ? (
             <ListItem>
               <ListItemText primary="Нет уведомлений" />
             </ListItem>

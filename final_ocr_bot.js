@@ -10,6 +10,8 @@ class FinalOCRBot {
         this.baseUrl = 'http://localhost:3000';
         this.screenshotsDir = 'test_screenshots/final_bot';
         this.logs = [];
+        this.errors = [];
+        this.lastScreenshotPath = null;
         
         // Документация состояний
         this.stateDocumentation = {
@@ -97,7 +99,55 @@ class FinalOCRBot {
             fullPage: true 
         });
         this.log(`📸 ${description} -> ${filepath}`);
+        this.lastScreenshotPath = filepath;
         return filepath;
+    }
+
+    // Функция для показа Windows уведомления
+    showWindowsNotification(title, message) {
+        // Используем более безопасный способ с временным файлом
+        const tempFile = `${this.screenshotsDir}/notification_${Date.now()}.ps1`;
+        const psScript = `
+Add-Type -AssemblyName PresentationFramework
+[System.Windows.MessageBox]::Show('${message.replace(/'/g, "''")}', '${title.replace(/'/g, "''")}', 'OK', 'Information')
+`;
+        
+        try {
+            require('fs').writeFileSync(tempFile, psScript, 'utf8');
+            const { exec } = require('child_process');
+            exec(`powershell -ExecutionPolicy Bypass -File "${tempFile}"`, (error, stdout, stderr) => {
+                // Удаляем временный файл
+                try {
+                    require('fs').unlinkSync(tempFile);
+                } catch (e) {
+                    // Игнорируем ошибки удаления
+                }
+                
+                if (error) {
+                    console.log('Ошибка при показе уведомления Windows:', error.message);
+                }
+            });
+        } catch (error) {
+            console.log('Ошибка при создании уведомления:', error.message);
+        }
+    }
+
+    // Функция для добавления ошибки с уведомлением
+    addError(description, error = null) {
+        const errorInfo = {
+            description,
+            screenshotPath: this.lastScreenshotPath,
+            timestamp: new Date().toISOString(),
+            stack: error ? error.stack : null
+        };
+        
+        this.errors.push(errorInfo);
+        this.log(`❌ Ошибка: ${description}`, 'error');
+        
+        // Показываем Windows уведомление
+        const notificationTitle = `Ошибка автоматизации #${this.errors.length}`;
+        const notificationMessage = `${description}\n\nСкриншот: ${this.lastScreenshotPath || 'Не создан'}`;
+        this.showWindowsNotification(notificationTitle, notificationMessage);
     }
 
     async analyzeCurrentState() {
@@ -117,6 +167,7 @@ class FinalOCRBot {
             
         } catch (error) {
             this.log(`❌ Ошибка при анализе состояния: ${error.message}`, 'error');
+            this.addError('Ошибка при анализе состояния', error);
             return {
                 name: 'Ошибка анализа',
                 confidence: 0,
@@ -129,33 +180,39 @@ class FinalOCRBot {
         try {
             this.log(`🔍 Поиск элемента с текстом: "${searchText}"`);
             
-            // Используем XPath для поиска элементов с частичным совпадением текста
-            const elementHandles = await this.page.$x(`//*[contains(text(), "${searchText}")]`);
-            
-            for (const elementHandle of elementHandles) {
-                try {
-                    // Проверяем видимость элемента
-                    const isVisible = await elementHandle.evaluate(el => {
-                        return !!(el.offsetParent || el.getClientRects().length);
-                    });
-                    
-                    if (isVisible) {
-                        const box = await elementHandle.boundingBox();
-                        const text = await elementHandle.evaluate(el => el.textContent?.trim());
+            // Используем page.evaluate для поиска элементов с текстом
+            const elementInfo = await this.page.evaluate((text) => {
+                const elements = document.querySelectorAll('button, a, span, div, p, h1, h2, h3, h4, h5, h6');
+                for (const element of elements) {
+                    if (element.textContent && element.textContent.includes(text)) {
+                        const rect = element.getBoundingClientRect();
+                        const isVisible = !!(element.offsetParent || rect.width > 0 || rect.height > 0);
                         
-                        this.log(`✅ Элемент найден: "${text}"`);
-                        return {
-                            element: elementHandle,
-                            text: text,
-                            x: box.x + box.width / 2,
-                            y: box.y + box.height / 2,
-                            confidence: 0.95
-                        };
+                        if (isVisible) {
+                            return {
+                                text: element.textContent.trim(),
+                                x: rect.x + rect.width / 2,
+                                y: rect.y + rect.height / 2,
+                                tagName: element.tagName.toLowerCase(),
+                                className: element.className
+                            };
+                        }
                     }
-                } catch (error) {
-                    // Пропускаем элементы с ошибками
-                    continue;
                 }
+                return null;
+            }, searchText);
+            
+            if (elementInfo) {
+                this.log(`✅ Элемент найден: "${elementInfo.text}"`);
+                return {
+                    element: null, // Не можем вернуть handle из evaluate
+                    text: elementInfo.text,
+                    x: elementInfo.x,
+                    y: elementInfo.y,
+                    confidence: 0.95,
+                    tagName: elementInfo.tagName,
+                    className: elementInfo.className
+                };
             }
             
             // Альтернативный поиск через CSS селекторы
@@ -188,6 +245,7 @@ class FinalOCRBot {
             
         } catch (error) {
             this.log(`❌ Ошибка при поиске элемента: ${error.message}`, 'error');
+            this.addError(`Ошибка при поиске элемента "${searchText}"`, error);
             return null;
         }
     }
@@ -224,7 +282,17 @@ class FinalOCRBot {
     async clickElement(element, description = '') {
         try {
             this.log(`🖱️ Клик по элементу: ${description}`);
-            await element.element.click();
+            
+            if (element.element) {
+                // Если у нас есть handle элемента
+                await element.element.click();
+            } else if (element.x && element.y) {
+                // Если у нас есть только координаты
+                await this.page.mouse.click(element.x, element.y);
+            } else {
+                throw new Error('Нет элемента или координат для клика');
+            }
+            
             await this.pause(2000);
             this.log(`✅ Клик выполнен: ${description}`);
             return true;
@@ -608,6 +676,36 @@ class FinalOCRBot {
         } catch (error) {
             this.log(`❌ Ошибка при очистке: ${error.message}`, 'error');
         }
+    }
+
+    // Функция для обработки всех ошибок в конце выполнения
+    handleFinalErrors() {
+        if (this.errors.length > 0) {
+            console.log('\n=== ОШИБКИ ВЫПОЛНЕНИЯ ===');
+            console.log(`Найдено ошибок: ${this.errors.length}`);
+            
+            this.errors.forEach((error, index) => {
+                console.log(`\nОшибка ${index + 1}:`);
+                console.log(`Описание: ${error.description}`);
+                console.log(`Скриншот: ${error.screenshotPath}`);
+                console.log(`Время: ${error.timestamp}`);
+                if (error.stack) {
+                    console.log(`Стек вызовов: ${error.stack}`);
+                }
+                console.log('---');
+            });
+            
+            console.log('\n=== КОНЕЦ ОТЧЕТА ОБ ОШИБКАХ ===');
+            
+            // Показываем итоговое уведомление
+            const finalTitle = `Завершение автоматизации - ${this.errors.length} ошибок`;
+            const finalMessage = `Найдено ${this.errors.length} ошибок.\n\nПроверьте консоль для детальной информации.\n\nСкриншоты ошибок сохранены в: ${this.screenshotsDir}`;
+            this.showWindowsNotification(finalTitle, finalMessage);
+            
+            return false;
+        }
+        
+        return true;
     }
 }
 

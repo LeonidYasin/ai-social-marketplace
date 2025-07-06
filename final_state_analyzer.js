@@ -1,4 +1,8 @@
 const puppeteer = require('puppeteer');
+const fs = require('fs');
+const path = require('path');
+const { exec } = require('child_process');
+const tesseract = require('node-tesseract-ocr');
 
 class FinalStateAnalyzer {
     constructor() {
@@ -290,6 +294,20 @@ class FinalStateAnalyzer {
             return null;
         }
     }
+}
+
+// Функция для показа Windows уведомления
+function showWindowsNotification(title, message) {
+    const escapedTitle = title.replace(/'/g, "''");
+    const escapedMessage = message.replace(/'/g, "''");
+    
+    const command = `powershell -Command "Add-Type -AssemblyName PresentationFramework; [System.Windows.MessageBox]::Show('${escapedMessage}', '${escapedTitle}', 'OK', 'Information')"`;
+    
+    exec(command, (error, stdout, stderr) => {
+        if (error) {
+            console.log('Ошибка при показе уведомления Windows:', error.message);
+        }
+    });
 }
 
 module.exports = FinalStateAnalyzer; 

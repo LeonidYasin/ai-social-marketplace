@@ -88,8 +88,9 @@ async function clickButtonByText(page, text, description = '') {
         }
     }
     
-    console.log(`❌ Кнопка с текстом "${text}" не найдена (${description})`);
-    return false;
+    const errorMsg = `Кнопка с текстом "${text}" не найдена (${description})`;
+    console.log(`❌ ${errorMsg}`);
+    throw new Error(errorMsg);
 }
 
 // Заполнение поля

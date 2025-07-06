@@ -63,7 +63,9 @@ class TestFinalOCRBot {
             
         } catch (error) {
             console.error('❌ Ошибка при выполнении тестов:', error);
+            this.bot.addError('Критическая ошибка при выполнении тестов', error);
         } finally {
+            this.bot.handleFinalErrors();
             await this.bot.cleanup();
         }
     }
@@ -110,7 +112,9 @@ class TestFinalOCRBot {
             
         } catch (error) {
             console.error('❌ Ошибка при выполнении сценариев:', error);
+            this.bot.addError('Критическая ошибка при выполнении сценариев', error);
         } finally {
+            this.bot.handleFinalErrors();
             await this.bot.cleanup();
         }
     }
@@ -134,7 +138,9 @@ class TestFinalOCRBot {
             
         } catch (error) {
             console.error('❌ Ошибка в многопользовательском тесте:', error);
+            this.bot.addError('Критическая ошибка в многопользовательском тесте', error);
         } finally {
+            this.bot.handleFinalErrors();
             await this.bot.cleanup();
         }
     }
@@ -161,6 +167,7 @@ class TestFinalOCRBot {
             
         } catch (error) {
             console.error('❌ Критическая ошибка:', error);
+            this.bot.addError('Критическая ошибка при выполнении всех тестов', error);
         }
     }
 }

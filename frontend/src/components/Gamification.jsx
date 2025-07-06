@@ -335,7 +335,7 @@ const Gamification = ({ open, onClose, userStats }) => {
           <CardContent>
             <Typography variant="h6" sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
               <TrophyIcon />
-              Достижения ({earnedAchievements.length}/{ACHIEVEMENTS.length})
+              Достижения ({(earnedAchievements || []).length}/{ACHIEVEMENTS.length})
             </Typography>
             <Grid container spacing={2}>
               {userAchievements.slice(0, 6).map((achievement) => (
@@ -383,7 +383,7 @@ const Gamification = ({ open, onClose, userStats }) => {
                 </Grid>
               ))}
             </Grid>
-            {userAchievements.length > 6 && (
+            {(userAchievements || []).length > 6 && (
               <Box sx={{ textAlign: 'center', mt: 2 }}>
                 <Button variant="outlined" onClick={() => setActiveTab(1)}>
                   Показать все достижения

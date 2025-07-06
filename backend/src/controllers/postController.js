@@ -127,8 +127,9 @@ const createPost = async (req, res) => {
       privacy, section, location, is_ai_generated, ai_prompt 
     } = req.body;
     
-    if (!content) {
-      return res.status(400).json({ error: 'content обязателен' });
+    // Проверяем, что есть либо контент, либо медиафайлы
+    if (!content && (!media_urls || media_urls.length === 0)) {
+      return res.status(400).json({ error: 'Необходим либо текст, либо медиафайлы' });
     }
     
     const userId = req.user.id; // ID из JWT токена
@@ -151,7 +152,7 @@ const createPost = async (req, res) => {
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
       RETURNING *`,
       [
-        userId, content, 
+        userId, content || '', 
         mediaUrlsPg,
         media_type || null,
         background_color || null,

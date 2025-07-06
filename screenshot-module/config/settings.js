@@ -17,8 +17,7 @@ module.exports = {
   // Настройки скриншотов
   screenshotOptions: {
     fullPage: true,
-    type: 'png',
-    quality: 90
+    type: 'png'
   },
   
   // Папки для разных типов скриншотов
@@ -47,9 +46,9 @@ module.exports = {
   // Настройки логирования
   logging: {
     level: 'info', // 'debug', 'info', 'warn', 'error'
-    file: 'logs/execution.log',
-    errorsFile: 'logs/errors.log',
-    screenshotsFile: 'logs/screenshots.log'
+    file: 'documentation_screenshots/logs/execution.log',
+    errorsFile: 'documentation_screenshots/logs/errors.log',
+    screenshotsFile: 'documentation_screenshots/logs/screenshots.log'
   },
   
   // Настройки отчетов

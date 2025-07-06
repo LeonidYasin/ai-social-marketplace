@@ -151,7 +151,11 @@ const PostCard = ({ post, compact = false }) => {
 
   // Основной рендер
   return (
-    <Card sx={{ mb: 2, borderRadius: 2, boxShadow: 1 }}>
+    <Card sx={{ 
+      mb: 2, 
+      borderRadius: 2, 
+      boxShadow: 1,
+    }}>
       <CardContent>
         {/* Автор и дата */}
         {post.author && (
@@ -164,9 +168,24 @@ const PostCard = ({ post, compact = false }) => {
           </Box>
         )}
         {/* Текст поста */}
-        <Typography variant="body1" sx={{ mb: post.images && post.images.length > 0 ? 2 : 0 }}>
-          {post.text}
-        </Typography>
+        <Box sx={{
+          background: post.bg || post.background_color || 'transparent',
+          backgroundImage: (post.bg || post.background_color)?.includes('gradient') ? (post.bg || post.background_color) : undefined,
+          backgroundSize: (post.bg || post.background_color)?.includes('gradient') ? 'cover' : undefined,
+          borderRadius: 2,
+          p: (post.bg || post.background_color) ? 2 : 0,
+          mb: post.images && post.images.length > 0 ? 2 : 0,
+        }}>
+          <Typography 
+            variant="body1" 
+            sx={{ 
+              color: (post.bg || post.background_color) ? '#fff' : 'inherit',
+              textShadow: (post.bg || post.background_color) ? '0 1px 2px rgba(0,0,0,0.3)' : 'none',
+            }}
+          >
+            {post.text}
+          </Typography>
+        </Box>
         {/* Картинки */}
         {post.images && post.images.length > 0 && (
           <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 1 }}>

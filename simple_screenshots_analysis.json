@@ -1,0 +1,860 @@
+{
+  "timestamp": "2025-07-05T01:14:43.931Z",
+  "totalScreenshots": 58,
+  "categories": {
+    "states": [
+      {
+        "filename": "01_initial_page.png",
+        "category": "states",
+        "path": "states/01_initial_page.png",
+        "fullPath": "documentation_screenshots/states/01_initial_page.png",
+        "features": [],
+        "description": "",
+        "uiElements": []
+      },
+      {
+        "filename": "02_guest_mode.png",
+        "category": "states",
+        "path": "states/02_guest_mode.png",
+        "fullPath": "documentation_screenshots/states/02_guest_mode.png",
+        "features": [
+          "Гостевой вход"
+        ],
+        "description": "Функционал гостевого входа",
+        "uiElements": [
+          "Кнопка \"Продолжить как гость\"",
+          "Форма гостя"
+        ]
+      },
+      {
+        "filename": "03_login_form.png",
+        "category": "states",
+        "path": "states/03_login_form.png",
+        "fullPath": "documentation_screenshots/states/03_login_form.png",
+        "features": [
+          "Форма входа"
+        ],
+        "description": "Стандартная форма авторизации",
+        "uiElements": [
+          "Поле email",
+          "Поле пароля",
+          "Кнопка входа"
+        ]
+      },
+      {
+        "filename": "03_post_creation.png",
+        "category": "states",
+        "path": "states/03_post_creation.png",
+        "fullPath": "documentation_screenshots/states/03_post_creation.png",
+        "features": [
+          "Создание постов"
+        ],
+        "description": "Функционал создания контента",
+        "uiElements": [
+          "Форма поста",
+          "Поле ввода",
+          "Кнопка публикации"
+        ]
+      },
+      {
+        "filename": "04_login_form_filled.png",
+        "category": "states",
+        "path": "states/04_login_form_filled.png",
+        "fullPath": "documentation_screenshots/states/04_login_form_filled.png",
+        "features": [
+          "Форма входа"
+        ],
+        "description": "Стандартная форма авторизации",
+        "uiElements": [
+          "Поле email",
+          "Поле пароля",
+          "Кнопка входа"
+        ]
+      },
+      {
+        "filename": "04_main_page.png",
+        "category": "states",
+        "path": "states/04_main_page.png",
+        "fullPath": "documentation_screenshots/states/04_main_page.png",
+        "features": [
+          "Главная страница (лента)"
+        ],
+        "description": "Главная страница без модального окна, с лентой постов и боковыми панелями",
+        "uiElements": [
+          "Лента постов",
+          "Боковые панели",
+          "Меню",
+          "Список пользователей"
+        ]
+      },
+      {
+        "filename": "04_menu_open.png",
+        "category": "states",
+        "path": "states/04_menu_open.png",
+        "fullPath": "documentation_screenshots/states/04_menu_open.png",
+        "features": [],
+        "description": "",
+        "uiElements": []
+      },
+      {
+        "filename": "05_chat_open.png",
+        "category": "states",
+        "path": "states/05_chat_open.png",
+        "fullPath": "documentation_screenshots/states/05_chat_open.png",
+        "features": [
+          "Чат"
+        ],
+        "description": "Система обмена сообщениями",
+        "uiElements": [
+          "Диалоги",
+          "Поле сообщения",
+          "Кнопка отправки"
+        ]
+      },
+      {
+        "filename": "05_post_creation.png",
+        "category": "states",
+        "path": "states/05_post_creation.png",
+        "fullPath": "documentation_screenshots/states/05_post_creation.png",
+        "features": [
+          "Создание постов"
+        ],
+        "description": "Функционал создания контента",
+        "uiElements": [
+          "Форма поста",
+          "Поле ввода",
+          "Кнопка публикации"
+        ]
+      },
+      {
+        "filename": "06_menu_open.png",
+        "category": "states",
+        "path": "states/06_menu_open.png",
+        "fullPath": "documentation_screenshots/states/06_menu_open.png",
+        "features": [],
+        "description": "",
+        "uiElements": []
+      },
+      {
+        "filename": "07_chat_open.png",
+        "category": "states",
+        "path": "states/07_chat_open.png",
+        "fullPath": "documentation_screenshots/states/07_chat_open.png",
+        "features": [
+          "Чат"
+        ],
+        "description": "Система обмена сообщениями",
+        "uiElements": [
+          "Диалоги",
+          "Поле сообщения",
+          "Кнопка отправки"
+        ]
+      },
+      {
+        "filename": "08_profile_page.png",
+        "category": "states",
+        "path": "states/08_profile_page.png",
+        "fullPath": "documentation_screenshots/states/08_profile_page.png",
+        "features": [
+          "Профиль пользователя"
+        ],
+        "description": "Страница профиля пользователя",
+        "uiElements": [
+          "Информация пользователя",
+          "Настройки профиля"
+        ]
+      },
+      {
+        "filename": "analyze_after_Клик_по_кнопке_входа_в_систему.png",
+        "category": "states",
+        "path": "states/analyze_after_Клик_по_кнопке_входа_в_систему.png",
+        "fullPath": "documentation_screenshots/states/analyze_after_Клик_по_кнопке_входа_в_систему.png",
+        "features": [
+          "Взаимодействия"
+        ],
+        "description": "Демонстрация пользовательских взаимодействий",
+        "uiElements": [
+          "Состояния до/после",
+          "Анимации"
+        ]
+      },
+      {
+        "filename": "analyze_after_Клик_по_кнопке_гостевого_входа.png",
+        "category": "states",
+        "path": "states/analyze_after_Клик_по_кнопке_гостевого_входа.png",
+        "fullPath": "documentation_screenshots/states/analyze_after_Клик_по_кнопке_гостевого_входа.png",
+        "features": [
+          "Взаимодействия"
+        ],
+        "description": "Демонстрация пользовательских взаимодействий",
+        "uiElements": [
+          "Состояния до/после",
+          "Анимации"
+        ]
+      },
+      {
+        "filename": "analyze_before_Клик_по_вкладке_чатов.png",
+        "category": "states",
+        "path": "states/analyze_before_Клик_по_вкладке_чатов.png",
+        "fullPath": "documentation_screenshots/states/analyze_before_Клик_по_вкладке_чатов.png",
+        "features": [
+          "Взаимодействия"
+        ],
+        "description": "Демонстрация пользовательских взаимодействий",
+        "uiElements": [
+          "Состояния до/после",
+          "Анимации"
+        ]
+      },
+      {
+        "filename": "analyze_before_Клик_по_кнопке_входа_в_систему.png",
+        "category": "states",
+        "path": "states/analyze_before_Клик_по_кнопке_входа_в_систему.png",
+        "fullPath": "documentation_screenshots/states/analyze_before_Клик_по_кнопке_входа_в_систему.png",
+        "features": [
+          "Взаимодействия"
+        ],
+        "description": "Демонстрация пользовательских взаимодействий",
+        "uiElements": [
+          "Состояния до/после",
+          "Анимации"
+        ]
+      },
+      {
+        "filename": "analyze_before_Клик_по_кнопке_гостевого_входа.png",
+        "category": "states",
+        "path": "states/analyze_before_Клик_по_кнопке_гостевого_входа.png",
+        "fullPath": "documentation_screenshots/states/analyze_before_Клик_по_кнопке_гостевого_входа.png",
+        "features": [
+          "Взаимодействия"
+        ],
+        "description": "Демонстрация пользовательских взаимодействий",
+        "uiElements": [
+          "Состояния до/после",
+          "Анимации"
+        ]
+      },
+      {
+        "filename": "analyze_before_Клик_по_кнопке_меню.png",
+        "category": "states",
+        "path": "states/analyze_before_Клик_по_кнопке_меню.png",
+        "fullPath": "documentation_screenshots/states/analyze_before_Клик_по_кнопке_меню.png",
+        "features": [
+          "Взаимодействия"
+        ],
+        "description": "Демонстрация пользовательских взаимодействий",
+        "uiElements": [
+          "Состояния до/после",
+          "Анимации"
+        ]
+      },
+      {
+        "filename": "analyze_before_Клик_по_полю_создания_поста.png",
+        "category": "states",
+        "path": "states/analyze_before_Клик_по_полю_создания_поста.png",
+        "fullPath": "documentation_screenshots/states/analyze_before_Клик_по_полю_создания_поста.png",
+        "features": [
+          "Взаимодействия"
+        ],
+        "description": "Демонстрация пользовательских взаимодействий",
+        "uiElements": [
+          "Состояния до/после",
+          "Анимации"
+        ]
+      },
+      {
+        "filename": "analyze_initial.png",
+        "category": "states",
+        "path": "states/analyze_initial.png",
+        "fullPath": "documentation_screenshots/states/analyze_initial.png",
+        "features": [],
+        "description": "",
+        "uiElements": []
+      }
+    ],
+    "components": [
+      {
+        "filename": "01_appbar.png",
+        "category": "components",
+        "path": "components/01_appbar.png",
+        "fullPath": "documentation_screenshots/components/01_appbar.png",
+        "features": [],
+        "description": "",
+        "uiElements": []
+      },
+      {
+        "filename": "02_sidebar_left.png",
+        "category": "components",
+        "path": "components/02_sidebar_left.png",
+        "fullPath": "documentation_screenshots/components/02_sidebar_left.png",
+        "features": [
+          "Боковая панель"
+        ],
+        "description": "Навигационная панель",
+        "uiElements": [
+          "Меню навигации",
+          "Ссылки"
+        ]
+      },
+      {
+        "filename": "03_sidebar_right.png",
+        "category": "components",
+        "path": "components/03_sidebar_right.png",
+        "fullPath": "documentation_screenshots/components/03_sidebar_right.png",
+        "features": [
+          "Боковая панель"
+        ],
+        "description": "Навигационная панель",
+        "uiElements": [
+          "Меню навигации",
+          "Ссылки"
+        ]
+      },
+      {
+        "filename": "04_feed.png",
+        "category": "components",
+        "path": "components/04_feed.png",
+        "fullPath": "documentation_screenshots/components/04_feed.png",
+        "features": [
+          "Главная страница (лента)"
+        ],
+        "description": "Главная страница без модального окна, с лентой постов и боковыми панелями",
+        "uiElements": [
+          "Лента постов",
+          "Боковые панели",
+          "Меню",
+          "Список пользователей"
+        ]
+      },
+      {
+        "filename": "06_chat_dialog.png",
+        "category": "components",
+        "path": "components/06_chat_dialog.png",
+        "fullPath": "documentation_screenshots/components/06_chat_dialog.png",
+        "features": [
+          "Чат"
+        ],
+        "description": "Система обмена сообщениями",
+        "uiElements": [
+          "Диалоги",
+          "Поле сообщения",
+          "Кнопка отправки"
+        ]
+      },
+      {
+        "filename": "07_notifications.png",
+        "category": "components",
+        "path": "components/07_notifications.png",
+        "fullPath": "documentation_screenshots/components/07_notifications.png",
+        "features": [
+          "Уведомления"
+        ],
+        "description": "Система уведомлений",
+        "uiElements": [
+          "Список уведомлений",
+          "Индикаторы"
+        ]
+      },
+      {
+        "filename": "08_search.png",
+        "category": "components",
+        "path": "components/08_search.png",
+        "fullPath": "documentation_screenshots/components/08_search.png",
+        "features": [
+          "Поиск"
+        ],
+        "description": "Функционал поиска",
+        "uiElements": [
+          "Поле поиска",
+          "Результаты поиска"
+        ]
+      }
+    ],
+    "interactions": [
+      {
+        "filename": "01_before_like.png",
+        "category": "interactions",
+        "path": "interactions/01_before_like.png",
+        "fullPath": "documentation_screenshots/interactions/01_before_like.png",
+        "features": [
+          "Взаимодействия"
+        ],
+        "description": "Демонстрация пользовательских взаимодействий",
+        "uiElements": [
+          "Состояния до/после",
+          "Анимации"
+        ]
+      },
+      {
+        "filename": "02_after_like.png",
+        "category": "interactions",
+        "path": "interactions/02_after_like.png",
+        "fullPath": "documentation_screenshots/interactions/02_after_like.png",
+        "features": [
+          "Взаимодействия"
+        ],
+        "description": "Демонстрация пользовательских взаимодействий",
+        "uiElements": [
+          "Состояния до/после",
+          "Анимации"
+        ]
+      },
+      {
+        "filename": "05_post_field_focused.png",
+        "category": "interactions",
+        "path": "interactions/05_post_field_focused.png",
+        "fullPath": "documentation_screenshots/interactions/05_post_field_focused.png",
+        "features": [
+          "Создание постов"
+        ],
+        "description": "Функционал создания контента",
+        "uiElements": [
+          "Форма поста",
+          "Поле ввода",
+          "Кнопка публикации"
+        ]
+      },
+      {
+        "filename": "06_post_with_text.png",
+        "category": "interactions",
+        "path": "interactions/06_post_with_text.png",
+        "fullPath": "documentation_screenshots/interactions/06_post_with_text.png",
+        "features": [
+          "Создание постов"
+        ],
+        "description": "Функционал создания контента",
+        "uiElements": [
+          "Форма поста",
+          "Поле ввода",
+          "Кнопка публикации"
+        ]
+      }
+    ],
+    "multiuser": [
+      {
+        "filename": "01_user1_initial.png",
+        "category": "multiuser",
+        "path": "multiuser/01_user1_initial.png",
+        "fullPath": "documentation_screenshots/multiuser/01_user1_initial.png",
+        "features": [
+          "Мультипользовательский режим"
+        ],
+        "description": "Тестирование с несколькими пользователями",
+        "uiElements": [
+          "Разные аккаунты",
+          "Взаимодействие между пользователями"
+        ]
+      },
+      {
+        "filename": "02_user2_initial.png",
+        "category": "multiuser",
+        "path": "multiuser/02_user2_initial.png",
+        "fullPath": "documentation_screenshots/multiuser/02_user2_initial.png",
+        "features": [
+          "Мультипользовательский режим"
+        ],
+        "description": "Тестирование с несколькими пользователями",
+        "uiElements": [
+          "Разные аккаунты",
+          "Взаимодействие между пользователями"
+        ]
+      },
+      {
+        "filename": "04_user2_sees_post.png",
+        "category": "multiuser",
+        "path": "multiuser/04_user2_sees_post.png",
+        "fullPath": "documentation_screenshots/multiuser/04_user2_sees_post.png",
+        "features": [
+          "Создание постов",
+          "Мультипользовательский режим"
+        ],
+        "description": "Тестирование с несколькими пользователями",
+        "uiElements": [
+          "Форма поста",
+          "Поле ввода",
+          "Кнопка публикации",
+          "Разные аккаунты",
+          "Взаимодействие между пользователями"
+        ]
+      },
+      {
+        "filename": "05_user2_liked_post.png",
+        "category": "multiuser",
+        "path": "multiuser/05_user2_liked_post.png",
+        "fullPath": "documentation_screenshots/multiuser/05_user2_liked_post.png",
+        "features": [
+          "Создание постов",
+          "Мультипользовательский режим"
+        ],
+        "description": "Тестирование с несколькими пользователями",
+        "uiElements": [
+          "Форма поста",
+          "Поле ввода",
+          "Кнопка публикации",
+          "Разные аккаунты",
+          "Взаимодействие между пользователями"
+        ]
+      },
+      {
+        "filename": "06_user1_sees_like.png",
+        "category": "multiuser",
+        "path": "multiuser/06_user1_sees_like.png",
+        "fullPath": "documentation_screenshots/multiuser/06_user1_sees_like.png",
+        "features": [
+          "Мультипользовательский режим"
+        ],
+        "description": "Тестирование с несколькими пользователями",
+        "uiElements": [
+          "Разные аккаунты",
+          "Взаимодействие между пользователями"
+        ]
+      }
+    ]
+  },
+  "mainScreenshots": [
+    {
+      "filename": "01_main_page.png",
+      "category": "",
+      "path": "01_main_page.png",
+      "fullPath": "documentation_screenshots/01_main_page.png",
+      "features": [
+        "Главная страница с приветствием"
+      ],
+      "description": "Главная страница с модальным окном приветствия (выбор способа входа)",
+      "uiElements": [
+        "Модальное окно \"Добро пожаловать\"",
+        "Кнопка \"Войти в систему\"",
+        "Кнопка \"Продолжить как гость\"",
+        "Лента постов",
+        "Боковые панели"
+      ]
+    },
+    {
+      "filename": "02_guest_login_clicked.png",
+      "category": "",
+      "path": "02_guest_login_clicked.png",
+      "fullPath": "documentation_screenshots/02_guest_login_clicked.png",
+      "features": [
+        "Гостевой вход",
+        "Форма входа"
+      ],
+      "description": "Стандартная форма авторизации",
+      "uiElements": [
+        "Кнопка \"Продолжить как гость\"",
+        "Форма гостя",
+        "Поле email",
+        "Поле пароля",
+        "Кнопка входа"
+      ]
+    },
+    {
+      "filename": "03_guest_form.png",
+      "category": "",
+      "path": "03_guest_form.png",
+      "fullPath": "documentation_screenshots/03_guest_form.png",
+      "features": [
+        "Гостевой вход"
+      ],
+      "description": "Функционал гостевого входа",
+      "uiElements": [
+        "Кнопка \"Продолжить как гость\"",
+        "Форма гостя"
+      ]
+    },
+    {
+      "filename": "04_login_form.png",
+      "category": "",
+      "path": "04_login_form.png",
+      "fullPath": "documentation_screenshots/04_login_form.png",
+      "features": [
+        "Форма входа"
+      ],
+      "description": "Стандартная форма авторизации",
+      "uiElements": [
+        "Поле email",
+        "Поле пароля",
+        "Кнопка входа"
+      ]
+    },
+    {
+      "filename": "05_login_form_filled.png",
+      "category": "",
+      "path": "05_login_form_filled.png",
+      "fullPath": "documentation_screenshots/05_login_form_filled.png",
+      "features": [
+        "Форма входа"
+      ],
+      "description": "Стандартная форма авторизации",
+      "uiElements": [
+        "Поле email",
+        "Поле пароля",
+        "Кнопка входа"
+      ]
+    },
+    {
+      "filename": "06_after_login.png",
+      "category": "",
+      "path": "06_after_login.png",
+      "fullPath": "documentation_screenshots/06_after_login.png",
+      "features": [
+        "Форма входа",
+        "Взаимодействия"
+      ],
+      "description": "Демонстрация пользовательских взаимодействий",
+      "uiElements": [
+        "Поле email",
+        "Поле пароля",
+        "Кнопка входа",
+        "Состояния до/после",
+        "Анимации"
+      ]
+    },
+    {
+      "filename": "07_user_profile.png",
+      "category": "",
+      "path": "07_user_profile.png",
+      "fullPath": "documentation_screenshots/07_user_profile.png",
+      "features": [
+        "Профиль пользователя"
+      ],
+      "description": "Страница профиля пользователя",
+      "uiElements": [
+        "Информация пользователя",
+        "Настройки профиля"
+      ]
+    },
+    {
+      "filename": "09_feed_page.png",
+      "category": "",
+      "path": "09_feed_page.png",
+      "fullPath": "documentation_screenshots/09_feed_page.png",
+      "features": [
+        "Главная страница (лента)"
+      ],
+      "description": "Главная страница без модального окна, с лентой постов и боковыми панелями",
+      "uiElements": [
+        "Лента постов",
+        "Боковые панели",
+        "Меню",
+        "Список пользователей"
+      ]
+    },
+    {
+      "filename": "10_feed_scrolled.png",
+      "category": "",
+      "path": "10_feed_scrolled.png",
+      "fullPath": "documentation_screenshots/10_feed_scrolled.png",
+      "features": [
+        "Главная страница (лента)"
+      ],
+      "description": "Главная страница без модального окна, с лентой постов и боковыми панелями",
+      "uiElements": [
+        "Лента постов",
+        "Боковые панели",
+        "Меню",
+        "Список пользователей"
+      ]
+    },
+    {
+      "filename": "11_create_post_form.png",
+      "category": "",
+      "path": "11_create_post_form.png",
+      "fullPath": "documentation_screenshots/11_create_post_form.png",
+      "features": [
+        "Создание постов"
+      ],
+      "description": "Функционал создания контента",
+      "uiElements": [
+        "Форма поста",
+        "Поле ввода",
+        "Кнопка публикации"
+      ]
+    },
+    {
+      "filename": "12_post_form_filled.png",
+      "category": "",
+      "path": "12_post_form_filled.png",
+      "fullPath": "documentation_screenshots/12_post_form_filled.png",
+      "features": [
+        "Создание постов"
+      ],
+      "description": "Функционал создания контента",
+      "uiElements": [
+        "Форма поста",
+        "Поле ввода",
+        "Кнопка публикации"
+      ]
+    },
+    {
+      "filename": "13_post_created.png",
+      "category": "",
+      "path": "13_post_created.png",
+      "fullPath": "documentation_screenshots/13_post_created.png",
+      "features": [
+        "Создание постов"
+      ],
+      "description": "Функционал создания контента",
+      "uiElements": [
+        "Форма поста",
+        "Поле ввода",
+        "Кнопка публикации"
+      ]
+    },
+    {
+      "filename": "14_chat_page.png",
+      "category": "",
+      "path": "14_chat_page.png",
+      "fullPath": "documentation_screenshots/14_chat_page.png",
+      "features": [
+        "Чат"
+      ],
+      "description": "Система обмена сообщениями",
+      "uiElements": [
+        "Диалоги",
+        "Поле сообщения",
+        "Кнопка отправки"
+      ]
+    },
+    {
+      "filename": "15_chat_conversation.png",
+      "category": "",
+      "path": "15_chat_conversation.png",
+      "fullPath": "documentation_screenshots/15_chat_conversation.png",
+      "features": [
+        "Чат"
+      ],
+      "description": "Система обмена сообщениями",
+      "uiElements": [
+        "Диалоги",
+        "Поле сообщения",
+        "Кнопка отправки"
+      ]
+    },
+    {
+      "filename": "16_message_typing.png",
+      "category": "",
+      "path": "16_message_typing.png",
+      "fullPath": "documentation_screenshots/16_message_typing.png",
+      "features": [],
+      "description": "",
+      "uiElements": []
+    },
+    {
+      "filename": "17_message_sent.png",
+      "category": "",
+      "path": "17_message_sent.png",
+      "fullPath": "documentation_screenshots/17_message_sent.png",
+      "features": [],
+      "description": "",
+      "uiElements": []
+    },
+    {
+      "filename": "18_left_sidebar.png",
+      "category": "",
+      "path": "18_left_sidebar.png",
+      "fullPath": "documentation_screenshots/18_left_sidebar.png",
+      "features": [
+        "Боковая панель"
+      ],
+      "description": "Навигационная панель",
+      "uiElements": [
+        "Меню навигации",
+        "Ссылки"
+      ]
+    },
+    {
+      "filename": "19_right_sidebar.png",
+      "category": "",
+      "path": "19_right_sidebar.png",
+      "fullPath": "documentation_screenshots/19_right_sidebar.png",
+      "features": [
+        "Боковая панель"
+      ],
+      "description": "Навигационная панель",
+      "uiElements": [
+        "Меню навигации",
+        "Ссылки"
+      ]
+    },
+    {
+      "filename": "21_notifications_panel.png",
+      "category": "",
+      "path": "21_notifications_panel.png",
+      "fullPath": "documentation_screenshots/21_notifications_panel.png",
+      "features": [
+        "Уведомления"
+      ],
+      "description": "Система уведомлений",
+      "uiElements": [
+        "Список уведомлений",
+        "Индикаторы"
+      ]
+    },
+    {
+      "filename": "22_search_form.png",
+      "category": "",
+      "path": "22_search_form.png",
+      "fullPath": "documentation_screenshots/22_search_form.png",
+      "features": [
+        "Поиск"
+      ],
+      "description": "Функционал поиска",
+      "uiElements": [
+        "Поле поиска",
+        "Результаты поиска"
+      ]
+    },
+    {
+      "filename": "23_search_results.png",
+      "category": "",
+      "path": "23_search_results.png",
+      "fullPath": "documentation_screenshots/23_search_results.png",
+      "features": [
+        "Поиск"
+      ],
+      "description": "Функционал поиска",
+      "uiElements": [
+        "Поле поиска",
+        "Результаты поиска"
+      ]
+    },
+    {
+      "filename": "24_mobile_main.png",
+      "category": "",
+      "path": "24_mobile_main.png",
+      "fullPath": "documentation_screenshots/24_mobile_main.png",
+      "features": [
+        "Мобильная версия"
+      ],
+      "description": "Адаптивная версия для мобильных устройств",
+      "uiElements": [
+        "Мобильная навигация",
+        "Адаптивный дизайн"
+      ]
+    }
+  ],
+  "coverage": {
+    "pages": [
+      "Главная с приветствием",
+      "Профиль",
+      "Главная (лента)",
+      "Чат",
+      "Поиск"
+    ],
+    "components": [
+      "Форма входа",
+      "Боковая панель",
+      "Уведомления"
+    ],
+    "interactions": [
+      "Пользовательские действия",
+      "Создание контента"
+    ],
+    "states": [
+      "Гостевой режим",
+      "Авторизация"
+    ],
+    "mobile": true,
+    "multiuser": true
+  }
+}

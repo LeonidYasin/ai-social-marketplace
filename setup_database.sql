@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS posts (
     content TEXT,
     media_urls TEXT[], -- массив URL медиафайлов
     media_type VARCHAR(20), -- image, video, document
-    background_color VARCHAR(7), -- hex цвет фона
+    background_color VARCHAR(255), -- hex цвет фона или CSS градиент
     privacy VARCHAR(20) DEFAULT 'public', -- public, friends, private
     section VARCHAR(50), -- для категоризации постов
     location VARCHAR(200),

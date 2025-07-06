@@ -131,11 +131,11 @@ const Analytics = ({ open, onClose, posts, userReactions, comments }) => {
 
   // Статистика пользователя
   const userStats = {
-    totalPosts: posts.length,
-    totalReactions: Object.values(userReactions).filter(r => r).length,
-    totalComments: Object.values(comments).flat().length,
-    averageReactions: posts.length > 0 ? 
-      posts.reduce((sum, post) => sum + Object.values(post.reactions).reduce((a, b) => a + b, 0), 0) / posts.length : 0,
+    totalPosts: (posts || []).length,
+    totalReactions: Object.values(userReactions || {}).filter(r => r).length,
+    totalComments: Object.values(comments || {}).flat().length,
+    averageReactions: (posts || []).length > 0 ? 
+      (posts || []).reduce((sum, post) => sum + Object.values(post.reactions || {}).reduce((a, b) => a + b, 0), 0) / (posts || []).length : 0,
     mostActiveDay: 'Понедельник',
     favoriteSection: 'Продам',
   };
