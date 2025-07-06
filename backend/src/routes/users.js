@@ -6,9 +6,9 @@ const { checkAdmin, requireAuth } = require('../middleware/checkAdmin');
 // Публичные маршруты
 router.post('/register', userController.registerUser);
 router.post('/login', userController.loginUser);
+router.get('/', userController.getUsers);
 
 // Защищенные маршруты (требуют JWT токен)
-router.get('/', requireAuth, userController.getUsers);
 router.put('/profile', requireAuth, userController.updateCurrentUserProfile);
 router.get('/profile', requireAuth, userController.getCurrentUser);
 router.get('/:id', requireAuth, userController.getUserById);

@@ -18,11 +18,9 @@ const createToken = (user) => {
 // Получить всех пользователей
 const getUsers = async (req, res) => {
   try {
-    console.log('[getUsers] Получен запрос на список пользователей');
     const result = await query(
       'SELECT id, username, first_name, last_name, avatar_url, bio, created_at FROM users ORDER BY created_at DESC'
     );
-    console.log(`[getUsers] Найдено пользователей: ${result.rows.length}`);
     
     // Проверяем, не были ли уже отправлены заголовки
     if (!res.headersSent) {

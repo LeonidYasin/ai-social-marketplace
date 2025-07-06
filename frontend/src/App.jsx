@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Box, Typography, ThemeProvider, CssBaseline, IconButton } from '@mui/material';
+import { io } from 'socket.io-client';
 import AppBarMain from './components/AppBar';
 import SidebarLeft from './components/SidebarLeft';
 import SidebarRight from './components/SidebarRight';
@@ -49,32 +50,23 @@ const App = ({ themeMode, onThemeToggle }) => {
   // Новое состояние для реальных пользователей
   const [realUsers, setRealUsers] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
+  
+  // WebSocket соединение
+  const [socket, setSocket] = useState(null);
 
   // Функция загрузки пользователей из API
   const fetchUsers = async () => {
     try {
       setLoadingUsers(true);
-      console.log('Fetching users from API...');
-      
-      // Проверяем, есть ли токен авторизации
-      const token = localStorage.getItem('authToken');
-      if (!token) {
-        console.log('No auth token found, skipping users fetch');
-        setRealUsers([]);
-        return;
-      }
       
       const response = await fetch('http://localhost:8000/api/users', {
         headers: {
-          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
       });
-      console.log('API response status:', response.status);
       
       if (response.ok) {
         const data = await response.json();
-        console.log('API response data:', data);
         // Преобразуем пользователей в нужный формат
         const formattedUsers = data.map(user => ({
           id: user.id.toString(),
@@ -95,13 +87,6 @@ const App = ({ themeMode, onThemeToggle }) => {
           }
         }
         setRealUsers(uniqueUsers);
-      } else if (response.status === 401) {
-        // Токен истек, очищаем данные
-        console.log('Token expired, clearing auth data');
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('currentUser');
-        setCurrentUser(null);
-        setRealUsers([]);
       } else {
         console.error('API error:', response.status, response.statusText);
       }
@@ -199,6 +184,87 @@ const App = ({ themeMode, onThemeToggle }) => {
     fetchUsers();
   }, []);
 
+  // Периодическое обновление сообщений в активном чате
+  useEffect(() => {
+    if (!activeChatId || !currentUser) return;
+
+    const interval = setInterval(async () => {
+      await loadConversation(activeChatId);
+    }, 3000); // Обновляем каждые 3 секунды
+
+    return () => clearInterval(interval);
+  }, [activeChatId, currentUser]);
+
+  // Инициализация WebSocket соединения
+  useEffect(() => {
+    console.log('App.jsx: Инициализация WebSocket для пользователя:', currentUser);
+    
+    if (currentUser) {
+      const newSocket = io('http://localhost:8000', {
+        transports: ['websocket', 'polling'],
+        timeout: 10000,
+        forceNew: true
+      });
+      
+      newSocket.on('connect', () => {
+        console.log('App.jsx: WebSocket подключен, socket.id:', newSocket.id);
+        
+        // Присоединяемся к чату
+        newSocket.emit('join', {
+          userId: currentUser.id,
+          username: currentUser.username,
+          avatarUrl: currentUser.avatar
+        });
+        console.log('App.jsx: Отправлен join с данными:', {
+          userId: currentUser.id,
+          username: currentUser.username
+        });
+      });
+
+      newSocket.on('disconnect', (reason) => {
+        console.log('App.jsx: WebSocket отключен, причина:', reason);
+      });
+
+      newSocket.on('connect_error', (error) => {
+        console.error('App.jsx: Ошибка подключения WebSocket:', error);
+        console.log('App.jsx: Попытка переподключения...');
+      });
+
+      newSocket.on('reconnect', (attemptNumber) => {
+        console.log('App.jsx: WebSocket переподключен, попытка:', attemptNumber);
+      });
+
+      newSocket.on('reconnect_error', (error) => {
+        console.error('App.jsx: Ошибка переподключения WebSocket:', error);
+      });
+
+      // Проверяем состояние подключения через 2 секунды
+      setTimeout(() => {
+        if (!newSocket.connected) {
+          console.error('App.jsx: WebSocket не подключился за 2 секунды');
+          console.log('App.jsx: Состояние socket:', {
+            connected: newSocket.connected,
+            id: newSocket.id,
+            transport: newSocket.io.engine.transport.name
+          });
+        }
+      }, 2000);
+
+      setSocket(newSocket);
+
+      return () => {
+        console.log('App.jsx: Отключение WebSocket');
+        newSocket.disconnect();
+      };
+    } else {
+      if (socket) {
+        console.log('App.jsx: Отключение WebSocket (пользователь не авторизован)');
+        socket.disconnect();
+        setSocket(null);
+      }
+    }
+  }, [currentUser]);
+
   // Обновляем список пользователей после изменения currentUser
   useEffect(() => {
     if (currentUser) {
@@ -257,27 +323,99 @@ const App = ({ themeMode, onThemeToggle }) => {
   }, [loadingUser, currentUser]);
 
   // Открыть чат с пользователем
-  const openChat = (userId) => {
+  const openChat = async (userId) => {
     if (!chats[userId]) {
       setChats(prev => ({ ...prev, [userId]: { userId, messages: [] } }));
     }
     setActiveChatId(userId);
+    
+    // Загружаем историю сообщений
+    await loadConversation(userId);
   };
 
   // Отправить сообщение
-  const sendMessage = (userId, text) => {
-    setChats(prev => ({
-      ...prev,
-      [userId]: {
-        ...prev[userId],
-        messages: [
-          ...prev[userId].messages,
-          { text, isUser: true, timestamp: Date.now() },
-          // AI-ответ (заглушка)
-          ...(userId === 'ai' ? [{ text: 'AI: (заглушка ответа)', isUser: false, timestamp: Date.now() }] : []),
-        ],
-      },
-    }));
+  const sendMessage = async (userId, text) => {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        console.error('No auth token found');
+        return;
+      }
+
+      // Отправляем сообщение на сервер
+      const response = await fetch('http://localhost:8000/api/messages/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          receiverId: userId,
+          content: text
+        })
+      });
+
+      if (response.ok) {
+        // Добавляем сообщение локально для мгновенного отображения
+        setChats(prev => ({
+          ...prev,
+          [userId]: {
+            ...prev[userId],
+            messages: [
+              ...prev[userId].messages,
+              { text, isUser: true, timestamp: Date.now() }
+            ],
+          },
+        }));
+
+        // Загружаем обновленную историю сообщений
+        await loadConversation(userId);
+      } else {
+        console.error('Failed to send message:', response.status);
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
+  };
+
+  // Загрузить историю сообщений с пользователем
+  const loadConversation = async (userId) => {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        console.error('No auth token found');
+        return;
+      }
+
+      const response = await fetch(`http://localhost:8000/api/messages/conversation/${userId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const messages = await response.json();
+        
+        // Преобразуем сообщения в нужный формат
+        const formattedMessages = messages.map(msg => ({
+          text: msg.content,
+          isUser: msg.sender_id === currentUser?.id,
+          timestamp: new Date(msg.created_at).getTime()
+        }));
+
+        setChats(prev => ({
+          ...prev,
+          [userId]: {
+            userId,
+            messages: formattedMessages
+          },
+        }));
+      } else {
+        console.error('Failed to load conversation:', response.status);
+      }
+    } catch (error) {
+      console.error('Error loading conversation:', error);
+    }
   };
 
   // Функция выхода пользователя
@@ -337,6 +475,7 @@ const App = ({ themeMode, onThemeToggle }) => {
                 setThemeName={setThemeName}
                 onLogout={handleLogout}
                 onDebugUsers={debugUsers}
+                socket={socket}
               />
               <Box sx={{ display: 'flex' }}>
                 <SidebarLeft

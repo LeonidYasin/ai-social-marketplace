@@ -132,11 +132,17 @@ const createPost = async (req, res) => {
     }
     
     const userId = req.user.id; // ID из JWT токена
+    
+    if (!userId) {
+      return res.status(401).json({ error: 'Пользователь не авторизован' });
+    }
+    
     // Преобразуем media_urls в формат '{"url1","url2"}' для PostgreSQL
     let mediaUrlsPg = null;
     if (Array.isArray(media_urls)) {
       mediaUrlsPg = '{' + media_urls.map(url => '"' + url.replace(/"/g, '\"') + '"').join(',') + '}';
     }
+    
     const result = await query(
       `INSERT INTO posts (
         user_id, content, media_urls, media_type, background_color,

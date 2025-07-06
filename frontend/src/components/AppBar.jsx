@@ -21,6 +21,7 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import NightlightIcon from '@mui/icons-material/Nightlight';
 import SearchDialog from './Search';
 import NotificationsManager from './Notifications';
+import MessageNotifications from './MessageNotifications';
 import Gamification from './Gamification';
 import Avatar from '@mui/material/Avatar';
 import { setThemeName } from '../App';
@@ -49,7 +50,7 @@ const notifications = [
   { id: 3, text: 'Появился новый пост в "Продам"' },
 ];
 
-const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGamificationOpen, onUserSettingsOpen, currentUser, themeName, setThemeName, onLogout, onDebugUsers }) => {
+const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGamificationOpen, onUserSettingsOpen, currentUser, themeName, setThemeName, onLogout, onDebugUsers, socket }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [active, setActive] = useState('home');
@@ -167,18 +168,7 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
               <SearchIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Уведомления">
-            <IconButton color="default" onClick={onNotificationsOpen}>
-              <Badge color="error" badgeContent={unread} invisible={unread === 0}>
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Отладка пользователей">
-            <IconButton color="inherit" onClick={onDebugUsers}>
-              <AccountCircleIcon />
-            </IconButton>
-          </Tooltip>
+          <MessageNotifications socket={socket} currentUser={currentUser} />
           <Tooltip title="Сменить стиль">
             <IconButton color="inherit" onClick={handleThemeMenu}>
               <LightModeIcon sx={{ display: themeName === 'facebook' ? 'inline' : 'none' }} />
@@ -197,7 +187,12 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
             </Tooltip>
           )}
           <Tooltip title={currentUser && currentUser.name ? currentUser.name : 'Войти'}>
-            <IconButton color="default" onClick={onUserSettingsOpen}>
+            <IconButton 
+              color="default" 
+              onClick={onUserSettingsOpen}
+              aria-label="Профиль"
+              data-testid="profile-button"
+            >
               {currentUser && currentUser.name ? (
                 <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.main', fontSize: 18 }} src={currentUser.avatar}>
                   {currentUser.name[0]}

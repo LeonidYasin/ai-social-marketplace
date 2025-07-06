@@ -37,6 +37,7 @@ const apiRequest = async (endpoint, options = {}) => {
   };
 
   console.log('API Request:', { url, method: config.method || 'GET', body: config.body });
+  console.log('API Request headers:', config.headers);
   
   // Логируем для автоматического тестирования
   if (typeof window !== 'undefined') {
@@ -186,10 +187,8 @@ export const authAPI = {
 export const postsAPI = {
   // Получить все посты
   getPosts: async () => {
-    console.log('postsAPI.getPosts called');
     try {
       const result = await apiRequest('/posts');
-      console.log('postsAPI.getPosts result:', result);
       return result;
     } catch (error) {
       console.error('postsAPI.getPosts error:', error);
@@ -199,10 +198,19 @@ export const postsAPI = {
 
   // Создать пост
   createPost: async (postData) => {
-    return apiRequest('/posts', {
-      method: 'POST',
-      body: JSON.stringify(postData)
-    });
+    try {
+      return await apiRequest('/posts', {
+        method: 'POST',
+        body: JSON.stringify(postData)
+      });
+    } catch (error) {
+      // Отправляем лог на backend
+      sendClientLog('error', 'Ошибка создания поста', {
+        postData,
+        error: error.message
+      });
+      throw error;
+    }
   },
 
   // Получить пост по ID
@@ -333,6 +341,28 @@ export const telegramAPI = {
     
     document.head.appendChild(script);
   }
+};
+
+// Функция для отправки логов на backend
+export const sendClientLog = async (level, message, data) => {
+  try {
+    await fetch('http://localhost:8000/api/client-log', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ level, message, data })
+    });
+  } catch (e) {
+    // Не мешаем работе фронта, если лог не отправился
+  }
+};
+
+// Функция для логирования в файл (через backend) - только для важных событий
+export const logToFile = async (level, message, data = '') => {
+  const timestamp = new Date().toISOString();
+  const logEntry = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
+  
+  // Отправляем на backend для записи в файл
+  await sendClientLog(level, logEntry, data);
 };
 
 export default {

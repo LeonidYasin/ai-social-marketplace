@@ -429,7 +429,6 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
 
     try {
       const postData = {
-        user_id: currentUser?.id || 1,
         content: aiDialog ? aiDialog.map(m => (m.isUser ? 'Вы: ' : 'AI: ') + m.text).join('\n') : text,
         media_urls: images.map(f => URL.createObjectURL(f)),
         media_type: video ? 'video' : doc ? 'document' : images.length > 0 ? 'image' : null,
@@ -441,7 +440,7 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
         ai_prompt: aiDialog ? aiInput : null
       };
 
-      const response = await postsAPI.create(postData);
+      const response = await postsAPI.createPost(postData);
       
       const newPost = {
         id: response.post.id,

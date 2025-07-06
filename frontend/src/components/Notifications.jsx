@@ -24,6 +24,9 @@ import {
   useMediaQuery,
   Snackbar,
   Alert,
+  Badge,
+  ListItemAvatar,
+  Avatar,
 } from '@mui/material';
 import {
   Notifications as NotificationsIcon,
@@ -38,6 +41,7 @@ import {
   Settings as SettingsIcon,
   Info as InfoIcon,
   Warning as WarningIcon,
+  Message as MessageIcon,
 } from '@mui/icons-material';
 
 // Типы уведомлений
@@ -128,7 +132,7 @@ const generateMockNotifications = () => [
   },
 ];
 
-const NotificationsManager = ({ open, onClose }) => {
+const NotificationsManager = ({ socket, currentUser }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   
@@ -137,6 +141,11 @@ const NotificationsManager = ({ open, onClose }) => {
   const [browserPermission, setBrowserPermission] = useState('default');
   const [showSettings, setShowSettings] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('info');
+  const [showNotificationsList, setShowNotificationsList] = useState(false);
 
   // Загрузка настроек из localStorage
   useEffect(() => {
@@ -241,6 +250,7 @@ const NotificationsManager = ({ open, onClose }) => {
         notif.id === notificationId ? { ...notif, read: true } : notif
       )
     );
+    setUnreadCount(prev => Math.max(0, prev - 1));
   };
 
   // Отметить все как прочитанные
@@ -248,6 +258,7 @@ const NotificationsManager = ({ open, onClose }) => {
     setNotifications(prev =>
       prev.map(notif => ({ ...notif, read: true }))
     );
+    setUnreadCount(0);
   };
 
   // Удалить уведомление
@@ -255,11 +266,13 @@ const NotificationsManager = ({ open, onClose }) => {
     setNotifications(prev =>
       prev.filter(notif => notif.id !== notificationId)
     );
+    setUnreadCount(prev => Math.max(0, prev - 1));
   };
 
   // Очистить все уведомления
   const clearAllNotifications = () => {
     setNotifications([]);
+    setUnreadCount(0);
   };
 
   // Получить иконку для типа уведомления
@@ -284,13 +297,81 @@ const NotificationsManager = ({ open, onClose }) => {
     return colors[type] || 'default';
   };
 
-  const unreadCount = notifications.filter(n => !n.read).length;
+  useEffect(() => {
+    // Обработчик новых сообщений
+    if (socket) {
+      socket.on('newMessage', (message) => {
+        // Проверяем, что сообщение не от текущего пользователя
+        if (message.sender_id !== currentUser?.id) {
+          handleNewMessage(message);
+        }
+      });
+    }
+
+    return () => {
+      if (socket) {
+        socket.off('newMessage');
+      }
+    };
+  }, [socket, currentUser]);
+
+  const handleNewMessage = (message) => {
+    // Добавляем уведомление в список
+    const newNotification = {
+      id: Date.now(),
+      type: 'message',
+      title: `Новое сообщение от ${message.sender_username || 'пользователя'}`,
+      content: message.content,
+      timestamp: new Date(),
+      read: false,
+      sender: {
+        id: message.sender_id,
+        username: message.sender_username,
+        avatar: null
+      }
+    };
+
+    setNotifications(prev => [newNotification, ...prev.slice(0, 9)]); // Храним последние 10
+    setUnreadCount(prev => prev + 1);
+
+    // Показываем уведомление в интерфейсе
+    setSnackbarMessage(newNotification.title);
+    setSnackbarSeverity('info');
+    setShowSnackbar(true);
+
+    // Показываем браузерное уведомление
+    showBrowserNotification(newNotification);
+  };
+
+  const showBrowserNotification = (notification) => {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification(notification.title, {
+        body: notification.content,
+        icon: '/favicon.ico', // Можно заменить на иконку приложения
+        tag: 'new-message',
+        requireInteraction: false
+      });
+    }
+  };
+
+  const formatTime = (timestamp) => {
+    const now = new Date();
+    const diff = now - new Date(timestamp);
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+
+    if (minutes < 1) return 'только что';
+    if (minutes < 60) return `${minutes} мин назад`;
+    if (hours < 24) return `${hours} ч назад`;
+    return `${days} дн назад`;
+  };
 
   return (
     <>
       <Dialog
-        open={open}
-        onClose={onClose}
+        open={showNotificationsList}
+        onClose={() => setShowNotificationsList(false)}
         fullScreen={isMobile}
         maxWidth="md"
         fullWidth
@@ -311,7 +392,7 @@ const NotificationsManager = ({ open, onClose }) => {
             <IconButton onClick={() => setShowSettings(true)}>
               <SettingsIcon />
             </IconButton>
-            <IconButton onClick={onClose}>
+            <IconButton onClick={() => setShowNotificationsList(false)}>
               <CloseIcon />
             </IconButton>
           </Box>
@@ -426,10 +507,10 @@ const NotificationsManager = ({ open, onClose }) => {
                       secondary={
                         <Box>
                           <Typography variant="body2" color="text.secondary">
-                            {notification.message}
+                            {notification.content}
                           </Typography>
                           <Typography variant="caption" color="text.secondary">
-                            {notification.time}
+                            {formatTime(notification.timestamp)}
                           </Typography>
                         </Box>
                       }
@@ -506,15 +587,17 @@ const NotificationsManager = ({ open, onClose }) => {
 
       {/* Snackbar для сообщений */}
       <Snackbar
-        open={snackbar.open}
+        open={showSnackbar}
         autoHideDuration={4000}
-        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        onClose={() => setShowSnackbar(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
         <Alert 
-          onClose={() => setSnackbar({ ...snackbar, open: false })} 
-          severity={snackbar.severity}
+          onClose={() => setShowSnackbar(false)} 
+          severity={snackbarSeverity}
+          sx={{ width: '100%' }}
         >
-          {snackbar.message}
+          {snackbarMessage}
         </Alert>
       </Snackbar>
     </>

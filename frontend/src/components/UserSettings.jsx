@@ -282,14 +282,55 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [] }) => {
       const browserId = localStorage.getItem('browserId') || uuidv4();
       localStorage.setItem('browserId', browserId);
       
-      const username = 'guest_' + browserId.slice(0, 8);
+      // Проверяем, есть ли уже сохраненный гостевой пользователь
+      const savedGuestUser = localStorage.getItem('guestUser');
+      if (savedGuestUser) {
+        try {
+          const guestUser = JSON.parse(savedGuestUser);
+          console.log('Найден сохраненный гостевой пользователь:', guestUser.username);
+          
+          // Пытаемся войти с сохраненными данными
+          const loginResponse = await authAPI.login({
+            username: guestUser.username,
+            password: guestUser.password
+          });
+          
+          const newUser = {
+            id: loginResponse.user.id,
+            name: `${loginResponse.user.first_name} ${loginResponse.user.last_name}`.trim(),
+            email: loginResponse.user.email,
+            username: loginResponse.user.username,
+            avatar: '',
+            browserId: browserId,
+            createdAt: loginResponse.user.created_at,
+            isFirstUser: true,
+            authMethod: 'guest',
+          };
+          
+          setCurrentUser(newUser);
+          localStorage.setItem('currentUser', JSON.stringify(newUser));
+          localStorage.setItem('authToken', loginResponse.token);
+          if (onUserChange) onUserChange(newUser);
+          
+          onClose();
+          return;
+        } catch (error) {
+          console.log('Не удалось войти с сохраненными данными, создаем нового гостя');
+        }
+      }
+      
+      // Создаем нового гостевого пользователя
+      const uniqueSuffix = Math.random().toString(36).slice(-6);
+      const username = `guest_${browserId.slice(0, 8)}_${uniqueSuffix}`;
       const firstName = 'Гость';
       const lastName = browserId.slice(0, 4);
+      const email = `guest_${browserId}_${uniqueSuffix}@example.com`;
+      const password = Math.random().toString(36).slice(-8);
       
       const registerResponse = await authAPI.register({
         username: username,
-        email: `guest_${browserId}@example.com`,
-        password: Math.random().toString(36).slice(-8),
+        email: email,
+        password: password,
         first_name: firstName,
         last_name: lastName,
         bio: 'Гостевой пользователь'
@@ -309,6 +350,15 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [] }) => {
       
       setCurrentUser(newUser);
       localStorage.setItem('currentUser', JSON.stringify(newUser));
+      localStorage.setItem('authToken', registerResponse.token);
+      
+      // Сохраняем данные гостевого пользователя для повторного использования
+      localStorage.setItem('guestUser', JSON.stringify({
+        username: username,
+        password: password,
+        email: email
+      }));
+      
       if (onUserChange) onUserChange(newUser);
       
       // Закрываем диалог после успешного создания гостевого пользователя
