@@ -430,7 +430,7 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
     try {
       const postData = {
         content: aiDialog ? aiDialog.map(m => (m.isUser ? 'Вы: ' : 'AI: ') + m.text).join('\n') : text,
-        media_urls: images.map(f => URL.createObjectURL(f)),
+        media_urls: images.map(f => f.name || 'image.jpg'),
         media_type: video ? 'video' : doc ? 'document' : images.length > 0 ? 'image' : null,
         background_color: bg,
         privacy: privacy === 'all' ? 'public' : privacy === 'friends' ? 'friends' : 'private',
@@ -446,8 +446,8 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
         id: response.post.id,
         userId: currentUser?.id,
         text: aiDialog ? aiDialog.map(m => (m.isUser ? 'Вы: ' : 'AI: ') + m.text).join('\n') : text,
-        images: images.map(f => URL.createObjectURL(f)),
-        video: video ? URL.createObjectURL(video) : null,
+        images: images.map(f => f.name || 'image.jpg'),
+        video: video ? (video.name || 'video.mp4') : null,
         doc: doc ? doc.name : null,
         bg,
         section,
