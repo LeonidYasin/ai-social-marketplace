@@ -163,7 +163,7 @@ const createPost = async (req, res) => {
       ]
     );
     
-    res.status(201).json(result.rows[0]);
+    res.status(201).json({ post: result.rows[0] });
   } catch (error) {
     console.error('Ошибка при создании поста:', error);
     res.status(500).json({ error: 'Внутренняя ошибка сервера' });
