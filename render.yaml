@@ -1,0 +1,73 @@
+services:
+  # PostgreSQL Database
+  - type: pserv
+    name: social-marketplace-db
+    env: postgresql
+    plan: free
+    ipAllowList: []
+
+  # Backend API Service
+  - type: web
+    name: social-marketplace-backend
+    env: node
+    plan: free
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 8000
+      - key: HOST
+        value: 0.0.0.0
+      - key: DB_HOST
+        fromDatabase:
+          name: social-marketplace-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: social-marketplace-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: social-marketplace-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: social-marketplace-db
+          property: username
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: social-marketplace-db
+          property: password
+      - key: JWT_SECRET
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_CALLBACK_URL
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: SESSION_SECRET
+        sync: false
+
+  # Frontend Static Site
+  - type: web
+    name: social-marketplace-frontend
+    env: static
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/build
+    envVars:
+      - key: REACT_APP_API_URL
+        fromService:
+          type: web
+          name: social-marketplace-backend
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: REACT_APP_WS_URL
+        fromService:
+          type: web
+          name: social-marketplace-backend
+          envVarKey: RENDER_EXTERNAL_URL 

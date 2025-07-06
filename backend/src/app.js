@@ -75,15 +75,40 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: [
-      'http://localhost:3000',
-      'http://192.168.0.102:3000',
-      'http://192.168.0.107:3000',
-      'http://192.168.193.181:3000',
-      /^http:\/\/192\.168\.\d+\.\d+:3000$/,  // Разрешаем все IP в диапазоне 192.168.x.x
-      /^http:\/\/10\.\d+\.\d+\.\d+:3000$/,   // Разрешаем все IP в диапазоне 10.x.x.x
-      /^http:\/\/172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+:3000$/  // Разрешаем все IP в диапазоне 172.16-31.x.x
-    ],
+    origin: function (origin, callback) {
+      // Разрешаем запросы без origin
+      if (!origin) return callback(null, true);
+      
+      const allowedOrigins = [
+        'http://localhost:3000',
+        'http://192.168.0.102:3000',
+        'http://192.168.0.107:3000',
+        'http://192.168.193.181:3000',
+        /^http:\/\/192\.168\.\d+\.\d+:3000$/,  // Разрешаем все IP в диапазоне 192.168.x.x
+        /^http:\/\/10\.\d+\.\d+\.\d+:3000$/,   // Разрешаем все IP в диапазоне 10.x.x.x
+        /^http:\/\/172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+:3000$/  // Разрешаем все IP в диапазоне 172.16-31.x.x
+      ];
+      
+      // В production добавляем домен Render
+      if (process.env.NODE_ENV === 'production') {
+        allowedOrigins.push(/^https:\/\/.*\.onrender\.com$/);
+        allowedOrigins.push(/^https:\/\/.*\.render\.com$/);
+      }
+      
+      // Проверяем, разрешен ли origin
+      const isAllowed = allowedOrigins.some(allowedOrigin => {
+        if (allowedOrigin instanceof RegExp) {
+          return allowedOrigin.test(origin);
+        }
+        return allowedOrigin === origin;
+      });
+      
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true
   }
 });
@@ -193,18 +218,45 @@ io.on('connection', (socket) => {
 });
 
 // Middleware
-app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://192.168.0.102:3000',
-    'http://192.168.0.107:3000',
-    'http://192.168.193.181:3000',
-    /^http:\/\/192\.168\.\d+\.\d+:3000$/,  // Разрешаем все IP в диапазоне 192.168.x.x
-    /^http:\/\/10\.\d+\.\d+\.\d+:3000$/,   // Разрешаем все IP в диапазоне 10.x.x.x
-    /^http:\/\/172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+:3000$/  // Разрешаем все IP в диапазоне 172.16-31.x.x
-  ],
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Разрешаем запросы без origin (например, мобильные приложения)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'http://192.168.0.102:3000',
+      'http://192.168.0.107:3000',
+      'http://192.168.193.181:3000',
+      /^http:\/\/192\.168\.\d+\.\d+:3000$/,  // Разрешаем все IP в диапазоне 192.168.x.x
+      /^http:\/\/10\.\d+\.\d+\.\d+:3000$/,   // Разрешаем все IP в диапазоне 10.x.x.x
+      /^http:\/\/172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+:3000$/  // Разрешаем все IP в диапазоне 172.16-31.x.x
+    ];
+    
+    // В production добавляем домен Render
+    if (process.env.NODE_ENV === 'production') {
+      allowedOrigins.push(/^https:\/\/.*\.onrender\.com$/);
+      allowedOrigins.push(/^https:\/\/.*\.render\.com$/);
+    }
+    
+    // Проверяем, разрешен ли origin
+    const isAllowed = allowedOrigins.some(allowedOrigin => {
+      if (allowedOrigin instanceof RegExp) {
+        return allowedOrigin.test(origin);
+      }
+      return allowedOrigin === origin;
+    });
+    
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
-}));
+};
+
+app.use(cors(corsOptions));
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

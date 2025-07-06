@@ -1,6 +1,6 @@
 import { API_CONFIG, API_STATUS, ERROR_MESSAGES } from '../config/api';
 
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL ? `${process.env.REACT_APP_API_URL}/api` : 'http://localhost:8000/api';
 
 // Функция для получения токена из localStorage
 const getAuthToken = () => {
@@ -270,7 +270,7 @@ export const reactionsAPI = {
 export const oauthAPI = {
   // Инициализация Google OAuth
   initGoogleAuth: () => {
-    window.location.href = 'http://localhost:8000/api/auth/google';
+    window.location.href = `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/api/auth/google`;
   },
 
   // Обработка OAuth успеха
@@ -346,7 +346,7 @@ export const telegramAPI = {
 // Функция для отправки логов на backend
 export const sendClientLog = async (level, message, data) => {
   try {
-    await fetch('http://localhost:8000/api/client-log', {
+            await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/api/client-log`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ level, message, data })
