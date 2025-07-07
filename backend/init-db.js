@@ -166,6 +166,9 @@ async function initializeDatabase() {
         value TEXT
       );
 
+      -- Гарантируем наличие поля category в posts
+      ALTER TABLE posts ADD COLUMN IF NOT EXISTS category VARCHAR(50) DEFAULT 'general';
+
       -- Создание индексов для производительности
       CREATE INDEX IF NOT EXISTS idx_posts_user_id ON posts(user_id);
       CREATE INDEX IF NOT EXISTS idx_posts_category ON posts(category);
