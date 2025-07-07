@@ -9,7 +9,7 @@ node check-deployment-readiness.js
 
 # Убедитесь, что код закоммичен
 git add .
-git commit -m "Ready for deployment"
+git commit -m "Fix render deployment configuration"
 git push origin main
 ```
 
@@ -59,6 +59,9 @@ REACT_APP_WS_URL=https://ваш-backend-url.onrender.com
 ```
 
 ### 4. Инициализация базы данных
+✅ **Автоматически!** База данных инициализируется при первом запуске backend сервиса.
+
+Если нужно переинициализировать базу данных вручную:
 - В Backend сервисе → **Logs** → **Shell**
 - Выполните: `npm run init-db`
 

@@ -1,6 +1,6 @@
-// Конфигурация логирования
+// Logging configuration
 module.exports = {
-  // Уровни логирования
+  // Logging levels
   levels: {
     ERROR: 0,
     WARN: 1,
@@ -8,10 +8,10 @@ module.exports = {
     DEBUG: 3
   },
   
-  // Текущий уровень логирования
+  // Current logging level
   currentLevel: process.env.LOG_LEVEL || 'INFO',
   
-  // Настройки файлов логов
+  // Log files configuration
   files: {
     backend: 'backend.log',
     frontend: 'frontend.log',
@@ -19,13 +19,13 @@ module.exports = {
     access: 'access.log'
   },
   
-  // Максимальный размер файла лога (в МБ)
+  // Maximum log file size (in MB)
   maxFileSize: process.env.LOG_MAX_SIZE || 50,
   
-  // Количество дней для хранения логов
+  // Number of days to retain logs
   retentionDays: process.env.LOG_RETENTION_DAYS || 7,
   
-  // Настройки для разных окружений
+  // Environment-specific settings
   environments: {
     development: {
       level: 'DEBUG',
@@ -47,23 +47,23 @@ module.exports = {
     }
   },
   
-  // Фильтры для исключения определенных сообщений
+  // Filters to exclude certain messages
   filters: {
-    // Исключаем избыточные сообщения
+    // Exclude redundant messages
     excludePatterns: [
-      /\[getUsers\] Получен запрос на список пользователей/,
-      /\[getUsers\] Найдено пользователей:/,
+      /\[getUsers\] Request received for user list/,
+      /\[getUsers\] Users found:/,
       /Getting notifications for user/,
       /createPost: Request body:/,
       /createPost: User from token:/,
       /createPost: User ID from token:/,
       /createPost: About to execute SQL with params:/,
       /createPost: SQL executed successfully/,
-      /SocketManager: Отправка уведомления для сообщения:/,
-      /SocketManager: io доступен:/,
-      /SocketManager: Получатель не найден для чата/,
-      /SocketManager: Найден получатель с ID:/,
-      /SocketManager: Онлайн пользователи:/,
+      /SocketManager: Sending notification for message:/,
+      /SocketManager: io available:/,
+      /SocketManager: Recipient not found for chat/,
+      /SocketManager: Recipient found with ID:/,
+      /SocketManager: Online users:/,
       /User joining chat/,
       /Sending \d+ unread notifications to user/,
       /Sending \d+ undelivered notifications to user/,
@@ -75,7 +75,7 @@ module.exports = {
       /API response data:/
     ],
     
-    // Включаем только важные сообщения в консоль
+    // Include only important messages in console
     consoleOnlyPatterns: [
       /Server started on port/,
       /API available at:/,
@@ -91,7 +91,7 @@ module.exports = {
     ]
   },
   
-  // Настройки форматирования
+  // Formatting settings
   formatting: {
     timestamp: true,
     level: true,

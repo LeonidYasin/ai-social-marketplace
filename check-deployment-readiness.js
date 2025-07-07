@@ -1,151 +1,109 @@
+#!/usr/bin/env node
+
 const fs = require('fs');
 const path = require('path');
 
-console.log('🔍 Проверка готовности к развёртыванию на Render.com...\n');
+console.log('🔍 Проверка готовности к деплою на Render.com...\n');
 
-// Список необходимых файлов
-const requiredFiles = [
-  'render.yaml',
-  'backend/package.json',
-  'frontend/package.json',
-  'backend/src/app.js',
-  'frontend/src/App.jsx',
-  'setup_database.sql',
-  'backend/init-db.js',
-  'backend/health-check.js',
-  'frontend/env.example'
-];
+let allChecksPassed = true;
 
-// Список рекомендуемых файлов
-const recommendedFiles = [
-  'DEPLOYMENT_GUIDE.md',
-  'README.md',
-  '.gitignore'
-];
-
-let allGood = true;
-
-// Проверяем необходимые файлы
-console.log('📋 Проверка необходимых файлов:');
-requiredFiles.forEach(file => {
-  if (fs.existsSync(file)) {
-    console.log(`  ✅ ${file}`);
-  } else {
-    console.log(`  ❌ ${file} - НЕ НАЙДЕН`);
-    allGood = false;
-  }
-});
-
-console.log('\n📋 Проверка рекомендуемых файлов:');
-recommendedFiles.forEach(file => {
-  if (fs.existsSync(file)) {
-    console.log(`  ✅ ${file}`);
-  } else {
-    console.log(`  ⚠️  ${file} - не найден (рекомендуется)`);
-  }
-});
-
-// Проверяем package.json файлы
-console.log('\n📦 Проверка package.json файлов:');
-
-// Backend package.json
-try {
-  const backendPackage = JSON.parse(fs.readFileSync('backend/package.json', 'utf8'));
-  const backendScripts = backendPackage.scripts || {};
-  
-  console.log('  Backend scripts:');
-  ['start', 'init-db', 'health-check'].forEach(script => {
-    if (backendScripts[script]) {
-      console.log(`    ✅ ${script}`);
-    } else {
-      console.log(`    ❌ ${script} - отсутствует`);
-      allGood = false;
-    }
-  });
-} catch (error) {
-  console.log('  ❌ Ошибка чтения backend/package.json');
-  allGood = false;
-}
-
-// Frontend package.json
-try {
-  const frontendPackage = JSON.parse(fs.readFileSync('frontend/package.json', 'utf8'));
-  const frontendScripts = frontendPackage.scripts || {};
-  
-  console.log('  Frontend scripts:');
-  ['start', 'build'].forEach(script => {
-    if (frontendScripts[script]) {
-      console.log(`    ✅ ${script}`);
-    } else {
-      console.log(`    ❌ ${script} - отсутствует`);
-      allGood = false;
-    }
-  });
-} catch (error) {
-  console.log('  ❌ Ошибка чтения frontend/package.json');
-  allGood = false;
-}
-
-// Проверяем render.yaml
-console.log('\n⚙️  Проверка render.yaml:');
-try {
+// Проверка 1: render.yaml
+console.log('1. Проверка render.yaml...');
+if (fs.existsSync('render.yaml')) {
   const renderYaml = fs.readFileSync('render.yaml', 'utf8');
-  
-  const checks = [
-    { name: 'PostgreSQL Database', pattern: 'type: pserv' },
-    { name: 'Backend Service', pattern: 'name: social-marketplace-backend' },
-    { name: 'Frontend Service', pattern: 'name: social-marketplace-frontend' },
-    { name: 'Database Connection', pattern: 'fromDatabase:' },
-    { name: 'Environment Variables', pattern: 'envVars:' }
-  ];
-  
-  checks.forEach(check => {
-    if (renderYaml.includes(check.pattern)) {
-      console.log(`  ✅ ${check.name}`);
-    } else {
-      console.log(`  ❌ ${check.name} - не настроен`);
-      allGood = false;
-    }
-  });
-} catch (error) {
-  console.log('  ❌ Ошибка чтения render.yaml');
-  allGood = false;
-}
-
-// Проверяем .gitignore
-console.log('\n📁 Проверка .gitignore:');
-try {
-  const gitignore = fs.readFileSync('.gitignore', 'utf8');
-  const gitignoreChecks = [
-    'node_modules',
-    '.env',
-    'logs',
-    '*.log'
-  ];
-  
-  gitignoreChecks.forEach(item => {
-    if (gitignore.includes(item)) {
-      console.log(`  ✅ ${item}`);
-    } else {
-      console.log(`  ⚠️  ${item} - не добавлен в .gitignore`);
-    }
-  });
-} catch (error) {
-  console.log('  ⚠️  .gitignore не найден');
-}
-
-// Итоговая оценка
-console.log('\n' + '='.repeat(50));
-if (allGood) {
-  console.log('🎉 Проект готов к развёртыванию на Render.com!');
-  console.log('\n📋 Следующие шаги:');
-  console.log('1. Убедитесь, что код закоммичен в git');
-  console.log('2. Создайте сервисы в Render Dashboard');
-  console.log('3. Настройте переменные окружения');
-  console.log('4. Инициализируйте базу данных');
-  console.log('\n📖 Подробные инструкции см. в DEPLOYMENT_GUIDE.md');
+  if (renderYaml.includes('buildCommand: cd backend') && 
+      renderYaml.includes('startCommand: cd backend') &&
+      renderYaml.includes('buildCommand: cd frontend')) {
+    console.log('✅ render.yaml настроен правильно');
+  } else {
+    console.log('❌ render.yaml требует исправлений');
+    allChecksPassed = false;
+  }
 } else {
-  console.log('❌ Проект НЕ готов к развёртыванию');
-  console.log('Исправьте указанные ошибки и запустите проверку снова');
+  console.log('❌ render.yaml не найден');
+  allChecksPassed = false;
 }
-console.log('='.repeat(50)); 
+
+// Проверка 2: backend/package.json
+console.log('\n2. Проверка backend/package.json...');
+if (fs.existsSync('backend/package.json')) {
+  const backendPackage = JSON.parse(fs.readFileSync('backend/package.json', 'utf8'));
+  if (backendPackage.scripts && backendPackage.scripts.start) {
+    console.log('✅ backend/package.json содержит скрипт start');
+  } else {
+    console.log('❌ backend/package.json не содержит скрипт start');
+    allChecksPassed = false;
+  }
+} else {
+  console.log('❌ backend/package.json не найден');
+  allChecksPassed = false;
+}
+
+// Проверка 3: frontend/package.json
+console.log('\n3. Проверка frontend/package.json...');
+if (fs.existsSync('frontend/package.json')) {
+  const frontendPackage = JSON.parse(fs.readFileSync('frontend/package.json', 'utf8'));
+  if (frontendPackage.scripts && frontendPackage.scripts.build) {
+    console.log('✅ frontend/package.json содержит скрипт build');
+  } else {
+    console.log('❌ frontend/package.json не содержит скрипт build');
+    allChecksPassed = false;
+  }
+} else {
+  console.log('❌ frontend/package.json не найден');
+  allChecksPassed = false;
+}
+
+// Проверка 4: backend/src/app.js
+console.log('\n4. Проверка backend/src/app.js...');
+if (fs.existsSync('backend/src/app.js')) {
+  console.log('✅ backend/src/app.js найден');
+} else {
+  console.log('❌ backend/src/app.js не найден');
+  allChecksPassed = false;
+}
+
+// Проверка 5: frontend/src/App.jsx
+console.log('\n5. Проверка frontend/src/App.jsx...');
+if (fs.existsSync('frontend/src/App.jsx')) {
+  console.log('✅ frontend/src/App.jsx найден');
+} else {
+  console.log('❌ frontend/src/App.jsx не найден');
+  allChecksPassed = false;
+}
+
+// Проверка 6: Переменные окружения
+console.log('\n6. Проверка переменных окружения...');
+const envFiles = ['backend/config.env', 'frontend/.env', '.env'];
+let envFileFound = false;
+
+for (const envFile of envFiles) {
+  if (fs.existsSync(envFile)) {
+    console.log(`✅ ${envFile} найден`);
+    envFileFound = true;
+    break;
+  }
+}
+
+if (!envFileFound) {
+  console.log('⚠️  Файл .env не найден (но это нормально для production)');
+}
+
+// Итоговая проверка
+console.log('\n' + '='.repeat(50));
+if (allChecksPassed) {
+  console.log('🎉 Проект готов к деплою на Render.com!');
+  console.log('\n📋 Следующие шаги:');
+  console.log('1. Закоммитьте изменения: git add . && git commit -m "Fix render deployment"');
+  console.log('2. Отправьте в репозиторий: git push origin main');
+  console.log('3. Создайте новый проект в Render Dashboard');
+  console.log('4. Выберите "Blueprint" и подключите ваш репозиторий');
+  console.log('5. Настройте переменные окружения в Render Dashboard');
+} else {
+  console.log('❌ Проект требует исправлений перед деплоем');
+  console.log('\n🔧 Необходимо исправить отмеченные выше проблемы');
+}
+
+console.log('\n📚 Дополнительная информация:');
+console.log('- Подробная инструкция: QUICK_DEPLOY.md');
+console.log('- Полная документация: DEPLOYMENT_GUIDE.md'); 

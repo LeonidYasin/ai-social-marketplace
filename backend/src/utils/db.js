@@ -1,25 +1,53 @@
 const { Pool } = require('pg');
 const logger = require('./logger');
 
-// Конфигурация подключения к базе данных
-const dbConfig = {
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  // SSL настройки для production
-  ssl: process.env.NODE_ENV === 'production' ? { 
-    rejectUnauthorized: false 
-  } : false,
-  // Настройки пула соединений
-  max: 20, // максимальное количество клиентов в пуле
-  idleTimeoutMillis: 30000, // время неактивности клиента
-  connectionTimeoutMillis: 2000, // время ожидания соединения
-};
+// Поддержка DATABASE_URL для Render.com
+let dbConfig;
+
+if (process.env.DATABASE_URL) {
+  // Используем DATABASE_URL для Render
+  dbConfig = {
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.NODE_ENV === 'production' ? { 
+      rejectUnauthorized: false 
+    } : false,
+    // Настройки пула соединений
+    max: 20, // максимальное количество клиентов в пуле
+    idleTimeoutMillis: 30000, // время неактивности клиента
+    connectionTimeoutMillis: 2000, // время ожидания соединения
+  };
+} else {
+  // Используем отдельные переменные для локальной разработки
+  dbConfig = {
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    database: process.env.DB_NAME,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    // SSL настройки для production
+    ssl: process.env.NODE_ENV === 'production' ? { 
+      rejectUnauthorized: false 
+    } : false,
+    // Настройки пула соединений
+    max: 20, // максимальное количество клиентов в пуле
+    idleTimeoutMillis: 30000, // время неактивности клиента
+    connectionTimeoutMillis: 2000, // время ожидания соединения
+  };
+}
 
 // Создаем пул соединений
 const pool = new Pool(dbConfig);
+
+// Функция query для совместимости с существующим кодом
+const query = async (text, params) => {
+  const client = await pool.connect();
+  try {
+    const result = await client.query(text, params);
+    return result;
+  } finally {
+    client.release();
+  }
+};
 
 // Обработчик ошибок пула
 pool.on('error', (err, client) => {
@@ -63,6 +91,7 @@ async function closePool() {
 
 module.exports = {
   pool,
+  query,
   testConnection,
   closePool
 }; 

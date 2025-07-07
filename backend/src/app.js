@@ -11,31 +11,34 @@ const fs = require('fs');
 const path = require('path');
 const logger = require('./utils/logger');
 
-// Перехватываем console.log и console.error для записи в лог
+// Load environment variables FIRST, before any other imports
+dotenv.config({ path: path.join(__dirname, '..', 'config.env') });
+
+// Intercept console.log and console.error for logging
 const originalConsoleLog = console.log;
 const originalConsoleError = console.error;
 
-// INFO — только в лог-файл
+// INFO — only to log file
 console.log = (...args) => {
   const message = args.join(' ');
   logger.info(message);
-  // В консоль не выводим
+  // Don't output to console
 };
 
-// ERROR — и в лог, и в консоль (красным)
+// ERROR — both to log and console (in red)
 console.error = (...args) => {
   const message = args.join(' ');
   logger.error(message);
 };
 
-// Функция для вывода стартовых сообщений в консоль
+// Function for outputting startup messages to console
 const startupLog = (...args) => {
   const message = args.join(' ');
   originalConsoleLog(`[STARTUP] ${message}`);
   logger.startup(message);
 };
 
-// Перехватываем необработанные ошибки
+// Intercept unhandled errors
 process.on('uncaughtException', (error) => {
   logger.critical('Uncaught Exception', { 
     message: error.message, 
@@ -52,7 +55,7 @@ process.on('unhandledRejection', (reason, promise) => {
   });
 });
 
-// Импорт маршрутов
+// Import routes
 const usersRouter = require('./routes/users');
 const postsRouter = require('./routes/posts');
 const commentsRouter = require('./routes/comments');
@@ -63,20 +66,22 @@ const telegramRouter = require('./routes/telegram');
 const messagesRouter = require('./routes/messages');
 const notificationsRouter = require('./routes/notifications');
 
-dotenv.config({ path: path.join(__dirname, '..', 'config.env') });
-
-// Стартовые сообщения и переменные окружения — явно в консоль
+// Startup messages and environment variables — explicitly to console
 logger.startup('Environment variables loaded:');
 logger.startup(`  HOST: ${process.env.HOST || 'not set'}`);
 logger.startup(`  PORT: ${process.env.PORT || 'not set'}`);
 logger.startup(`  NODE_ENV: ${process.env.NODE_ENV || 'not set'}`);
+logger.startup(`  DB_HOST: ${process.env.DB_HOST || 'not set'}`);
+logger.startup(`  DB_USER: ${process.env.DB_USER || 'not set'}`);
+logger.startup(`  DB_PASSWORD: ${process.env.DB_PASSWORD ? '***SET***' : 'NOT SET'}`);
+logger.startup(`  DB_PASSWORD type: ${typeof process.env.DB_PASSWORD}`);
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
     origin: function (origin, callback) {
-      // Разрешаем запросы без origin
+      // Allow requests without origin
       if (!origin) return callback(null, true);
       
       const allowedOrigins = [
@@ -84,18 +89,18 @@ const io = socketIo(server, {
         'http://192.168.0.102:3000',
         'http://192.168.0.107:3000',
         'http://192.168.193.181:3000',
-        /^http:\/\/192\.168\.\d+\.\d+:3000$/,  // Разрешаем все IP в диапазоне 192.168.x.x
-        /^http:\/\/10\.\d+\.\d+\.\d+:3000$/,   // Разрешаем все IP в диапазоне 10.x.x.x
-        /^http:\/\/172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+:3000$/  // Разрешаем все IP в диапазоне 172.16-31.x.x
+        /^http:\/\/192\.168\.\d+\.\d+:3000$/,  // Allow all IPs in range 192.168.x.x
+        /^http:\/\/10\.\d+\.\d+\.\d+:3000$/,   // Allow all IPs in range 10.x.x.x
+        /^http:\/\/172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+:3000$/  // Allow all IPs in range 172.16-31.x.x
       ];
       
-      // В production добавляем домен Render
+      // Add Render domain in production
       if (process.env.NODE_ENV === 'production') {
         allowedOrigins.push(/^https:\/\/.*\.onrender\.com$/);
         allowedOrigins.push(/^https:\/\/.*\.render\.com$/);
       }
       
-      // Проверяем, разрешен ли origin
+      // Check if origin is allowed
       const isAllowed = allowedOrigins.some(allowedOrigin => {
         if (allowedOrigin instanceof RegExp) {
           return allowedOrigin.test(origin);
@@ -113,27 +118,27 @@ const io = socketIo(server, {
   }
 });
 
-// Делаем io доступным для других модулей
+// Make io available to other modules
 app.locals.io = io;
 
-// WebSocket обработчики
+// WebSocket handlers
 io.on('connection', (socket) => {
   logger.info('User connected', { socketId: socket.id });
 
-  // Пользователь присоединяется к чату
+  // User joins chat
   socket.on('join', async (userData) => {
     const { userId, username, avatarUrl } = userData;
     
     socketManager.addOnlineUser(socket.id, { userId, username, avatarUrl });
     
-    // Уведомляем всех о новом пользователе
+    // Notify everyone about new user
     io.emit('userJoined', { userId, username, avatarUrl, socketId: socket.id });
     
-    // Отправляем список всех онлайн пользователей
+    // Send list of all online users
     const usersList = socketManager.getOnlineUsers();
     socket.emit('onlineUsers', usersList);
     
-    // Отправляем непрочитанные уведомления пользователю
+    // Send unread notifications to user
     try {
       const Notification = require('./models/notification');
       const unreadNotifications = await Notification.getUnreadByUserId(userId);
@@ -151,21 +156,21 @@ io.on('connection', (socket) => {
       }
   });
 
-  // Отправка сообщения
+  // Send message
   socket.on('sendMessage', async (data) => {
     const { receiverId, content, senderId, senderUsername } = data;
     logger.info('Message received via WebSocket', { receiverId, content, senderId, senderUsername });
     
     try {
-      // Сохраняем сообщение в базе данных
+      // Save message to database
       const Message = require('./models/message');
       const message = await Message.create(senderId, receiverId, content);
       logger.info('Message saved to database', message);
       
-      // Отправляем сообщение получателю через WebSocket
+      // Send message to recipient via WebSocket
       socketManager.sendMessageNotification(message, senderUsername, io);
       
-      // Отправляем подтверждение отправителю
+      // Send confirmation to sender
       socket.emit('messageSent', message);
       
     } catch (error) {
@@ -174,7 +179,7 @@ io.on('connection', (socket) => {
     }
   });
 
-  // Подтверждение доставки уведомления
+  // Notification delivery confirmation
   socket.on('notificationDelivered', async (data) => {
     const { notificationId } = data;
     const user = socketManager.getUserBySocketId(socket.id);
@@ -190,7 +195,7 @@ io.on('connection', (socket) => {
     }
   });
 
-  // Подтверждение прочтения уведомления
+  // Notification read confirmation
   socket.on('notificationRead', async (data) => {
     const { notificationId } = data;
     const user = socketManager.getUserBySocketId(socket.id);
@@ -206,7 +211,7 @@ io.on('connection', (socket) => {
     }
   });
 
-  // Пользователь отключается
+  // User disconnects
   socket.on('disconnect', () => {
     const user = socketManager.getUserBySocketId(socket.id);
     if (user) {
@@ -220,7 +225,7 @@ io.on('connection', (socket) => {
 // Middleware
 const corsOptions = {
   origin: function (origin, callback) {
-    // Разрешаем запросы без origin (например, мобильные приложения)
+    // Allow requests without origin (e.g., mobile apps)
     if (!origin) return callback(null, true);
     
     const allowedOrigins = [
@@ -228,18 +233,18 @@ const corsOptions = {
       'http://192.168.0.102:3000',
       'http://192.168.0.107:3000',
       'http://192.168.193.181:3000',
-      /^http:\/\/192\.168\.\d+\.\d+:3000$/,  // Разрешаем все IP в диапазоне 192.168.x.x
-      /^http:\/\/10\.\d+\.\d+\.\d+:3000$/,   // Разрешаем все IP в диапазоне 10.x.x.x
-      /^http:\/\/172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+:3000$/  // Разрешаем все IP в диапазоне 172.16-31.x.x
+      /^http:\/\/192\.168\.\d+\.\d+:3000$/,  // Allow all IPs in range 192.168.x.x
+      /^http:\/\/10\.\d+\.\d+\.\d+:3000$/,   // Allow all IPs in range 10.x.x.x
+      /^http:\/\/172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+:3000$/  // Allow all IPs in range 172.16-31.x.x
     ];
     
-    // В production добавляем домен Render
+    // Add Render domain in production
     if (process.env.NODE_ENV === 'production') {
       allowedOrigins.push(/^https:\/\/.*\.onrender\.com$/);
       allowedOrigins.push(/^https:\/\/.*\.render\.com$/);
     }
     
-    // Проверяем, разрешен ли origin
+    // Check if origin is allowed
     const isAllowed = allowedOrigins.some(allowedOrigin => {
       if (allowedOrigin instanceof RegExp) {
         return allowedOrigin.test(origin);
@@ -261,25 +266,25 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Настройка сессий
+// Configure sessions
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-session-secret',
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false, // В продакшене должно быть true
-    maxAge: 24 * 60 * 60 * 1000 // 24 часа
+    secure: false, // In production should be true
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
   }
 }));
 
-// Инициализация Passport
+// Initialize Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Обработчик ошибок для body-parser и других middleware
+// Error handler for body-parser and other middleware
 app.use((error, req, res, next) => {
   if (error instanceof SyntaxError && error.status === 400 && 'body' in error) {
-    // Ошибка парсинга JSON
+    // JSON parsing error
     logger.error('JSON parsing error', {
       message: error.message,
       stack: error.stack,
@@ -296,7 +301,7 @@ app.use((error, req, res, next) => {
     });
   }
   
-  // Другие ошибки middleware
+  // Other middleware errors
   logger.error('Middleware error', {
     message: error.message,
     stack: error.stack,
@@ -313,7 +318,7 @@ app.use((error, req, res, next) => {
   });
 });
 
-// Проверка здоровья API
+// Health check API
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'ok', 
@@ -322,7 +327,7 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Маршруты API
+// API routes
 app.use('/api/users', usersRouter);
 app.use('/api/posts', postsRouter);
 app.use('/api/comments', commentsRouter);
@@ -333,12 +338,12 @@ app.use('/api/telegram', telegramRouter);
 app.use('/api/messages', messagesRouter);
 app.use('/api/notifications', notificationsRouter);
 
-// Тестовый маршрут
+// Test route
 app.get('/api/test', (req, res) => {
-  res.json({ message: 'API работает!' });
+  res.json({ message: 'API works!' });
 });
 
-// Endpoint для приёма логов с фронта
+// Endpoint for receiving logs from frontend
 app.post('/api/client-log', (req, res) => {
   const { level = 'info', message, data } = req.body;
   const timestamp = new Date().toISOString();
@@ -347,7 +352,7 @@ app.post('/api/client-log', (req, res) => {
   
   fs.appendFileSync(logFile, logEntry);
   
-  // Выводим в консоль backend только ошибки
+  // Output backend logs only for errors
   if (level === 'error') {
     logger.error(`[FRONTEND] ${message}`, data || '');
   }
@@ -355,7 +360,7 @@ app.post('/api/client-log', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-// Глобальный обработчик ошибок для всех маршрутов
+// Global error handler for all routes
 app.use((error, req, res, next) => {
   logger.error('Unhandled route error', {
     message: error.message,
@@ -374,7 +379,7 @@ app.use((error, req, res, next) => {
   });
 });
 
-// Обработчик 404 ошибок
+// 404 error handler
 app.use('*', (req, res) => {
   logger.warn('Route not found', {
     url: req.originalUrl,
@@ -393,24 +398,24 @@ app.use('*', (req, res) => {
 const PORT = process.env.PORT || 8000;
 const HOST = process.env.HOST || 'localhost';
 
-// Получаем IP адреса для отображения
+// Get IP addresses for display
 const os = require('os');
 const networkInterfaces = os.networkInterfaces();
 const ipAddresses = [];
 
 Object.keys(networkInterfaces).forEach((interfaceName) => {
   networkInterfaces[interfaceName].forEach((interface) => {
-    // Пропускаем IPv6 и loopback адреса
+    // Skip IPv6 and loopback addresses
     if (interface.family === 'IPv4' && !interface.internal) {
       ipAddresses.push(interface.address);
     }
   });
 });
 
-// Защита от дублирования стартовых сообщений
+// Protect from duplicate startup messages
 let startupLogged = false;
 
-// Временные отладочные сообщения
+// Temporary debug messages
 console.log('=== DEBUG: About to start server ===');
 console.log(`PORT: ${PORT}`);
 console.log(`HOST: ${HOST}`);
@@ -419,12 +424,12 @@ console.log(`ipAddresses: ${JSON.stringify(ipAddresses)}`);
 server.listen(PORT, HOST, () => {
   console.log('=== DEBUG: Server.listen callback executed ===');
   
-  // Проверяем, что стартовые сообщения еще не были выведены
+  // Check if startup messages have not been output yet
   if (!startupLogged) {
     console.log('=== DEBUG: startupLogged was false, logging startup messages ===');
     startupLogged = true;
     
-    // Стартовые сообщения явно в консоль и в лог-файл
+    // Explicit startup messages to console and log file
     startupLog(`Server started on port ${PORT}`);
     startupLog(`API available at: http://${HOST}:${PORT}/api`);
     if (ipAddresses.length > 0) {
@@ -436,7 +441,7 @@ server.listen(PORT, HOST, () => {
     startupLog(`Backend server listening on ${HOST}:${PORT}`);
     startupLog('Backend initialization completed successfully');
     
-    // Также через логгер
+    // Also through logger
     logger.startup(`Server started on port ${PORT}`);
     logger.startup(`API available at: http://${HOST}:${PORT}/api`);
     if (ipAddresses.length > 0) {

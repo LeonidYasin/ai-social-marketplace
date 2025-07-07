@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Очистка данных браузера</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>Очистка данных браузера</h1>
+    <p>Эта страница очистит все куки и localStorage для localhost</p>
+    
+    <button onclick="clearAllData()">Очистить все данные</button>
+    <button onclick="clearCookies()">Очистить только куки</button>
+    <button onclick="clearLocalStorage()">Очистить только localStorage</button>
+    
+    <div id="result"></div>
+    
+    <script>
+        function clearAllData() {
+            clearCookies();
+            clearLocalStorage();
+            document.getElementById('result').innerHTML = '<p style="color: green;">✅ Все данные очищены!</p>';
+        }
+        
+        function clearCookies() {
+            const cookies = document.cookie.split(";");
+            
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i];
+                const eqPos = cookie.indexOf("=");
+                const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
+                
+                // Удаляем куки для всех возможных путей
+                document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+                document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=localhost";
+                document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=.localhost";
+            }
+            
+            document.getElementById('result').innerHTML = '<p style="color: green;">✅ Куки очищены!</p>';
+        }
+        
+        function clearLocalStorage() {
+            localStorage.clear();
+            sessionStorage.clear();
+            document.getElementById('result').innerHTML = '<p style="color: green;">✅ localStorage очищен!</p>';
+        }
+        
+        // Показываем текущие данные
+        function showCurrentData() {
+            let result = '<h3>Текущие данные:</h3>';
+            
+            // Куки
+            result += '<h4>Куки:</h4>';
+            if (document.cookie) {
+                result += '<pre>' + document.cookie + '</pre>';
+            } else {
+                result += '<p>Куки пусты</p>';
+            }
+            
+            // localStorage
+            result += '<h4>localStorage:</h4>';
+            if (localStorage.length > 0) {
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    const value = localStorage.getItem(key);
+                    result += '<p><strong>' + key + ':</strong> ' + value + '</p>';
+                }
+            } else {
+                result += '<p>localStorage пуст</p>';
+            }
+            
+            document.getElementById('result').innerHTML = result;
+        }
+        
+        // Показываем данные при загрузке
+        window.onload = showCurrentData;
+    </script>
+</body>
+</html> 

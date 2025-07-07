@@ -4,8 +4,8 @@ services:
     name: social-marketplace-api
     runtime: node
     plan: free  # Изменено с starter на free
-    buildCommand: npm install
-    startCommand: npm start
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm run init-db && npm start
     envVars:
       - key: NODE_ENV
         value: production
@@ -28,8 +28,8 @@ services:
   - type: web
     name: social-marketplace-frontend
     runtime: static
-    buildCommand: npm install && npm run build
-    staticPublishPath: ./build
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/build
     envVars:
       - key: REACT_APP_API_URL
         fromService:

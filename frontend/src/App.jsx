@@ -89,10 +89,14 @@ const App = ({ themeMode, onThemeToggle }) => {
         }
         setRealUsers(uniqueUsers);
       } else {
-        console.error('API error:', response.status, response.statusText);
+        console.error('API error fetching users:', response.status, response.statusText);
+        // При ошибке API устанавливаем пустой массив пользователей
+        setRealUsers([]);
       }
     } catch (error) {
       console.error('Error fetching users:', error);
+      // При ошибке сети устанавливаем пустой массив пользователей
+      setRealUsers([]);
     } finally {
       setLoadingUsers(false);
     }
@@ -129,14 +133,27 @@ const App = ({ themeMode, onThemeToggle }) => {
         setCurrentUser(user);
         localStorage.setItem('currentUser', JSON.stringify(user));
         return user;
-      } else if (response.status === 401) {
-        // Токен истек
+      } else if (response.status === 401 || response.status === 404) {
+        // Токен истек или пользователь не найден - очищаем все данные
+        console.log('Token expired or user not found, clearing auth data');
         localStorage.removeItem('authToken');
         localStorage.removeItem('currentUser');
+        localStorage.removeItem('guestUser');
+        return null;
+      } else {
+        // Другие ошибки - тоже очищаем данные для безопасности
+        console.log('Unexpected error loading user, clearing auth data');
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('guestUser');
         return null;
       }
     } catch (error) {
       console.error('Error loading current user:', error);
+      // При любой ошибке сети очищаем данные
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('guestUser');
       return null;
     }
   };

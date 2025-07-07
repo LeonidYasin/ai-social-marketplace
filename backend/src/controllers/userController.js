@@ -27,9 +27,9 @@ const getUsers = async (req, res) => {
       res.json(result.rows);
     }
   } catch (error) {
-    console.error('[getUsers] Ошибка при получении пользователей:', error);
+    console.error('[getUsers] Error getting users:', error);
     if (!res.headersSent) {
-      res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+      res.status(500).json({ error: 'Internal server error' });
     }
   }
 };
@@ -44,13 +44,13 @@ const getUserById = async (req, res) => {
     );
     
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Пользователь не найден' });
+      return res.status(404).json({ error: 'User not found' });
     }
     
     res.json(result.rows[0]);
   } catch (error) {
-    console.error('Ошибка при получении пользователя:', error);
-    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+    console.error('Error getting user:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -65,15 +65,15 @@ const getCurrentUser = async (req, res) => {
     );
     
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Пользователь не найден' });
+      return res.status(404).json({ error: 'User not found' });
     }
     
     res.json({
       user: result.rows[0]
     });
   } catch (error) {
-    console.error('Ошибка при получении текущего пользователя:', error);
-    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+    console.error('Error getting current user:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -84,7 +84,7 @@ const registerUser = async (req, res) => {
     
     // Проверка обязательных полей
     if (!username || !email || !password || !first_name || !last_name) {
-      return res.status(400).json({ error: 'Все обязательные поля должны быть заполнены' });
+      return res.status(400).json({ error: 'All required fields must be filled' });
     }
     
     // Проверка уникальности username и email
@@ -94,7 +94,7 @@ const registerUser = async (req, res) => {
     );
     
     if (existingUser.rows.length > 0) {
-      return res.status(400).json({ error: 'Пользователь с таким username или email уже существует' });
+      return res.status(400).json({ error: 'User with this username or email already exists' });
     }
     
     // Хеширование пароля
@@ -111,13 +111,13 @@ const registerUser = async (req, res) => {
     const token = createToken(user);
     
     res.status(201).json({
-      message: 'Пользователь успешно зарегистрирован',
+      message: 'User registered successfully',
       user,
       token
     });
   } catch (error) {
-    console.error('Ошибка при регистрации пользователя:', error);
-    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+    console.error('Error registering user:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -127,7 +127,7 @@ const loginUser = async (req, res) => {
     const { username, password } = req.body;
     
     if (!username || !password) {
-      return res.status(400).json({ error: 'Username и password обязательны' });
+      return res.status(400).json({ error: 'Username and password are required' });
     }
     
     // Поиск пользователя
@@ -137,7 +137,7 @@ const loginUser = async (req, res) => {
     );
     
     if (result.rows.length === 0) {
-      return res.status(401).json({ error: 'Неверные учетные данные' });
+      return res.status(401).json({ error: 'Invalid credentials' });
     }
     
     const user = result.rows[0];
@@ -146,7 +146,7 @@ const loginUser = async (req, res) => {
     const isValidPassword = await bcrypt.compare(password, user.password_hash);
     
     if (!isValidPassword) {
-      return res.status(401).json({ error: 'Неверные учетные данные' });
+      return res.status(401).json({ error: 'Invalid credentials' });
     }
     
     // Обновление времени последнего входа
@@ -161,13 +161,13 @@ const loginUser = async (req, res) => {
     const token = createToken(user);
     
     res.json({
-      message: 'Авторизация успешна',
+      message: 'Login successful',
       user,
       token
     });
   } catch (error) {
-    console.error('Ошибка при авторизации:', error);
-    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+    console.error('Error during login:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -192,23 +192,23 @@ const updateProfile = async (req, res) => {
     );
     
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Пользователь не найден' });
+      return res.status(404).json({ error: 'User not found' });
     }
     
     res.json({
-      message: 'Профиль обновлен',
+      message: 'Profile updated',
       user: result.rows[0]
     });
   } catch (error) {
-    console.error('Ошибка при обновлении профиля:', error);
-    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+    console.error('Error updating profile:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
 // Обновление профиля текущего пользователя
 const updateCurrentUserProfile = async (req, res) => {
   try {
-    const userId = req.user.id; // ID из JWT токена
+    const userId = req.user.id;
     const { first_name, last_name, bio, location, website, avatar_url } = req.body;
     
     const result = await query(
@@ -226,56 +226,63 @@ const updateCurrentUserProfile = async (req, res) => {
     );
     
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Пользователь не найден' });
+      return res.status(404).json({ error: 'User not found' });
     }
     
     res.json({
-      message: 'Профиль обновлен',
+      message: 'Profile updated',
       user: result.rows[0]
     });
   } catch (error) {
-    console.error('Ошибка при обновлении профиля:', error);
-    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+    console.error('Error updating current user profile:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
-// Удаление пользователя по ID
+// Удаление пользователя (только для админов)
 const deleteUser = async (req, res) => {
-  if (!req.user || req.user.role !== 'admin') {
-    return res.status(403).json({ error: 'Доступ запрещен: только для админов' });
-  }
   try {
     const { id } = req.params;
+    
     const result = await query('DELETE FROM users WHERE id = $1 RETURNING id', [id]);
+    
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Пользователь не найден' });
+      return res.status(404).json({ error: 'User not found' });
     }
-    res.json({ message: 'Пользователь удалён', id });
+    
+    res.json({ message: 'User deleted successfully' });
   } catch (error) {
-    console.error('Ошибка при удалении пользователя:', error);
-    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+    console.error('Error deleting user:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
-// Смена роли пользователя (только для админа)
+// Изменение роли пользователя (только для админов)
 const changeUserRole = async (req, res) => {
-  if (!req.user || req.user.role !== 'admin') {
-    return res.status(403).json({ error: 'Доступ запрещен: только для админов' });
-  }
-  const { id } = req.params;
-  const { role } = req.body;
-  if (!['admin', 'member'].includes(role)) {
-    return res.status(400).json({ error: 'Недопустимая роль' });
-  }
   try {
-    const result = await query('UPDATE users SET role = $1 WHERE id = $2 RETURNING id, role', [role, id]);
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Пользователь не найден' });
+    const { id } = req.params;
+    const { role } = req.body;
+    
+    if (!role || !['user', 'admin', 'moderator'].includes(role)) {
+      return res.status(400).json({ error: 'Invalid role' });
     }
-    res.json({ message: 'Роль пользователя обновлена', user: result.rows[0] });
+    
+    const result = await query(
+      'UPDATE users SET role = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING id, username, role',
+      [role, id]
+    );
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    res.json({
+      message: 'User role updated',
+      user: result.rows[0]
+    });
   } catch (error) {
-    console.error('Ошибка при смене роли пользователя:', error);
-    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+    console.error('Error changing user role:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 

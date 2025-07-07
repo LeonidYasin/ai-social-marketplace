@@ -2,15 +2,34 @@ const { Pool } = require('pg');
 const fs = require('fs');
 const path = require('path');
 
+// Load environment variables from config.env
+require('dotenv').config({ path: path.join(__dirname, 'config.env') });
+
+// Поддержка DATABASE_URL для Render.com
+let poolConfig;
+
+if (process.env.DATABASE_URL) {
+  // Используем DATABASE_URL для Render
+  poolConfig = {
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.NODE_ENV === 'production' ? { 
+      rejectUnauthorized: false 
+    } : false
+  };
+} else {
+  // Используем отдельные переменные для локальной разработки
+  poolConfig = {
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    database: process.env.DB_NAME,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  };
+}
+
 // Создаем подключение к базе данных
-const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
-});
+const pool = new Pool(poolConfig);
 
 async function initDatabase() {
   try {

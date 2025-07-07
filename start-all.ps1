@@ -1,4 +1,4 @@
-# Устанавливаем кодировку консоли для Windows (windows-1251)
+# Устанавливаем кодировку консоли для Windows (windows-1251 для правильного отображения кириллицы)
 $OutputEncoding = [Console]::OutputEncoding = [System.Text.Encoding]::GetEncoding('windows-1251')
 [Console]::InputEncoding = [System.Text.Encoding]::GetEncoding('windows-1251')
 chcp 1251
@@ -202,6 +202,40 @@ function Test-ServerResponse {
     }
 }
 
+# Функция для безопасного чтения логов с правильной кодировкой
+function Read-LogFile {
+    param([string]$LogPath, [int]$TailLines = 10)
+    
+    if (-not (Test-Path $LogPath)) {
+        return @()
+    }
+    
+    # Пробуем разные кодировки для чтения лога
+    $lines = $null
+    $encodings = @('UTF8', 'Default', 'ASCII', 'Unicode')
+    
+    foreach ($encoding in $encodings) {
+        try {
+            if ($TailLines -gt 0) {
+                $lines = Get-Content $LogPath -Tail $TailLines -Encoding $encoding -ErrorAction Stop
+            } else {
+                $lines = Get-Content $LogPath -Encoding $encoding -ErrorAction Stop
+            }
+            Write-Host "    Successfully read log with $encoding encoding" -ForegroundColor Gray
+            break
+        } catch {
+            continue
+        }
+    }
+    
+    if ($lines -eq $null) {
+        Write-Host "    Warning: Could not read log file with any encoding" -ForegroundColor Yellow
+        return @()
+    }
+    
+    return $lines
+}
+
 # Функция для проверки логов
 function Test-LogFiles {
     Write-Host "Checking log files..." -ForegroundColor Yellow
@@ -240,7 +274,7 @@ function Test-BackendStartupMessages {
     $startupPort = $null
     
     # Читаем весь лог и ищем последние стартовые сообщения
-    $allLogs = Get-Content $backendLog
+    $allLogs = Read-LogFile -LogPath $backendLog -TailLines 0
     $startupSequence = @()
     
     for ($i = $allLogs.Count - 1; $i -ge 0; $i--) {
@@ -363,7 +397,7 @@ function Test-BackendLogging {
             return $true
         } else {
             # Проверяем, есть ли новые записи в логе (последние 5 секунд)
-            $recentLogs = Get-Content $backendLog -Tail 10 | Where-Object { 
+            $recentLogs = Read-LogFile -LogPath $backendLog -TailLines 10 | Where-Object { 
                 $_ -match '\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}' -and 
                 [DateTime]::ParseExact($_.Split('[')[1].Split(']')[0], 'yyyy-MM-ddTHH:mm:ss.fffZ', $null) -gt (Get-Date).AddSeconds(-10)
             }
@@ -470,25 +504,17 @@ function Show-RecentLogEntries {
     
     if (Test-Path $backendLog) {
         Write-Host "  Recent Backend log entries:" -ForegroundColor Cyan
-        try {
-            $backendLines = Get-Content $backendLog -Tail 3 -ErrorAction SilentlyContinue
-            foreach ($line in $backendLines) {
-                Write-Host "    $line" -ForegroundColor Gray
-            }
-        } catch {
-            Write-Host "    Error reading backend log" -ForegroundColor Red
+        $backendLines = Read-LogFile -LogPath $backendLog -TailLines 3
+        foreach ($line in $backendLines) {
+            Write-Host "    $line" -ForegroundColor Gray
         }
     }
     
     if (Test-Path $frontendLog) {
         Write-Host "  Recent Frontend log entries:" -ForegroundColor Cyan
-        try {
-            $frontendLines = Get-Content $frontendLog -Tail 3 -ErrorAction SilentlyContinue
-            foreach ($line in $frontendLines) {
-                Write-Host "    $line" -ForegroundColor Gray
-            }
-        } catch {
-            Write-Host "    Error reading frontend log" -ForegroundColor Red
+        $frontendLines = Read-LogFile -LogPath $frontendLog -TailLines 3
+        foreach ($line in $frontendLines) {
+            Write-Host "    $line" -ForegroundColor Gray
         }
     }
 }

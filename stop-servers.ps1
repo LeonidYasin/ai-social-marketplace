@@ -10,7 +10,7 @@ Write-Host "Stopping all servers..." -ForegroundColor Red
 Write-Host "Stopping processes by ports..." -ForegroundColor Yellow
 
 # Проверка, что порт свободен
-function Check-PortFree {
+function Test-PortFree {
     param([int]$port)
     $busy = netstat -ano | Select-String ":$port "
     return -not $busy
@@ -32,7 +32,7 @@ $maxTries = 3
 $portsToCheck = @(8000, 3000)
 foreach ($port in $portsToCheck) {
     $try = 1
-    while (-not (Check-PortFree $port) -and $try -le $maxTries) {
+    while (-not (Test-PortFree $port) -and $try -le $maxTries) {
         Write-Host "Port $port is still busy. Retrying stop... (Attempt $try)" -ForegroundColor Yellow
         $processes = netstat -ano | Select-String ":$port " | ForEach-Object { ($_ -split '\s+')[-1] } | Select-Object -Unique
         foreach ($processId in $processes) {
@@ -48,7 +48,7 @@ foreach ($port in $portsToCheck) {
         Start-Sleep -Seconds 1
         $try++
     }
-    if (Check-PortFree $port) {
+    if (Test-PortFree $port) {
         Write-Host "Port $port is now free." -ForegroundColor Green
     } else {
         Write-Host "WARNING: Port $port is STILL busy after $maxTries attempts!" -ForegroundColor Red

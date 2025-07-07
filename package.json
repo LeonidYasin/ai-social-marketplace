@@ -38,6 +38,7 @@
     "express": "^5.1.0",
     "fs-extra": "^11.3.0",
     "helmet": "^8.1.0",
+    "iconv-lite": "^0.6.3",
     "multer": "^2.0.1",
     "node-fetch": "^2.7.0",
     "node-tesseract-ocr": "^2.2.1",
