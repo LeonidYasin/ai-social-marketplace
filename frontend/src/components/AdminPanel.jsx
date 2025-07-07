@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { api } from '../config/api';
+import API_CONFIG from '../config/api';
 
 const AdminPanel = () => {
   const [password, setPassword] = useState('');
@@ -16,7 +16,7 @@ const AdminPanel = () => {
 
     setLoading(true);
     try {
-      const response = await fetch(`${api.baseURL}/admin/database-info`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/admin/database-info`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ const AdminPanel = () => {
   const handleFixDatabase = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${api.baseURL}/admin/fix-database`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/admin/fix-database`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ const AdminPanel = () => {
 
     setLoading(true);
     try {
-      const response = await fetch(`${api.baseURL}/admin/recreate-notifications`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/admin/recreate-notifications`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,6 +1,14 @@
 const { Pool } = require('pg');
 const logger = require('./logger');
 const encoding = require('./encoding');
+const dotenv = require('dotenv');
+dotenv.config({ path: require('path').join(__dirname, '..', 'config.env') });
+
+console.log('[db.js] DB_HOST:', process.env.DB_HOST);
+console.log('[db.js] DB_USER:', process.env.DB_USER);
+console.log('[db.js] DB_PASSWORD:', process.env.DB_PASSWORD, 'type:', typeof process.env.DB_PASSWORD);
+console.log('[db.js] DB_NAME:', process.env.DB_NAME);
+console.log('[db.js] DATABASE_URL:', process.env.DATABASE_URL);
 
 // Поддержка DATABASE_URL для Render.com
 let dbConfig;
