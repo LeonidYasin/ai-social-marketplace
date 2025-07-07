@@ -21,7 +21,7 @@ services:
       - key: RENDER_SYSLOG_ENABLED
         value: true
       - key: RENDER_SYSLOG_ENDPOINT
-        value: ${RENDER_SERVICE_URL}:514
+        value: ${RENDER_SERVICE_URL}:10000
       - key: RENDER_SERVICE_URL
         fromService:
           name: social-marketplace-backend
