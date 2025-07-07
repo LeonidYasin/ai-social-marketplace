@@ -12,6 +12,13 @@ const path = require('path');
 // Load environment variables FIRST, before any other imports
 dotenv.config({ path: path.join(__dirname, '..', 'config.env') });
 
+// Debug: Log all environment variables related to ports
+console.log('=== ENVIRONMENT VARIABLES DEBUG ===');
+console.log('process.env.PORT:', process.env.PORT);
+console.log('process.env.BACKEND_PORT:', process.env.BACKEND_PORT);
+console.log('process.env.SYSLOG_PORT:', process.env.SYSLOG_PORT);
+console.log('=====================================');
+
 // Create logs directory if it doesn't exist
 const logsDir = path.join(__dirname, '..', 'logs');
 if (!fs.existsSync(logsDir)) {
@@ -106,7 +113,9 @@ process.on('unhandledRejection', (reason, promise) => {
 // Startup messages and environment variables — explicitly to console
 startupLog('Environment variables loaded:');
 startupLog(`  HOST: ${process.env.HOST || 'not set'}`);
-startupLog(`  PORT: ${process.env.PORT || 'not set'}`);
+startupLog(`  BACKEND_PORT: ${process.env.BACKEND_PORT || 'not set'}`);
+startupLog(`  PORT (Render): ${process.env.PORT || 'not set'}`);
+startupLog(`  SYSLOG_PORT: ${process.env.SYSLOG_PORT || 'not set'}`);
 startupLog(`  NODE_ENV: ${process.env.NODE_ENV || 'not set'}`);
 startupLog(`  DB_HOST: ${process.env.DB_HOST || 'not set'}`);
 startupLog(`  DB_USER: ${process.env.DB_USER || 'not set'}`);
