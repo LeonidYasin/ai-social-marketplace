@@ -554,7 +554,7 @@ app.use('*', (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.BACKEND_PORT || process.env.PORT || 8000;
 const HOST = process.env.HOST || 'localhost';
 
 // Get IP addresses for display
