@@ -1,0 +1,57 @@
+# Universal Render.com deployment template
+# Copy this file to render.yaml and customize for your project
+
+services:
+  # Backend API Service
+  - type: web
+    name: your-app-api  # Change this to your app name
+    runtime: node
+    plan: free
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm run init-db && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: your-app-db  # Change this to your DB name
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      # Add your OAuth credentials here
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+
+  # Frontend Static Site
+  - type: web
+    name: your-app-frontend  # Change this to your app name
+    runtime: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/build
+    # Environment variables are optional - the app will auto-detect URLs
+    envVars:
+      # Uncomment and customize these if you want to override auto-detection
+      # - key: REACT_APP_API_URL
+      #   value: https://your-app-api.onrender.com
+      # - key: REACT_APP_WS_URL
+      #   value: wss://your-app-api.onrender.com
+
+databases:
+  # PostgreSQL Database
+  - name: your-app-db  # Change this to your DB name
+    plan: free
+    databaseName: your_app_db  # Change this
+    user: app_user
+
+# Instructions:
+# 1. Copy this file to render.yaml
+# 2. Replace 'your-app' with your actual app name
+# 3. Update database names
+# 4. Add your OAuth credentials in the dashboard
+# 5. Deploy! 
