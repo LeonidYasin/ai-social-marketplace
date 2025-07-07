@@ -20,6 +20,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { v4 as uuidv4 } from 'uuid';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { authAPI } from './services/api';
+import API_CONFIG from './config/api';
 
 // const USERS = [
 //   { id: 'ai', name: 'AI Ассистент', isAI: true },
@@ -60,7 +61,7 @@ const App = ({ themeMode, onThemeToggle }) => {
     try {
       setLoadingUsers(true);
       
-      const response = await fetch('http://localhost:8000/api/users', {
+      const response = await fetch(API_CONFIG.getUrl(API_CONFIG.ENDPOINTS.USERS), {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -111,7 +112,7 @@ const App = ({ themeMode, onThemeToggle }) => {
         return null;
       }
       
-      const response = await fetch('http://localhost:8000/api/auth/me', {
+      const response = await fetch(API_CONFIG.getUrl(API_CONFIG.ENDPOINTS.AUTH_ME), {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -218,7 +219,7 @@ const App = ({ themeMode, onThemeToggle }) => {
     console.log('App.jsx: Инициализация WebSocket для пользователя:', currentUser);
     
     if (currentUser) {
-      const newSocket = io('http://localhost:8000', {
+      const newSocket = io(API_CONFIG.getWsUrl(), {
         transports: ['websocket', 'polling'],
         timeout: 10000,
         forceNew: true
@@ -361,7 +362,7 @@ const App = ({ themeMode, onThemeToggle }) => {
       }
 
       // Отправляем сообщение на сервер
-      const response = await fetch('http://localhost:8000/api/messages/send', {
+      const response = await fetch(API_CONFIG.getUrl(API_CONFIG.ENDPOINTS.MESSAGES_SEND), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -405,7 +406,7 @@ const App = ({ themeMode, onThemeToggle }) => {
         return;
       }
 
-      const response = await fetch(`http://localhost:8000/api/messages/conversation/${userId}`, {
+      const response = await fetch(API_CONFIG.getUrl(API_CONFIG.ENDPOINTS.MESSAGES_CONVERSATION(userId)), {
         headers: {
           'Authorization': `Bearer ${token}`
         }

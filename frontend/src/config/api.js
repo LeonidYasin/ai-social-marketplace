@@ -1,66 +1,40 @@
-// API Configuration for Telegram Backend
+// API Configuration
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const WS_BASE_URL = process.env.REACT_APP_WS_URL || 'ws://localhost:8000';
+
+// Remove trailing slash if present
+const cleanBaseUrl = (url) => url.replace(/\/$/, '');
+
 export const API_CONFIG = {
-  // Base URLs
-  BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:8000',
-  TELEGRAM_WEBHOOK_URL: process.env.REACT_APP_TELEGRAM_WEBHOOK || 'http://localhost:8000/webhook',
+  BASE_URL: cleanBaseUrl(API_BASE_URL),
+  WS_URL: cleanBaseUrl(WS_BASE_URL),
   
   // API Endpoints
   ENDPOINTS: {
-    // Posts
-    POSTS: '/api/posts',
-    POST: (id) => `/api/posts/${id}`,
-    POST_REACTIONS: (id) => `/api/posts/${id}/reactions`,
-    POST_COMMENTS: (id) => `/api/posts/${id}/comments`,
-    
-    // Users
     USERS: '/api/users',
-    USER: (id) => `/api/users/${id}`,
-    USER_PROFILE: (id) => `/api/users/${id}/profile`,
-    
-    // Chat
-    CHAT_MESSAGES: '/api/chat/messages',
-    CHAT_SEND: '/api/chat/send',
-    AI_CHAT: '/api/chat/ai',
-    
-    // Telegram Integration
-    TELEGRAM_AUTH: '/api/telegram/auth',
-    TELEGRAM_WEBHOOK: '/api/telegram/webhook',
-    TELEGRAM_SEND: '/api/telegram/send',
-    
-    // Analytics
-    ANALYTICS: '/api/analytics',
-    USER_STATS: (id) => `/api/analytics/users/${id}/stats`,
-    
-    // Search
-    SEARCH: '/api/search',
-    SEARCH_POSTS: '/api/search/posts',
-    SEARCH_USERS: '/api/search/users',
-    
-    // Notifications
+    AUTH_ME: '/api/auth/me',
+    AUTH_GOOGLE: '/api/auth/google',
     NOTIFICATIONS: '/api/notifications',
-    NOTIFICATION_READ: (id) => `/api/notifications/${id}/read`,
-    
-    // Gamification
-    ACHIEVEMENTS: '/api/achievements',
-    USER_ACHIEVEMENTS: (id) => `/api/users/${id}/achievements`,
-    LEADERBOARD: '/api/leaderboard',
+    MESSAGES_CONVERSATIONS: '/api/messages/conversations',
+    MESSAGES_CONVERSATION: (userId) => `/api/messages/conversation/${userId}`,
+    MESSAGES_SEND: '/api/messages/send',
+    HEALTH: '/api/health'
   },
   
-  // Headers
-  DEFAULT_HEADERS: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-  },
-  
-  // Timeouts
-  TIMEOUT: 10000, // 10 seconds
-  
-  // Retry configuration
-  RETRY: {
-    attempts: 3,
-    delay: 1000,
-  },
+  // Full URLs
+  getUrl: (endpoint) => `${API_CONFIG.BASE_URL}${endpoint}`,
+  getWsUrl: () => API_CONFIG.WS_URL
 };
+
+// Debug logging
+console.log('API Configuration:', {
+  BASE_URL: API_CONFIG.BASE_URL,
+  WS_URL: API_CONFIG.WS_URL,
+  REACT_APP_API_URL: process.env.REACT_APP_API_URL,
+  REACT_APP_WS_URL: process.env.REACT_APP_WS_URL
+});
+
+export default API_CONFIG;
 
 // API Response Status Codes
 export const API_STATUS = {

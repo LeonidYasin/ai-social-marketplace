@@ -7,6 +7,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import CircularProgress from '@mui/material/CircularProgress';
+import API_CONFIG from '../config/api';
 
 const MessageNotifications = ({ currentUser, socket }) => {
   const [notifications, setNotifications] = useState([]);
@@ -19,7 +20,7 @@ const MessageNotifications = ({ currentUser, socket }) => {
     setLoading(true);
     try {
       const token = localStorage.getItem('authToken');
-      const res = await fetch('http://localhost:8000/api/notifications', {
+      const res = await fetch(API_CONFIG.getUrl(API_CONFIG.ENDPOINTS.NOTIFICATIONS), {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {

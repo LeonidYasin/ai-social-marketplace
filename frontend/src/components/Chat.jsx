@@ -25,6 +25,7 @@ import {
   Circle as CircleIcon
 } from '@mui/icons-material';
 import { io } from 'socket.io-client';
+import API_CONFIG from '../config/api';
 
 const Chat = ({ currentUser, isOpen, onClose }) => {
   const [socket, setSocket] = useState(null);
@@ -38,7 +39,7 @@ const Chat = ({ currentUser, isOpen, onClose }) => {
   // Подключение к WebSocket
   useEffect(() => {
     if (currentUser && isOpen) {
-      const newSocket = io('http://localhost:8000');
+      const newSocket = io(API_CONFIG.getWsUrl());
       setSocket(newSocket);
 
       // Присоединяемся к чату
@@ -98,7 +99,7 @@ const Chat = ({ currentUser, isOpen, onClose }) => {
 
   const fetchConversations = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/messages/conversations`, {
+      const response = await fetch(API_CONFIG.getUrl(API_CONFIG.ENDPOINTS.MESSAGES_CONVERSATIONS), {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -114,7 +115,7 @@ const Chat = ({ currentUser, isOpen, onClose }) => {
 
   const fetchMessages = async (userId) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/messages/conversation/${userId}`, {
+      const response = await fetch(API_CONFIG.getUrl(API_CONFIG.ENDPOINTS.MESSAGES_CONVERSATION(userId)), {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }

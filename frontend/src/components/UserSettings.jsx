@@ -57,6 +57,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import PostCard from './PostCard';
 import Gamification from './Gamification';
 import { authAPI, oauthAPI, telegramAPI } from '../services/api';
+import API_CONFIG from '../config/api';
 
 // Темы оформления
 const THEMES = {
@@ -249,7 +250,7 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [] }) => {
       }
       
       // Тестируем подключение к API
-      fetch('http://localhost:8000/api/health')
+              fetch(API_CONFIG.getUrl(API_CONFIG.ENDPOINTS.HEALTH))
         .then(response => response.json())
         .then(data => {
           console.log('API Health Check:', data);
@@ -379,7 +380,7 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [] }) => {
     try {
       if (networkId === 'google') {
         // Проверяем, настроен ли Google OAuth
-        const response = await fetch('http://localhost:8000/api/auth/google');
+        const response = await fetch(API_CONFIG.getUrl(API_CONFIG.ENDPOINTS.AUTH_GOOGLE));
         if (response.status === 500 || response.status === 404) {
           setAuthError('Google OAuth не настроен. Следуйте инструкции в GOOGLE_OAUTH_SETUP.md');
           setIsLoading(false);
