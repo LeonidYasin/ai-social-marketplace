@@ -29,14 +29,12 @@ services:
       # Syslog Server Configuration
       - key: ENABLE_SYSLOG
         value: true
-      - key: SYSLOG_PORT
-        value: 8000
       - key: SYSLOG_HOST
         value: 0.0.0.0
       - key: RENDER_SYSLOG_ENABLED
         value: true
       - key: RENDER_SYSLOG_ENDPOINT
-        value: ${RENDER_SERVICE_URL}:8000
+        value: ${RENDER_SERVICE_URL}:${PORT}
       - key: RENDER_SERVICE_URL
         fromService:
           name: social-marketplace-api
