@@ -464,27 +464,27 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [] }) => {
         facebook: { 
           name: 'Facebook Пользователь', 
           email: 'facebook@example.com',
-          avatar: 'https://via.placeholder.com/150/4267B2/FFFFFF?text=F'
+          avatar: '/api/placeholder/150/4267B2/FFFFFF/F'
         },
         vk: { 
           name: 'VK Пользователь', 
           email: 'vk@example.com',
-          avatar: 'https://via.placeholder.com/150/4C75A3/FFFFFF?text=V'
+          avatar: '/api/placeholder/150/4C75A3/FFFFFF/V'
         },
         telegram: { 
           name: 'Telegram Пользователь', 
           email: 'telegram@example.com',
-          avatar: 'https://via.placeholder.com/150/0088cc/FFFFFF?text=T'
+          avatar: '/api/placeholder/150/0088cc/FFFFFF/T'
         },
         github: { 
           name: 'GitHub Пользователь', 
           email: 'github@example.com',
-          avatar: 'https://via.placeholder.com/150/333/FFFFFF?text=GH'
+          avatar: '/api/placeholder/150/333/FFFFFF/GH'
         },
         whatsapp: { 
           name: 'WhatsApp Пользователь', 
           email: 'whatsapp@example.com',
-          avatar: 'https://via.placeholder.com/150/25D366/FFFFFF?text=W'
+          avatar: '/api/placeholder/150/25D366/FFFFFF/W'
         },
       };
       

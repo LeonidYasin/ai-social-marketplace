@@ -207,7 +207,7 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
         images: post.media_urls ? post.media_urls.map(url => 
           url.startsWith('blob:') ? url : 
           url.startsWith('http') ? url : 
-          `https://via.placeholder.com/400x300/cccccc/666666?text=${encodeURIComponent(url)}`
+          `/api/placeholder/400x300/cccccc/666666/${encodeURIComponent(url)}`
         ) : [],
         video: null,
         doc: null,

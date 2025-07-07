@@ -66,6 +66,7 @@ const telegramRouter = require('./routes/telegram');
 const messagesRouter = require('./routes/messages');
 const notificationsRouter = require('./routes/notifications');
 const logsRouter = require('./routes/logs');
+const placeholderRouter = require('./routes/placeholder');
 
 // Startup messages and environment variables — explicitly to console
 logger.startup('Environment variables loaded:');
@@ -227,7 +228,13 @@ io.on('connection', (socket) => {
 const corsOptions = {
   origin: function (origin, callback) {
     // Allow requests without origin (e.g., mobile apps)
-    if (!origin) return callback(null, true);
+    if (!origin) {
+      console.log('[CORS] Request without origin, allowing');
+      return callback(null, true);
+    }
+    
+    console.log(`[CORS] Checking origin: ${origin}`);
+    console.log(`[CORS] NODE_ENV: ${process.env.NODE_ENV}, RENDER: ${process.env.RENDER}`);
     
     const allowedOrigins = [
       'http://localhost:3000',
@@ -239,8 +246,9 @@ const corsOptions = {
       /^http:\/\/172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+:3000$/  // Allow all IPs in range 172.16-31.x.x
     ];
     
-    // Add Render domain in production
-    if (process.env.NODE_ENV === 'production') {
+    // Add Render domain in production or on Render.com
+    if (process.env.NODE_ENV === 'production' || process.env.RENDER) {
+      console.log('[CORS] Adding Render domains to allowed origins');
       allowedOrigins.push(/^https:\/\/.*\.onrender\.com$/);
       allowedOrigins.push(/^https:\/\/.*\.render\.com$/);
     }
@@ -248,14 +256,24 @@ const corsOptions = {
     // Check if origin is allowed
     const isAllowed = allowedOrigins.some(allowedOrigin => {
       if (allowedOrigin instanceof RegExp) {
-        return allowedOrigin.test(origin);
+        const matches = allowedOrigin.test(origin);
+        if (matches) {
+          console.log(`[CORS] Origin ${origin} matches regex ${allowedOrigin}`);
+        }
+        return matches;
       }
-      return allowedOrigin === origin;
+      const matches = allowedOrigin === origin;
+      if (matches) {
+        console.log(`[CORS] Origin ${origin} matches exact ${allowedOrigin}`);
+      }
+      return matches;
     });
     
     if (isAllowed) {
+      console.log(`[CORS] Origin ${origin} is allowed`);
       callback(null, true);
     } else {
+      console.log(`[CORS] Origin ${origin} is NOT allowed`);
       callback(new Error('Not allowed by CORS'));
     }
   },
@@ -339,6 +357,7 @@ app.use('/api/telegram', telegramRouter);
 app.use('/api/messages', messagesRouter);
 app.use('/api/notifications', notificationsRouter);
 app.use('/api/logs', logsRouter);
+app.use('/api/placeholder', placeholderRouter);
 
 // Test route
 app.get('/api/test', (req, res) => {
