@@ -33,7 +33,12 @@ services:
       - key: RENDER_SYSLOG_ENABLED
         value: true
       - key: RENDER_SYSLOG_ENDPOINT
-        value: ${RENDER_SERVICE_URL}:8000
+        value: ${RENDER_SERVICE_URL}
+      - key: SYSLOG_PORT
+        fromService:
+          name: social-marketplace-api
+          type: web
+          property: port
       - key: RENDER_SERVICE_URL
         fromService:
           name: social-marketplace-api
@@ -51,12 +56,18 @@ services:
     runtime: static
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: ./frontend/build
-    # Environment variables are optional - the app will auto-detect URLs
-    # envVars:
-    #   - key: REACT_APP_API_URL
-    #     value: https://social-marketplace-api.onrender.com
-    #   - key: REACT_APP_WS_URL
-    #     value: wss://social-marketplace-api.onrender.com
+    # Environment variables for frontend-backend connection
+    envVars:
+      - key: REACT_APP_API_URL
+        fromService:
+          name: social-marketplace-api
+          type: web
+          property: url
+      - key: REACT_APP_WS_URL
+        fromService:
+          name: social-marketplace-api
+          type: web
+          property: url
 
 databases:
   # PostgreSQL Database (Free)

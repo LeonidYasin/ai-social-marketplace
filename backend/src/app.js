@@ -12,6 +12,9 @@ const path = require('path');
 // Load environment variables FIRST, before any other imports
 dotenv.config({ path: path.join(__dirname, '..', 'config.env') });
 
+// Define PORT early for syslog server
+const PORT = process.env.PORT || 8000;
+
 // Debug: Log all environment variables related to ports
 console.log('=== ENVIRONMENT VARIABLES DEBUG ===');
 console.log('process.env.PORT:', process.env.PORT);
@@ -162,8 +165,8 @@ const server = http.createServer(app);
 let syslogServer = null;
 try {
   const SyslogServer = require('./utils/syslogServer');
-  // Always use the same port as the main server
-  const syslogPort = PORT;
+  // Use SYSLOG_PORT environment variable or the same port as main server
+  const syslogPort = process.env.SYSLOG_PORT || PORT;
   
   if (process.env.ENABLE_SYSLOG === 'true') {
     syslogServer = new SyslogServer(syslogPort, logger);
@@ -562,7 +565,6 @@ app.use('*', (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 8000;
 const HOST = process.env.HOST || 'localhost';
 
 // Get IP addresses for display

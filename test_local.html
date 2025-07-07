@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Local Test</title>
+</head>
+<body>
+    <h1>Local Backend Test</h1>
+    <div id="results"></div>
+    
+    <script>
+        async function testBackend() {
+            const results = document.getElementById('results');
+            
+            try {
+                // Test health endpoint
+                const healthResponse = await fetch('http://localhost:8000/api/health');
+                const healthData = await healthResponse.json();
+                
+                results.innerHTML += `<p>✅ Health: ${JSON.stringify(healthData)}</p>`;
+                
+                // Test syslog endpoint
+                const syslogResponse = await fetch('http://localhost:8000/api/syslog/logs');
+                const syslogData = await syslogResponse.json();
+                
+                results.innerHTML += `<p>✅ Syslog: ${syslogData.data.logs.length} logs received</p>`;
+                
+                // Test WebSocket connection
+                const socket = new WebSocket('ws://localhost:8000');
+                
+                socket.onopen = () => {
+                    results.innerHTML += `<p>✅ WebSocket: Connected</p>`;
+                    socket.close();
+                };
+                
+                socket.onerror = (error) => {
+                    results.innerHTML += `<p>❌ WebSocket: Error - ${error}</p>`;
+                };
+                
+            } catch (error) {
+                results.innerHTML += `<p>❌ Error: ${error.message}</p>`;
+            }
+        }
+        
+        testBackend();
+    </script>
+</body>
+</html> 
