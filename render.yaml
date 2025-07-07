@@ -32,10 +32,9 @@ services:
     staticPublishPath: ./frontend/build
     envVars:
       - key: REACT_APP_API_URL
-        fromService:
-          name: social-marketplace-api
-          type: web
-          property: hostport
+        value: https://social-marketplace-api.onrender.com
+      - key: REACT_APP_WS_URL
+        value: wss://social-marketplace-api.onrender.com
 
 databases:
   # PostgreSQL Database (Free)
