@@ -5,8 +5,8 @@ services:
     runtime: node
     plan: free  # Изменено с starter на free
     buildCommand: |
-      apt-get update && \
-      apt-get install -y python3 make g++ libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev && \
+      # apt-get update && \
+      # apt-get install -y python3 make g++ libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev && \
       cd backend && npm install
     startCommand: cd backend && npm run init-db && npm start
     envVars:
