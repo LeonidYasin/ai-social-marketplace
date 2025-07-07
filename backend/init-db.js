@@ -5,6 +5,9 @@ const path = require('path');
 // Load environment variables from config.env
 require('dotenv').config({ path: path.join(__dirname, 'config.env') });
 
+// Импортируем универсальный модуль кодировок
+const encoding = require('./src/utils/encoding');
+
 // Поддержка DATABASE_URL для Render.com
 let poolConfig;
 
@@ -27,6 +30,12 @@ if (process.env.DATABASE_URL) {
     ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
   };
 }
+
+// Добавляем универсальную настройку кодировки
+poolConfig = encoding.addEncodingToConfig(poolConfig);
+
+// Логируем информацию о кодировках
+encoding.logEncodingInfo();
 
 // Создаем подключение к базе данных
 const pool = new Pool(poolConfig);

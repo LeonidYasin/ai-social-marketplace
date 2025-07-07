@@ -1,5 +1,6 @@
 const { Pool } = require('pg');
 const logger = require('./logger');
+const encoding = require('./encoding');
 
 // Поддержка DATABASE_URL для Render.com
 let dbConfig;
@@ -34,6 +35,12 @@ if (process.env.DATABASE_URL) {
     connectionTimeoutMillis: 2000, // время ожидания соединения
   };
 }
+
+// Добавляем универсальную настройку кодировки
+dbConfig = encoding.addEncodingToConfig(dbConfig);
+
+// Логируем информацию о кодировках при инициализации
+encoding.logEncodingInfo();
 
 // Создаем пул соединений
 const pool = new Pool(dbConfig);

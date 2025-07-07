@@ -10,6 +10,9 @@ console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
 // Тестируем подключение к базе данных
 const { Pool } = require('pg');
 
+// Импортируем универсальный модуль кодировок
+const encoding = require('./backend/src/utils/encoding');
+
 // Конфигурация подключения к базе данных
 const dbConfig = {
   host: process.env.DB_HOST || 'localhost',
@@ -17,27 +20,31 @@ const dbConfig = {
   database: process.env.DB_NAME || 'marketplace_db',
   user: process.env.DB_USER || 'marketplace_user',
   password: process.env.DB_PASSWORD,
-  // Настройка кодировки для соответствия настройкам базы данных
-  client_encoding: 'WIN1251',
   // SSL настройки для production
   ssl: process.env.NODE_ENV === 'production' ? { 
     rejectUnauthorized: false 
   } : false,
 };
 
+// Добавляем универсальную настройку кодировки
+const finalConfig = encoding.addEncodingToConfig(dbConfig);
+
+// Логируем информацию о кодировках
+encoding.logEncodingInfo();
+
 console.log('=== Database Connection Test ===');
 console.log('='.repeat(50));
 console.log('Config:', {
-  host: dbConfig.host,
-  port: dbConfig.port,
-  database: dbConfig.database,
-  user: dbConfig.user,
-  password: typeof dbConfig.password + ' (' + dbConfig.password.length + ' chars)',
-  client_encoding: dbConfig.client_encoding
+  host: finalConfig.host,
+  port: finalConfig.port,
+  database: finalConfig.database,
+  user: finalConfig.user,
+  password: typeof finalConfig.password + ' (' + finalConfig.password.length + ' chars)',
+  client_encoding: finalConfig.client_encoding
 });
 
 // Создаем пул соединений
-const pool = new Pool(dbConfig);
+const pool = new Pool(finalConfig);
 
 async function testConnection() {
   try {
@@ -100,8 +107,8 @@ async function testConnection() {
       console.error('\n🔍 SASL Error detected! This is likely a password encoding issue.');
       console.error('Possible solutions:');
       console.error('1. Check if password contains special characters');
-      console.error('2. Try using UTF-8 encoding instead of WIN1251');
-      console.error('3. Verify password is properly set in environment variables');
+      console.error('2. Verify password is properly set in environment variables');
+      console.error('3. Check encoding configuration in backend/src/utils/encoding.js');
     }
   } finally {
     await pool.end();
