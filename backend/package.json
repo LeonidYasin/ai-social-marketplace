@@ -5,10 +5,12 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
+    "simple": "node simple-start.js",
     "dev": "nodemon src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "init-db": "node init-db.js",
-    "health-check": "node health-check.js"
+    "health-check": "node health-check.js",
+    "test-db": "node test-db-connection.js"
   },
   "keywords": [
     "social",

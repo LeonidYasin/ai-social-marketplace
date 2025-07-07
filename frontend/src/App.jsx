@@ -1,3 +1,4 @@
+import logger from './services/logging';
 import React, { useState, useMemo, useEffect } from 'react';
 import { Box, Typography, ThemeProvider, CssBaseline, IconButton } from '@mui/material';
 import { io } from 'socket.io-client';

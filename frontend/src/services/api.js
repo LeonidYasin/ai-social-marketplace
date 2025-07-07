@@ -1,3 +1,4 @@
+import logger from './logging';
 import { API_CONFIG, API_STATUS, ERROR_MESSAGES } from '../config/api';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL ? `${process.env.REACT_APP_API_URL}/api` : 'http://localhost:8000/api';
@@ -83,6 +84,9 @@ const apiRequest = async (endpoint, options = {}) => {
       window.apiLogs.push(`API Error: ${error.message} ${url}`);
     }
     
+    
+    // Логируем ошибку
+    logger.logApiError(method, url, error);
     throw error;
   }
 };
@@ -192,7 +196,10 @@ export const postsAPI = {
       return result;
     } catch (error) {
       console.error('postsAPI.getPosts error:', error);
-      throw error;
+      
+    // Логируем ошибку
+    logger.logApiError(method, url, error);
+    throw error;
     }
   },
 
@@ -209,7 +216,10 @@ export const postsAPI = {
         postData,
         error: error.message
       });
-      throw error;
+      
+    // Логируем ошибку
+    logger.logApiError(method, url, error);
+    throw error;
     }
   },
 
