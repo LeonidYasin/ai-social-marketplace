@@ -44,6 +44,13 @@ async function initializeDatabase() {
   try {
     console.log('🔧 Инициализация базы данных...');
     
+    // Сначала гарантируем наличие всех нужных колонок (отдельно, до индексов)
+    await pool.query("ALTER TABLE posts ADD COLUMN IF NOT EXISTS category VARCHAR(50) DEFAULT 'general';");
+    await pool.query("ALTER TABLE notifications ADD COLUMN IF NOT EXISTS is_delivered BOOLEAN NOT NULL DEFAULT FALSE;");
+    await pool.query("ALTER TABLE notifications ADD COLUMN IF NOT EXISTS delivered_at TIMESTAMP;");
+    await pool.query("ALTER TABLE notifications ADD COLUMN IF NOT EXISTS read_at TIMESTAMP;");
+    await pool.query("ALTER TABLE notifications ADD COLUMN IF NOT EXISTS type VARCHAR(32) NOT NULL DEFAULT 'message';");
+
     // SQL для создания всех таблиц с правильной структурой
     const initSQL = `
       -- Создание таблицы пользователей
@@ -166,9 +173,6 @@ async function initializeDatabase() {
         value TEXT
       );
 
-      -- Гарантируем наличие поля category в posts
-      ALTER TABLE posts ADD COLUMN IF NOT EXISTS category VARCHAR(50) DEFAULT 'general';
-
       -- Создание индексов для производительности
       CREATE INDEX IF NOT EXISTS idx_posts_user_id ON posts(user_id);
       CREATE INDEX IF NOT EXISTS idx_posts_category ON posts(category);
@@ -189,12 +193,6 @@ async function initializeDatabase() {
       CREATE INDEX IF NOT EXISTS idx_analytics_user_id ON analytics(user_id);
       CREATE INDEX IF NOT EXISTS idx_analytics_event_type ON analytics(event_type);
       CREATE INDEX IF NOT EXISTS idx_analytics_created_at ON analytics(created_at);
-
-      -- Гарантируем наличие новых полей в notifications
-      ALTER TABLE notifications ADD COLUMN IF NOT EXISTS is_delivered BOOLEAN NOT NULL DEFAULT FALSE;
-      ALTER TABLE notifications ADD COLUMN IF NOT EXISTS delivered_at TIMESTAMP;
-      ALTER TABLE notifications ADD COLUMN IF NOT EXISTS read_at TIMESTAMP;
-      ALTER TABLE notifications ADD COLUMN IF NOT EXISTS type VARCHAR(32) NOT NULL DEFAULT 'message';
     `;
 
     // Выполняем SQL
