@@ -50,6 +50,26 @@ async function initializeDatabase() {
     await pool.query("ALTER TABLE notifications ADD COLUMN IF NOT EXISTS delivered_at TIMESTAMP;");
     await pool.query("ALTER TABLE notifications ADD COLUMN IF NOT EXISTS read_at TIMESTAMP;");
     await pool.query("ALTER TABLE notifications ADD COLUMN IF NOT EXISTS type VARCHAR(32) NOT NULL DEFAULT 'message';");
+    await pool.query("ALTER TABLE messages ADD COLUMN IF NOT EXISTS receiver_id INTEGER;");
+    await pool.query("ALTER TABLE messages ADD COLUMN IF NOT EXISTS message_type VARCHAR(20) DEFAULT 'text';");
+    await pool.query("ALTER TABLE messages ADD COLUMN IF NOT EXISTS media_url TEXT;");
+    await pool.query("ALTER TABLE messages ADD COLUMN IF NOT EXISTS is_read BOOLEAN DEFAULT FALSE;");
+    await pool.query("ALTER TABLE messages ADD COLUMN IF NOT EXISTS read_at TIMESTAMP;");
+    await pool.query("ALTER TABLE messages ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;");
+    await pool.query("ALTER TABLE comments ADD COLUMN IF NOT EXISTS parent_id INTEGER;");
+    await pool.query("ALTER TABLE comments ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;");
+    await pool.query("ALTER TABLE comments ADD COLUMN IF NOT EXISTS likes_count INTEGER DEFAULT 0;");
+    await pool.query("ALTER TABLE reactions ADD COLUMN IF NOT EXISTS comment_id INTEGER;");
+    await pool.query("ALTER TABLE reactions ADD COLUMN IF NOT EXISTS reaction_type VARCHAR(20);");
+    await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS role VARCHAR(20) DEFAULT 'member';");
+    await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url TEXT;");
+    await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS bio TEXT;");
+    await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS first_name VARCHAR(50);");
+    await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS last_name VARCHAR(50);");
+    await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS auth_method VARCHAR(20) DEFAULT 'local';");
+    await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT TRUE;");
+    await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login TIMESTAMP;");
+    await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;");
 
     // SQL для создания всех таблиц с правильной структурой
     const initSQL = `
