@@ -46,7 +46,17 @@ async function initDatabase() {
     
     // Читаем SQL файл с схемой базы данных
     const sqlPath = path.join(__dirname, '..', 'setup_database.sql');
-    const sqlContent = fs.readFileSync(sqlPath, 'utf8');
+    // Альтернативный путь для Render.com
+    const alternativePath = path.join(__dirname, 'setup_database.sql');
+    
+    let sqlContent;
+    if (fs.existsSync(sqlPath)) {
+      sqlContent = fs.readFileSync(sqlPath, 'utf8');
+    } else if (fs.existsSync(alternativePath)) {
+      sqlContent = fs.readFileSync(alternativePath, 'utf8');
+    } else {
+      throw new Error('SQL файл не найден. Проверьте пути: ' + sqlPath + ' или ' + alternativePath);
+    }
     
     // Выполняем SQL команды
     await pool.query(sqlContent);
