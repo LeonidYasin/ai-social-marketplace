@@ -1,6 +1,7 @@
 const { query } = require('../utils/db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const adminPasswordUtils = require('../utils/adminPassword');
 
 // Функция для создания JWT токена
 const createToken = (user) => {
@@ -286,6 +287,41 @@ const changeUserRole = async (req, res) => {
   }
 };
 
+// Смена роли на admin по admin-паролю
+const becomeAdmin = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { adminPassword } = req.body;
+    const userId = req.user.id;
+
+    if (!adminPassword) {
+      return res.status(400).json({ error: 'Не указан пароль администратора' });
+    }
+    if (userId.toString() !== id.toString()) {
+      return res.status(403).json({ error: 'Можно сменить роль только себе' });
+    }
+    const isValid = await adminPasswordUtils.checkAdminPassword(adminPassword);
+    if (!isValid) {
+      return res.status(401).json({ error: 'Неверный пароль администратора' });
+    }
+    // Меняем роль на admin
+    const result = await query(
+      'UPDATE users SET role = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING id, username, role',
+      ['admin', id]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.json({
+      message: 'Теперь вы администратор',
+      user: result.rows[0]
+    });
+  } catch (error) {
+    console.error('Error becoming admin:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 module.exports = {
   getUsers,
   getUserById,
@@ -295,5 +331,6 @@ module.exports = {
   updateProfile,
   updateCurrentUserProfile,
   deleteUser,
-  changeUserRole
+  changeUserRole,
+  becomeAdmin
 }; 

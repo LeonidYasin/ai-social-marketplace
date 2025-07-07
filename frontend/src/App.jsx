@@ -12,6 +12,7 @@ import NotificationsManager from './components/Notifications';
 import Gamification from './components/Gamification';
 import UserSettings from './components/UserSettings';
 import OAuthSuccess from './components/OAuthSuccess';
+import AdminPanel from './components/AdminPanel';
 import { facebookTheme, neonTheme } from './config/themes';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -43,6 +44,7 @@ const App = ({ themeMode, onThemeToggle }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [adminPanelOpen, setAdminPanelOpen] = useState(false);
   const [themeName, setThemeName] = React.useState(() => localStorage.getItem('theme') || 'facebook');
   const theme = themeName === 'neon' ? neonTheme : facebookTheme;
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -496,6 +498,7 @@ const App = ({ themeMode, onThemeToggle }) => {
                 onNotificationsOpen={() => setNotificationsOpen(true)} 
                 onGamificationOpen={() => setGamificationOpen(true)} 
                 onUserSettingsOpen={() => setSettingsOpen(true)}
+                onAdminPanelOpen={() => setAdminPanelOpen(true)}
                 currentUser={currentUser}
                 themeName={themeName}
                 setThemeName={setThemeName}
@@ -592,6 +595,12 @@ const App = ({ themeMode, onThemeToggle }) => {
                   setTimeout(() => fetchUsers(), 1000);
                 }}
                 posts={feedData.posts}
+              />
+              
+              {/* Админская панель */}
+              <AdminPanel
+                open={adminPanelOpen}
+                onClose={() => setAdminPanelOpen(false)}
               />
             </Box>
           } />

@@ -18,6 +18,7 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import NightlightIcon from '@mui/icons-material/Nightlight';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import SearchDialog from './Search';
 import NotificationsManager from './Notifications';
 import MessageNotifications from './MessageNotifications';
@@ -49,7 +50,7 @@ const notifications = [
   { id: 3, text: 'Появился новый пост в "Продам"' },
 ];
 
-const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGamificationOpen, onUserSettingsOpen, currentUser, themeName, setThemeName, onDebugUsers, socket }) => {
+const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGamificationOpen, onUserSettingsOpen, onAdminPanelOpen, currentUser, themeName, setThemeName, onDebugUsers, socket }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [active, setActive] = useState('home');
@@ -172,6 +173,11 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
             <IconButton color="inherit" onClick={handleThemeMenu}>
               <LightModeIcon sx={{ display: themeName === 'facebook' ? 'inline' : 'none' }} />
               <NightlightIcon sx={{ display: themeName === 'neon' ? 'inline' : 'none' }} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Админская панель">
+            <IconButton color="default" onClick={onAdminPanelOpen}>
+              <AdminPanelSettingsIcon />
             </IconButton>
           </Tooltip>
           <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>

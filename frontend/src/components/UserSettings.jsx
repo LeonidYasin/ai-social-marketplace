@@ -194,6 +194,16 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [] }) => {
   const [deleteUserId, setDeleteUserId] = useState(null);
   const [deleteError, setDeleteError] = useState('');
 
+  // Новые состояния для получения роли admin
+  const [adminPassword, setAdminPassword] = useState('');
+  const [adminError, setAdminError] = useState('');
+  const [adminLoading, setAdminLoading] = useState(false);
+
+  // Смена admin-пароля
+  const [changePwd, setChangePwd] = useState({ old: '', new1: '', new2: '' });
+  const [changePwdMsg, setChangePwdMsg] = useState('');
+  const [changePwdLoading, setChangePwdLoading] = useState(false);
+
   // Функция для получения значения из куков
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
@@ -1288,6 +1298,79 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [] }) => {
     </Box>
   );
 
+  // Смена admin-пароля
+  const renderChangeAdminPassword = () => (
+    <Box sx={{ mt: 2, mb: 2, p: 2, bgcolor: '#e6f7ff', borderRadius: 2, border: '1px solid #91d5ff' }}>
+      <Typography variant="h6" sx={{ mb: 1 }}>Сменить пароль администратора</Typography>
+      <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+        <TextField
+          type="password"
+          label="Старый пароль"
+          value={changePwd.old}
+          onChange={e => setChangePwd({ ...changePwd, old: e.target.value })}
+          size="small"
+        />
+        <TextField
+          type="password"
+          label="Новый пароль"
+          value={changePwd.new1}
+          onChange={e => setChangePwd({ ...changePwd, new1: e.target.value })}
+          size="small"
+        />
+        <TextField
+          type="password"
+          label="Повторите новый пароль"
+          value={changePwd.new2}
+          onChange={e => setChangePwd({ ...changePwd, new2: e.target.value })}
+          size="small"
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          disabled={changePwdLoading || !changePwd.old || !changePwd.new1 || changePwd.new1 !== changePwd.new2}
+          onClick={async () => {
+            setChangePwdLoading(true);
+            setChangePwdMsg('');
+            try {
+              const res = await fetch('/api/admin/change-admin-password', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                },
+                body: JSON.stringify({ oldPassword: changePwd.old, newPassword: changePwd.new1 })
+              });
+              const data = await res.json();
+              if (res.ok) {
+                setChangePwd({ old: '', new1: '', new2: '' });
+                setChangePwdMsg('Пароль успешно изменён!');
+              } else {
+                setChangePwdMsg(data.error || data.message || 'Ошибка');
+              }
+            } catch (e) {
+              setChangePwdMsg('Ошибка запроса: ' + e.message);
+            } finally {
+              setChangePwdLoading(false);
+            }
+          }}
+        >
+          {changePwdLoading ? 'Смена...' : 'Сменить пароль'}
+        </Button>
+      </Box>
+      {changePwdMsg && <Typography color={changePwdMsg.includes('успешно') ? 'primary' : 'error'} sx={{ mt: 1 }}>{changePwdMsg}</Typography>}
+    </Box>
+  );
+
+  // Вкладка администрирования
+  const renderAdminTab = () => (
+    <Box>
+      <Typography variant="h6" sx={{ mb: 2 }}>Администрирование</Typography>
+      <Typography variant="body2" sx={{ mb: 2 }}>Здесь доступны функции для администраторов системы.</Typography>
+      {renderChangeAdminPassword()}
+      {/* Здесь могут быть другие админские функции */}
+    </Box>
+  );
+
   // Рендер экрана аутентификации
   const renderAuthScreen = () => (
     <>
@@ -1400,12 +1483,9 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [] }) => {
         {tab === 3 && renderFiltersTab()}
         {tab === 4 && renderGamificationTab()}
         {tab === 5 && renderAdminUsersTab()}
-        {tab === 6 && currentUser?.role === 'admin' && (
-          <Box>
-            <Typography variant="h6" sx={{ mb: 2 }}>Администрирование</Typography>
-            <Typography variant="body2">Здесь будут настройки для администраторов системы.</Typography>
-          </Box>
-        )}
+        {tab === 6 && currentUser?.role === 'admin' && renderAdminTab()}
+        {/* Если не админ — показать форму стать админом */}
+        {currentUser?.role !== 'admin' && renderChangeAdminPassword()}
       </DialogContent>
       
       {/* Диалог подтверждения выхода */}

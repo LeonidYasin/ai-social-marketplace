@@ -67,6 +67,7 @@ const messagesRouter = require('./routes/messages');
 const notificationsRouter = require('./routes/notifications');
 const logsRouter = require('./routes/logs');
 const placeholderRouter = require('./routes/placeholder');
+const adminRouter = require('./routes/admin');
 
 // Startup messages and environment variables — explicitly to console
 logger.startup('Environment variables loaded:');
@@ -358,6 +359,7 @@ app.use('/api/messages', messagesRouter);
 app.use('/api/notifications', notificationsRouter);
 app.use('/api/logs', logsRouter);
 app.use('/api/placeholder', placeholderRouter);
+app.use('/api/admin', adminRouter);
 
 // Test route
 app.get('/api/test', (req, res) => {
