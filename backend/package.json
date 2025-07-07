@@ -10,7 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "init-db": "node init-db.js",
     "health-check": "node health-check.js",
-    "test-db": "node test-db-connection.js"
+    "test-db": "node test-db-connection.js",
+    "test-server": "node simple-test.js"
   },
   "keywords": [
     "social",
