@@ -45,8 +45,8 @@ git push origin main
 4. **Настройте параметры:**
    - **Protocol:** UDP
    - **Host:** ваш-домен.onrender.com (например: `social-marketplace-backend.onrender.com`)
-   - **Port:** 514
-   - **Log Endpoint:** ваш-домен.onrender.com:514 (например: `social-marketplace-backend.onrender.com:514`)
+   - **Port:** 10000
+   - **Log Endpoint:** ваш-домен.onrender.com:10000 (например: `social-marketplace-backend.onrender.com:10000`)
 
 **Или используйте автоматический скрипт:**
 ```bash

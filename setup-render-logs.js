@@ -3,7 +3,7 @@ const axios = require('axios');
 class RenderLogsSetup {
   constructor(serviceUrl) {
     this.serviceUrl = serviceUrl;
-    this.syslogEndpoint = `${serviceUrl}:514`;
+    this.syslogEndpoint = `${serviceUrl}:10000`;
   }
 
   async checkSyslogStatus() {
@@ -27,7 +27,7 @@ class RenderLogsSetup {
       
       return new Promise((resolve) => {
         const host = this.serviceUrl.replace('https://', '').replace('http://', '').split(':')[0];
-        client.send(testMessage, 514, host, (err) => {
+        client.send(testMessage, 10000, host, (err) => {
           client.close();
           if (err) {
             console.error('❌ Ошибка отправки тестового сообщения:', err.message);
@@ -54,9 +54,9 @@ class RenderLogsSetup {
     console.log('5. Настройте параметры:');
     console.log(`   - Protocol: UDP`);
     console.log(`   - Host: ${this.serviceUrl.replace('https://', '').replace('http://', '')}`);
-    console.log(`   - Port: 514`);
+    console.log(`   - Port: 10000`);
     const host = this.serviceUrl.replace('https://', '').replace('http://', '').split(':')[0];
-    console.log(`   - Log Endpoint: ${host}:514`);
+    console.log(`   - Log Endpoint: ${host}:10000`);
     console.log('\n6. Сохраните настройки');
     console.log('\n7. Проверьте работу:');
     console.log(`   curl ${this.serviceUrl}/api/syslog/status`);
