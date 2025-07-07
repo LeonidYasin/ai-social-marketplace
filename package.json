@@ -17,7 +17,11 @@
     "monitor:test": "node test_monitor.js test",
     "start:backend": "cd backend && npm start",
     "start:frontend": "cd frontend && npm start",
-    "start:all": "npm run start:backend && npm run start:frontend"
+    "start:all": "npm run start:backend && npm run start:frontend",
+    "start-backend": "dotenv -e backend/config.env -- node backend/src/app.js",
+    "start-frontend": "dotenv -e frontend/env.example -- npm --prefix frontend start",
+    "test-db-init": "dotenv -e backend/config.env -- node backend/test-db-init.js",
+    "start-frontend-safe": "npx kill-port 3000 && npm run start-frontend"
   },
   "repository": {
     "type": "git",
@@ -39,6 +43,7 @@
     "fs-extra": "^11.3.0",
     "helmet": "^8.1.0",
     "iconv-lite": "^0.6.3",
+    "jimp": "^0.22.12",
     "multer": "^2.0.1",
     "node-fetch": "^2.7.0",
     "node-tesseract-ocr": "^2.2.1",
@@ -51,5 +56,9 @@
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
     "tesseract.js": "^6.0.1"
+  },
+  "devDependencies": {
+    "dotenv-cli": "7.4.4",
+    "kill-port": "^2.0.1"
   }
 }
