@@ -161,33 +161,48 @@ const syslogRouter = loadRoute('./routes/syslog', 'syslog');
 const app = express();
 const server = http.createServer(app);
 
-// Initialize syslog server
+// Initialize syslog servers (UDP and TCP)
 let syslogServer = null;
+let tcpSyslogServer = null;
 try {
   const SyslogServer = require('./utils/syslogServer');
-  // Use SYSLOG_PORT environment variable or the same port as main server
-  const syslogPort = process.env.SYSLOG_PORT || PORT;
+  const TCPSyslogServer = require('./utils/tcpSyslogServer');
+  
+  const udpSyslogPort = process.env.SYSLOG_UDP_PORT || 5514;
+  const tcpSyslogPort = process.env.SYSLOG_TCP_PORT || 5514;
   
   if (process.env.ENABLE_SYSLOG === 'true') {
-    syslogServer = new SyslogServer(syslogPort, logger);
+    // UDP syslog
+    syslogServer = new SyslogServer(udpSyslogPort, logger);
     app.locals.syslogServer = syslogServer;
-    
-    // Start syslog server
     syslogServer.start()
       .then(() => {
-        startupLog(`Syslog server started on port ${syslogPort}`);
-        logger.startup(`Syslog server started on port ${syslogPort}`);
+        startupLog(`UDP Syslog server started on port ${udpSyslogPort}`);
+        logger.startup(`UDP Syslog server started on port ${udpSyslogPort}`);
       })
       .catch((error) => {
-        startupLogger.error(`Failed to start syslog server: ${error.message}`);
-        logger.error(`Failed to start syslog server: ${error.message}`);
+        startupLogger.error(`Failed to start UDP syslog server: ${error.message}`);
+        logger.error(`Failed to start UDP syslog server: ${error.message}`);
+      });
+    
+    // TCP syslog
+    tcpSyslogServer = new TCPSyslogServer(tcpSyslogPort, logger);
+    app.locals.tcpSyslogServer = tcpSyslogServer;
+    tcpSyslogServer.start()
+      .then(() => {
+        startupLog(`TCP Syslog server started on port ${tcpSyslogPort}`);
+        logger.startup(`TCP Syslog server started on port ${tcpSyslogPort}`);
+      })
+      .catch((error) => {
+        startupLogger.error(`Failed to start TCP syslog server: ${error.message}`);
+        logger.error(`Failed to start TCP syslog server: ${error.message}`);
       });
   } else {
-    startupLog('Syslog server disabled (ENABLE_SYSLOG not set to true)');
+    startupLog('Syslog servers disabled (ENABLE_SYSLOG not set to true)');
   }
 } catch (error) {
-  startupLogger.error(`Failed to initialize syslog server: ${error.message}`);
-  logger.error(`Failed to initialize syslog server: ${error.message}`);
+  startupLogger.error(`Failed to initialize syslog servers: ${error.message}`);
+  logger.error(`Failed to initialize syslog servers: ${error.message}`);
 }
 
 // Try to initialize socket.io, but don't fail if it doesn't work
@@ -651,10 +666,15 @@ process.on('SIGTERM', async () => {
   try {
     startupLog('Received SIGTERM, shutting down gracefully...');
     
-    // Stop syslog server if running
+    // Stop syslog servers if running
     if (syslogServer && syslogServer.isRunning) {
       await syslogServer.stop();
-      startupLog('Syslog server stopped');
+      startupLog('UDP Syslog server stopped');
+    }
+    
+    if (tcpSyslogServer && tcpSyslogServer.isRunning) {
+      await tcpSyslogServer.stop();
+      startupLog('TCP Syslog server stopped');
     }
     
     // Close server
@@ -672,10 +692,15 @@ process.on('SIGINT', async () => {
   try {
     startupLog('Received SIGINT, shutting down gracefully...');
     
-    // Stop syslog server if running
+    // Stop syslog servers if running
     if (syslogServer && syslogServer.isRunning) {
       await syslogServer.stop();
-      startupLog('Syslog server stopped');
+      startupLog('UDP Syslog server stopped');
+    }
+    
+    if (tcpSyslogServer && tcpSyslogServer.isRunning) {
+      await tcpSyslogServer.stop();
+      startupLog('TCP Syslog server stopped');
     }
     
     // Close server
