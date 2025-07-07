@@ -14,7 +14,7 @@ const testMessages = [
 ];
 
 const host = 'localhost';
-const port = 10000;
+const port = 8000;
 
 console.log(`Testing syslog server at ${host}:${port}`);
 

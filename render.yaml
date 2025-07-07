@@ -12,7 +12,7 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: BACKEND_PORT
+      - key: PORT
         value: 8000
       - key: DATABASE_URL
         fromDatabase:
@@ -30,13 +30,13 @@ services:
       - key: ENABLE_SYSLOG
         value: true
       - key: SYSLOG_PORT
-        value: 10000
+        value: 8000
       - key: SYSLOG_HOST
         value: 0.0.0.0
       - key: RENDER_SYSLOG_ENABLED
         value: true
       - key: RENDER_SYSLOG_ENDPOINT
-        value: ${RENDER_SERVICE_URL}:10000
+        value: ${RENDER_SERVICE_URL}:8000
       - key: RENDER_SERVICE_URL
         fromService:
           name: social-marketplace-api

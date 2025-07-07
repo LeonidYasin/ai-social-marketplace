@@ -164,7 +164,7 @@ const server = http.createServer(app);
 let syslogServer = null;
 try {
   const SyslogServer = require('./utils/syslogServer');
-  const syslogPort = parseInt(process.env.SYSLOG_PORT) || 514;
+  const syslogPort = parseInt(process.env.SYSLOG_PORT) || PORT; // Use same port as backend
   
   if (process.env.ENABLE_SYSLOG === 'true') {
     syslogServer = new SyslogServer(syslogPort, logger);
@@ -563,7 +563,7 @@ app.use('*', (req, res) => {
   });
 });
 
-const PORT = process.env.BACKEND_PORT || process.env.PORT || 8000;
+const PORT = process.env.PORT || 8000;
 const HOST = process.env.HOST || 'localhost';
 
 // Get IP addresses for display
