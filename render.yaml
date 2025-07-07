@@ -30,11 +30,12 @@ services:
     runtime: static
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: ./frontend/build
-    envVars:
-      - key: REACT_APP_API_URL
-        value: https://social-marketplace-api.onrender.com
-      - key: REACT_APP_WS_URL
-        value: wss://social-marketplace-api.onrender.com
+    # Environment variables are optional - the app will auto-detect URLs
+    # envVars:
+    #   - key: REACT_APP_API_URL
+    #     value: https://social-marketplace-api.onrender.com
+    #   - key: REACT_APP_WS_URL
+    #     value: wss://social-marketplace-api.onrender.com
 
 databases:
   # PostgreSQL Database (Free)
