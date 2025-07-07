@@ -26,6 +26,27 @@ services:
         sync: false
       - key: TELEGRAM_BOT_TOKEN
         sync: false
+      # Syslog Server Configuration
+      - key: ENABLE_SYSLOG
+        value: true
+      - key: SYSLOG_PORT
+        value: 514
+      - key: SYSLOG_HOST
+        value: 0.0.0.0
+      - key: RENDER_SYSLOG_ENABLED
+        value: true
+      - key: RENDER_SYSLOG_ENDPOINT
+        value: ${RENDER_SERVICE_URL}:514
+      - key: RENDER_SERVICE_URL
+        fromService:
+          name: social-marketplace-api
+          type: web
+          property: url
+    # Disk for logs storage
+    disk:
+      name: logs-disk
+      mountPath: /opt/render/project/src/backend/logs
+      sizeGB: 1
 
   # Frontend Static Site (Free)
   - type: web

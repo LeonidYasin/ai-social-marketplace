@@ -36,7 +36,8 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",
     "pg": "^8.11.3",
-    "socket.io": "^4.8.1"
+    "socket.io": "^4.8.1",
+    "dgram": "^1.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

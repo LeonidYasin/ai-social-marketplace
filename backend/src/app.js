@@ -146,9 +146,38 @@ const notificationsRouter = loadRoute('./routes/notifications', 'notifications')
 const logsRouter = loadRoute('./routes/logs', 'logs');
 const placeholderRouter = loadRoute('./routes/placeholder', 'placeholder');
 const adminRouter = loadRoute('./routes/admin', 'admin');
+const syslogRouter = loadRoute('./routes/syslog', 'syslog');
 
 const app = express();
 const server = http.createServer(app);
+
+// Initialize syslog server
+let syslogServer = null;
+try {
+  const SyslogServer = require('./utils/syslogServer');
+  const syslogPort = parseInt(process.env.SYSLOG_PORT) || 514;
+  
+  if (process.env.ENABLE_SYSLOG === 'true') {
+    syslogServer = new SyslogServer(syslogPort, logger);
+    app.locals.syslogServer = syslogServer;
+    
+    // Start syslog server
+    syslogServer.start()
+      .then(() => {
+        startupLog(`Syslog server started on port ${syslogPort}`);
+        logger.startup(`Syslog server started on port ${syslogPort}`);
+      })
+      .catch((error) => {
+        startupLogger.error(`Failed to start syslog server: ${error.message}`);
+        logger.error(`Failed to start syslog server: ${error.message}`);
+      });
+  } else {
+    startupLog('Syslog server disabled (ENABLE_SYSLOG not set to true)');
+  }
+} catch (error) {
+  startupLogger.error(`Failed to initialize syslog server: ${error.message}`);
+  logger.error(`Failed to initialize syslog server: ${error.message}`);
+}
 
 // Try to initialize socket.io, but don't fail if it doesn't work
 let io;
@@ -461,6 +490,7 @@ app.use('/api/notifications', notificationsRouter);
 app.use('/api/logs', logsRouter);
 app.use('/api/placeholder', placeholderRouter);
 app.use('/api/admin', adminRouter);
+app.use('/api/syslog', syslogRouter);
 
 // Test route
 app.get('/api/test', (req, res) => {
@@ -604,4 +634,47 @@ server.on('error', (error) => {
     originalConsoleError(error.stack);
   }
   process.exit(1);
+});
+
+// Graceful shutdown handling
+process.on('SIGTERM', async () => {
+  try {
+    startupLog('Received SIGTERM, shutting down gracefully...');
+    
+    // Stop syslog server if running
+    if (syslogServer && syslogServer.isRunning) {
+      await syslogServer.stop();
+      startupLog('Syslog server stopped');
+    }
+    
+    // Close server
+    server.close(() => {
+      startupLog('Server closed');
+      process.exit(0);
+    });
+  } catch (error) {
+    startupLogger.error(`Error during graceful shutdown: ${error.message}`);
+    process.exit(1);
+  }
+});
+
+process.on('SIGINT', async () => {
+  try {
+    startupLog('Received SIGINT, shutting down gracefully...');
+    
+    // Stop syslog server if running
+    if (syslogServer && syslogServer.isRunning) {
+      await syslogServer.stop();
+      startupLog('Syslog server stopped');
+    }
+    
+    // Close server
+    server.close(() => {
+      startupLog('Server closed');
+      process.exit(0);
+    });
+  } catch (error) {
+    startupLogger.error(`Error during graceful shutdown: ${error.message}`);
+    process.exit(1);
+  }
 }); 
