@@ -62,6 +62,8 @@ function MainLayout({
   setSettingsOpen,
   adminPanelOpen,
   setAdminPanelOpen,
+  setCurrentUser,
+  fetchUsers,
 }) {
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: theme => theme.palette.background.default }}>
@@ -221,6 +223,8 @@ const AppWithRouter = (props) => {
           setSettingsOpen={props.setSettingsOpen}
           adminPanelOpen={props.adminPanelOpen}
           setAdminPanelOpen={props.setAdminPanelOpen}
+          setCurrentUser={props.setCurrentUser}
+          fetchUsers={props.fetchUsers}
         />
       }>
         <Route index element={<Feed
@@ -693,6 +697,8 @@ const App = ({ themeMode, onThemeToggle }) => {
         setSettingsOpen={setSettingsOpen}
         adminPanelOpen={adminPanelOpen}
         setAdminPanelOpen={setAdminPanelOpen}
+        setCurrentUser={setCurrentUser}
+        fetchUsers={fetchUsers}
       />
     </ThemeProvider>
   );
