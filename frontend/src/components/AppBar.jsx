@@ -50,7 +50,7 @@ const notifications = [
   { id: 3, text: 'Появился новый пост в "Продам"' },
 ];
 
-const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGamificationOpen, onUserSettingsOpen, onAdminPanelOpen, currentUser, themeName, setThemeName, onDebugUsers, socket }) => {
+const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGamificationOpen, onUserSettingsOpen, onAdminPanelOpen, currentUser, themeName, setThemeName, onDebugUsers, socket, setLeftSidebarOpen, setRightSidebarOpen }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [active, setActive] = useState('home');
@@ -97,6 +97,12 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
   return (
     <AppBar position="fixed" color="default" elevation={1} sx={{ zIndex: 1201 }}>
       <Toolbar sx={{ minHeight: 64, justifyContent: 'space-between', px: isMobile ? 1 : 2, position: 'relative' }}>
+        {/* Кнопка открытия левого сайдбара на мобильных */}
+        {isMobile && setLeftSidebarOpen && (
+          <IconButton onClick={() => setLeftSidebarOpen(true)} sx={{ mr: 1 }}>
+            <MenuIcon />
+          </IconButton>
+        )}
         <Box sx={{ fontWeight: 700, fontSize: 24, color: 'primary.main', letterSpacing: 1, zIndex: 2 }}>
           M
         </Box>
@@ -200,6 +206,12 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
               )}
             </IconButton>
           </Tooltip>
+          {/* Кнопка открытия правого сайдбара на мобильных */}
+          {isMobile && setRightSidebarOpen && (
+            <IconButton onClick={() => setRightSidebarOpen(true)} sx={{ ml: 1 }}>
+              <ChevronRightIcon />
+            </IconButton>
+          )}
         </Stack>
       </Toolbar>
     </AppBar>

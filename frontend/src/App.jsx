@@ -19,7 +19,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { v4 as uuidv4 } from 'uuid';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate, Outlet } from 'react-router-dom';
 import { authAPI } from './services/api';
 import API_CONFIG from './config/api';
 import Chat from './components/Chat';
@@ -30,6 +30,131 @@ import CreatePostPage from './components/CreatePostPage';
 //   { id: 'anna', name: 'Анна', isAI: false },
 //   { id: 'ivan', name: 'Иван', isAI: false },
 // ];
+
+function MainLayout({
+  chatList,
+  openChat,
+  searchChat,
+  setSearchChat,
+  leftSidebarOpen,
+  setLeftSidebarOpen,
+  rightSidebarOpen,
+  setRightSidebarOpen,
+  isMobile,
+  allUsers,
+  loadingUsers,
+  currentUser,
+  themeName,
+  setThemeName,
+  debugUsers,
+  socket,
+  feedData,
+  setFeedData,
+  analyticsOpen,
+  setAnalyticsOpen,
+  searchOpen,
+  setSearchOpen,
+  notificationsOpen,
+  setNotificationsOpen,
+  gamificationOpen,
+  setGamificationOpen,
+  settingsOpen,
+  setSettingsOpen,
+  adminPanelOpen,
+  setAdminPanelOpen,
+}) {
+  return (
+    <Box sx={{ minHeight: '100vh', bgcolor: theme => theme.palette.background.default }}>
+      <AppBarMain
+        onAnalyticsOpen={() => setAnalyticsOpen(true)}
+        onSearchOpen={() => setSearchOpen(true)}
+        onNotificationsOpen={() => setNotificationsOpen(true)}
+        onGamificationOpen={() => setGamificationOpen(true)}
+        onUserSettingsOpen={() => setSettingsOpen(true)}
+        onAdminPanelOpen={() => setAdminPanelOpen(true)}
+        currentUser={currentUser}
+        themeName={themeName}
+        setThemeName={setThemeName}
+        onDebugUsers={debugUsers}
+        socket={socket}
+        setLeftSidebarOpen={setLeftSidebarOpen}
+        setRightSidebarOpen={setRightSidebarOpen}
+      />
+      <Box sx={{ display: 'flex' }}>
+        <SidebarLeft
+          chatList={chatList}
+          onChatClick={openChat}
+          searchChat={searchChat}
+          setSearchChat={setSearchChat}
+          open={leftSidebarOpen}
+          onClose={() => setLeftSidebarOpen(false)}
+          variant={isMobile ? 'temporary' : 'permanent'}
+        />
+        <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8, mb: 2, position: 'relative' }}>
+          <Outlet />
+        </Box>
+        <SidebarRight
+          users={allUsers}
+          onUserClick={openChat}
+          open={rightSidebarOpen}
+          onClose={() => setRightSidebarOpen(false)}
+          variant={isMobile ? 'temporary' : 'permanent'}
+          loading={loadingUsers}
+        />
+      </Box>
+      {/* Аналитика */}
+      <Analytics
+        open={analyticsOpen}
+        onClose={() => setAnalyticsOpen(false)}
+        posts={feedData.posts}
+        userReactions={feedData.userReactions}
+        comments={feedData.comments}
+      />
+      {/* Поиск */}
+      <SearchDialog
+        open={searchOpen}
+        onClose={() => setSearchOpen(false)}
+        onSearchResult={(results) => {
+          console.log('Search results:', results);
+        }}
+      />
+      {/* Уведомления */}
+      <NotificationsManager
+        open={notificationsOpen}
+        onClose={() => setNotificationsOpen(false)}
+        currentUser={currentUser}
+      />
+      {/* Гамификация */}
+      <Gamification
+        open={gamificationOpen}
+        onClose={() => setGamificationOpen(false)}
+        userStats={{
+          totalPosts: feedData.posts?.length || 0,
+          totalReactions: Object.values(feedData.userReactions || {}).filter(r => r).length,
+          totalComments: Object.values(feedData.comments || {}).flat().length,
+          totalXP: 450,
+          totalViews: 1234,
+          soldItems: 2,
+        }}
+      />
+      {/* Настройки пользователя и mock-логин */}
+      <UserSettings
+        open={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        onUserChange={(user) => {
+          setCurrentUser(user);
+          setTimeout(() => fetchUsers(), 1000);
+        }}
+        posts={feedData.posts}
+      />
+      {/* Админская панель */}
+      <AdminPanel
+        open={adminPanelOpen}
+        onClose={() => setAdminPanelOpen(false)}
+      />
+    </Box>
+  );
+}
 
 const App = ({ themeMode, onThemeToggle }) => {
   // Чаты: { userId, messages: [{text, isUser, timestamp}] }
@@ -488,112 +613,50 @@ const App = ({ themeMode, onThemeToggle }) => {
           <Route path="/oauth-success" element={<OAuthSuccess />} />
           <Route path="/post/new" element={<CreatePostPage currentUser={currentUser} />} />
           <Route path="/" element={
-            <Box sx={{ minHeight: '100vh', bgcolor: theme => theme.palette.background.default }}>
-              {/* Всегда показываем верхнюю панель */}
-              <AppBarMain 
-                onAnalyticsOpen={() => setAnalyticsOpen(true)} 
-                onSearchOpen={() => setSearchOpen(true)} 
-                onNotificationsOpen={() => setNotificationsOpen(true)} 
-                onGamificationOpen={() => setGamificationOpen(true)} 
-                onUserSettingsOpen={() => setSettingsOpen(true)}
-                onAdminPanelOpen={() => setAdminPanelOpen(true)}
-                currentUser={currentUser}
-                themeName={themeName}
-                setThemeName={setThemeName}
-                onDebugUsers={debugUsers}
-                socket={socket}
-              />
-              <Box sx={{ display: 'flex' }}>
-                <SidebarLeft
-                  chatList={chatList}
-                  onChatClick={openChat}
-                  searchChat={searchChat}
-                  setSearchChat={setSearchChat}
-                  open={leftSidebarOpen}
-                  onClose={() => setLeftSidebarOpen(false)}
-                  variant={isMobile ? 'temporary' : 'permanent'}
-                />
-                <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8, mb: 2, position: 'relative' }}>
-                  <Feed
-                    onDataUpdate={setFeedData} 
-                    currentUser={currentUser}
-                    isMobile={isMobile}
-                    leftSidebarOpen={leftSidebarOpen}
-                    setLeftSidebarOpen={setLeftSidebarOpen}
-                    rightSidebarOpen={rightSidebarOpen}
-                    setRightSidebarOpen={setRightSidebarOpen}
-                  />
-                  <Route path="/chat/:id" element={<Chat currentUser={currentUser} />} />
-                </Box>
-                <SidebarRight
-                  users={allUsers}
-                  onUserClick={openChat}
-                  open={rightSidebarOpen}
-                  onClose={() => setRightSidebarOpen(false)}
-                  variant={isMobile ? 'temporary' : 'permanent'}
-                  loading={loadingUsers}
-                />
-              </Box>
-              
-              {/* Аналитика */}
-              <Analytics
-                open={analyticsOpen}
-                onClose={() => setAnalyticsOpen(false)}
-                posts={feedData.posts}
-                userReactions={feedData.userReactions}
-                comments={feedData.comments}
-              />
-              
-              {/* Поиск */}
-              <SearchDialog
-                open={searchOpen}
-                onClose={() => setSearchOpen(false)}
-                onSearchResult={(results) => {
-                  console.log('Search results:', results);
-                  // TODO: Обработать результаты поиска
-                }}
-              />
-              
-              {/* Уведомления */}
-              <NotificationsManager
-                open={notificationsOpen}
-                onClose={() => setNotificationsOpen(false)}
-                currentUser={currentUser}
-              />
-              
-              {/* Гамификация */}
-              <Gamification
-                open={gamificationOpen}
-                onClose={() => setGamificationOpen(false)}
-                userStats={{
-                  totalPosts: feedData.posts?.length || 0,
-                  totalReactions: Object.values(feedData.userReactions || {}).filter(r => r).length,
-                  totalComments: Object.values(feedData.comments || {}).flat().length,
-                  totalXP: 450, // TODO: Рассчитывать на основе достижений
-                  totalViews: 1234, // TODO: Добавить просмотры
-                  soldItems: 2, // TODO: Добавить продажи
-                }}
-              />
-              
-              {/* Настройки пользователя и mock-логин */}
-              <UserSettings
-                open={settingsOpen}
-                onClose={() => setSettingsOpen(false)}
-                onUserChange={(user) => {
-                  setCurrentUser(user);
-                  // Обновляем список пользователей после изменения пользователя
-                  setTimeout(() => fetchUsers(), 1000);
-                }}
-                posts={feedData.posts}
-              />
-              
-              {/* Админская панель */}
-              <AdminPanel
-                open={adminPanelOpen}
-                onClose={() => setAdminPanelOpen(false)}
-              />
-            </Box>
-          } />
+            <MainLayout
+              chatList={chatList}
+              openChat={openChat}
+              searchChat={searchChat}
+              setSearchChat={setSearchChat}
+              leftSidebarOpen={leftSidebarOpen}
+              setLeftSidebarOpen={setLeftSidebarOpen}
+              rightSidebarOpen={rightSidebarOpen}
+              setRightSidebarOpen={setRightSidebarOpen}
+              isMobile={isMobile}
+              allUsers={allUsers}
+              loadingUsers={loadingUsers}
+              currentUser={currentUser}
+              themeName={themeName}
+              setThemeName={setThemeName}
+              debugUsers={debugUsers}
+              socket={socket}
+              feedData={feedData}
+              setFeedData={setFeedData}
+              analyticsOpen={analyticsOpen}
+              setAnalyticsOpen={setAnalyticsOpen}
+              searchOpen={searchOpen}
+              setSearchOpen={setSearchOpen}
+              notificationsOpen={notificationsOpen}
+              setNotificationsOpen={setNotificationsOpen}
+              gamificationOpen={gamificationOpen}
+              setGamificationOpen={setGamificationOpen}
+              settingsOpen={settingsOpen}
+              setSettingsOpen={setSettingsOpen}
+              adminPanelOpen={adminPanelOpen}
+              setAdminPanelOpen={setAdminPanelOpen}
+            />
+          }>
+            <Route index element={<Feed
+              onDataUpdate={setFeedData}
+              currentUser={currentUser}
+              isMobile={isMobile}
+              leftSidebarOpen={leftSidebarOpen}
+              setLeftSidebarOpen={setLeftSidebarOpen}
+              rightSidebarOpen={rightSidebarOpen}
+              setRightSidebarOpen={setRightSidebarOpen}
+            />} />
+            <Route path="chat/:id" element={<Chat currentUser={currentUser} />} />
+          </Route>
         </Routes>
       </Router>
     </ThemeProvider>
