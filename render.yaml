@@ -42,26 +42,16 @@ services:
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: ./frontend/build
     envVars:
-      - key: REACT_APP_API_HOST
+      - key: REACT_APP_API_URL
         fromService:
           name: social-marketplace-api
           type: web
-          property: host
-      - key: REACT_APP_API_PORT
+          property: url
+      - key: REACT_APP_WS_URL
         fromService:
           name: social-marketplace-api
           type: web
-          property: port
-      - key: REACT_APP_WS_HOST
-        fromService:
-          name: social-marketplace-api
-          type: web
-          property: host
-      - key: REACT_APP_WS_PORT
-        fromService:
-          name: social-marketplace-api
-          type: web
-          property: port
+          property: url
 
 databases:
   - name: social-marketplace-db
