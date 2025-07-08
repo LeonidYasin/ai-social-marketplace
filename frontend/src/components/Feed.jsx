@@ -22,6 +22,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import UserSettings from './UserSettings';
 import PostCard from './PostCard';
 import { postsAPI } from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
 const initialPosts = [
   { id: 1, text: 'Продаю iPhone 13', images: [], video: null, doc: null, bg: '', section: 'sell', privacy: 'all', reactions: { like: 3, love: 2, laugh: 1, wow: 0, sad: 0, angry: 0 } },
@@ -153,6 +154,7 @@ const Comment = ({ comment, onReply, onSendReply, replyValue, setReplyValue, dep
 const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSidebarOpen, rightSidebarOpen, setRightSidebarOpen }) => {
   const theme = useTheme();
   const isSmallMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const navigate = useNavigate();
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -990,182 +992,13 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
               fontSize: isMobile ? '0.875rem' : '1rem',
               py: isMobile ? 1 : 1.5,
             }}
-            onClick={() => setOpen(true)}
+            onClick={() => navigate('/post/new')}
           >
             {isMobile ? 'Что нового?' : 'Что у вас нового?'}
           </Button>
         </CardContent>
       </Card>
-      {/* Модальное окно создания поста с современным стилем */}
-      <Dialog 
-        open={open} 
-        onClose={() => setOpen(false)} 
-        maxWidth="sm" 
-        fullWidth
-        fullScreen={isSmallMobile}
-        PaperProps={{ 
-          sx: { 
-            borderRadius: isSmallMobile ? 0 : 3, 
-            boxShadow: 3, 
-            bgcolor: theme => theme.palette.background.paper,
-            height: isSmallMobile ? '100%' : 'auto',
-            border: theme => theme.palette.mode === 'dark' ? '1.5px solid #00ffe7' : 'none',
-          } 
-        }}
-      >
-        <DialogTitle sx={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'space-between',
-          pb: isSmallMobile ? 1 : 2,
-        }}>
-          <Stack direction="row" alignItems="center" gap={isMobile ? 1 : 2}>
-            <Avatar sx={{ bgcolor: 'primary.main', width: isMobile ? 36 : 44, height: isMobile ? 36 : 44 }}>
-              {currentUser?.name?.[0] || 'A'}
-            </Avatar>
-            <Typography variant={isMobile ? "subtitle1" : "h6"}>Создать пост</Typography>
-          </Stack>
-          <IconButton onClick={() => setOpen(false)}>
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent sx={{ pt: 0, pb: isSmallMobile ? 0 : 2 }}>
-          {/* Тело поста */}
-          <TextField
-            label="Текст поста"
-            multiline
-            fullWidth
-            minRows={isMobile ? 3 : 4}
-            value={text}
-            onChange={e => setText(e.target.value)}
-            sx={{ 
-              mb: isMobile ? 1.5 : 2, 
-              mt: 1, 
-              bgcolor: theme => theme.palette.background.default, 
-              borderRadius: 2, 
-              transition: 'background 0.3s' 
-            }}
-            InputProps={{ 
-              style: bg ? { 
-                background: bg, 
-                color: '#222', 
-                fontWeight: 600, 
-                fontSize: isMobile ? 18 : 20 
-              } : {} 
-            }}
-          />
-          {/* Панелька выбора фона */}
-          <Box sx={{ mb: isMobile ? 1.5 : 2 }}>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5, fontSize: isMobile ? '0.875rem' : '1rem' }}>
-              Фон публикации:
-            </Typography>
-            <Box sx={{ display: 'flex', gap: isMobile ? 0.5 : 1, flexWrap: 'wrap' }}>
-              {BG_COLORS.map((color, i) => (
-                <Box
-                  key={i}
-                  onClick={() => setBg(color)}
-                  sx={{
-                    width: isMobile ? 28 : 32,
-                    height: isMobile ? 28 : 32,
-                    borderRadius: '50%',
-                    bgcolor: color && !color.startsWith('linear') ? color : undefined,
-                    background: color && color.startsWith('linear') ? color : undefined,
-                    border: bg === color ? '2px solid #1976d2' : '2px solid #fff',
-                    boxShadow: bg === color ? 2 : 1,
-                    cursor: 'pointer',
-                    transition: 'transform 0.15s, box-shadow 0.15s',
-                    transform: bg === color ? 'scale(1.15)' : 'scale(1)',
-                    outline: 'none',
-                    '&:hover': {
-                      boxShadow: 4,
-                      transform: 'scale(1.15)',
-                    },
-                  }}
-                  title={color ? 'Выбрать фон' : 'Без фона'}
-                >
-                  {!color && (
-                    <Box sx={{ 
-                      width: isMobile ? 16 : 18, 
-                      height: isMobile ? 16 : 18, 
-                      borderRadius: '50%', 
-                      bgcolor: '#eee', 
-                      m: 'auto', 
-                      mt: isMobile ? '6px' : '7px' 
-                    }} />
-                  )}
-                </Box>
-              ))}
-            </Box>
-          </Box>
-          {/* Все настройки под полем поста */}
-          <Stack direction={isMobile ? "column" : "row"} spacing={isMobile ? 1 : 2} alignItems={isMobile ? "stretch" : "center"} sx={{ mb: isMobile ? 1.5 : 2 }}>
-            <FormControl sx={{ minWidth: isMobile ? '100%' : 120 }}>
-              <InputLabel sx={{ fontSize: isMobile ? '0.875rem' : '1rem' }}>Приватность</InputLabel>
-              <Select 
-                value={privacy} 
-                label="Приватность" 
-                onChange={e => setPrivacy(e.target.value)}
-                size={isMobile ? "small" : "medium"}
-              >
-                <MenuItem value="all">Все</MenuItem>
-                <MenuItem value="private">Только я</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl sx={{ minWidth: isMobile ? '100%' : 120 }}>
-              <InputLabel sx={{ fontSize: isMobile ? '0.875rem' : '1rem' }}>Раздел</InputLabel>
-              <Select 
-                value={section} 
-                label="Раздел" 
-                onChange={e => setSection(e.target.value)}
-                size={isMobile ? "small" : "medium"}
-              >
-                {SECTIONS.map(s => <MenuItem key={s.value} value={s.value}>{s.label}</MenuItem>)}
-              </Select>
-            </FormControl>
-          </Stack>
-          {/* Панелька дополнить публикацию */}
-          <Stack direction="row" spacing={isMobile ? 1 : 2} alignItems="center" sx={{ mb: isMobile ? 1.5 : 2, flexWrap: 'wrap' }}>
-            <Tooltip title="Добавить фото">
-              <IconButton component="label" size={isMobile ? "small" : "medium"}>
-                <PhotoCameraIcon color={images.length ? 'primary' : 'action'} />
-                <input type="file" hidden multiple accept="image/*" onChange={handleImageChange} />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Добавить видео">
-              <IconButton component="label" size={isMobile ? "small" : "medium"}>
-                <VideoLibraryIcon color={video ? 'primary' : 'action'} />
-                <input type="file" hidden accept="video/*" onChange={handleVideoChange} />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Добавить документ">
-              <IconButton component="label" size={isMobile ? "small" : "medium"}>
-                <InsertDriveFileIcon color={doc ? 'primary' : 'action'} />
-                <input type="file" hidden accept=".pdf,.doc,.docx,.txt" onChange={handleDocChange} />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="AI-подсказка">
-              <IconButton onClick={() => setAIOpen(true)} size={isMobile ? "small" : "medium"}>
-                <LightbulbIcon color="primary" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Эмодзи скоро!">
-              <span><IconButton disabled size={isMobile ? "small" : "medium"}><InsertEmoticonIcon /></IconButton></span>
-            </Tooltip>
-          </Stack>
-          {/* Вывод выбранных файлов */}
-          <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
-            {images.map((img, i) => (
-              <Typography key={i} variant="caption">{img.name}</Typography>
-            ))}
-            {video && <Typography variant="caption">{video.name}</Typography>}
-            {doc && <Typography variant="caption">{doc.name}</Typography>}
-          </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpen(false)}>Отмена</Button>
-          <Button variant="contained" onClick={() => handlePost()} disabled={!text && images.length === 0 && !video && !doc}>Опубликовать</Button>
-        </DialogActions>
-      </Dialog>
+      {/* Удалить все Dialog, связанные с созданием поста */}
       {/* AI-ассистент как отдельное модальное окно */}
       <Dialog open={aiOpen} onClose={() => setAIOpen(false)} maxWidth="xs" fullWidth
         PaperProps={{ sx: { borderRadius: 3, boxShadow: 3, bgcolor: '#fff' } }}>
@@ -1233,7 +1066,7 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
         <Fab
           color="primary"
           aria-label="Создать пост"
-          onClick={() => setOpen(true)}
+          onClick={() => navigate('/post/new')}
           sx={{
             position: 'fixed',
             bottom: 16,
