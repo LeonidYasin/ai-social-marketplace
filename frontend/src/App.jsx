@@ -6,7 +6,6 @@ import AppBarMain from './components/AppBar';
 import SidebarLeft from './components/SidebarLeft';
 import SidebarRight from './components/SidebarRight';
 import Feed from './components/Feed';
-import ChatDialog from './components/ChatDialog';
 import Analytics from './components/Analytics';
 import SearchDialog from './components/Search';
 import NotificationsManager from './components/Notifications';
@@ -20,9 +19,11 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { v4 as uuidv4 } from 'uuid';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { authAPI } from './services/api';
 import API_CONFIG from './config/api';
+import Chat from './components/Chat';
+import CreatePostPage from './components/CreatePostPage';
 
 // const USERS = [
 //   { id: 'ai', name: 'AI Ассистент', isAI: true },
@@ -344,17 +345,6 @@ const App = ({ themeMode, onThemeToggle }) => {
     }
   }, [loadingUser, currentUser]);
 
-  // Открыть чат с пользователем
-  const openChat = async (userId) => {
-    if (!chats[userId]) {
-      setChats(prev => ({ ...prev, [userId]: { userId, messages: [] } }));
-    }
-    setActiveChatId(userId);
-    
-    // Загружаем историю сообщений
-    await loadConversation(userId);
-  };
-
   // Отправить сообщение
   const sendMessage = async (userId, text) => {
     try {
@@ -482,14 +472,21 @@ const App = ({ themeMode, onThemeToggle }) => {
       );
   }, [chats, searchChat, allUsers]);
 
+  // Функция для открытия чата теперь использует navigate
+  const navigate = useNavigate();
+  const openChat = (userId) => {
+    navigate(`/chat/${userId}`);
+  };
+
   if (loadingUser) return null;
 
   return (
-    <Router>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
         <Routes>
           <Route path="/oauth-success" element={<OAuthSuccess />} />
+          <Route path="/post/new" element={<CreatePostPage currentUser={currentUser} />} />
           <Route path="/" element={
             <Box sx={{ minHeight: '100vh', bgcolor: theme => theme.palette.background.default }}>
               {/* Всегда показываем верхнюю панель */}
@@ -509,7 +506,7 @@ const App = ({ themeMode, onThemeToggle }) => {
               <Box sx={{ display: 'flex' }}>
                 <SidebarLeft
                   chatList={chatList}
-                  onChatClick={setActiveChatId}
+                  onChatClick={openChat}
                   searchChat={searchChat}
                   setSearchChat={setSearchChat}
                   open={leftSidebarOpen}
@@ -526,15 +523,7 @@ const App = ({ themeMode, onThemeToggle }) => {
                     rightSidebarOpen={rightSidebarOpen}
                     setRightSidebarOpen={setRightSidebarOpen}
                   />
-                  {activeChatId && (
-                    <ChatDialog
-                      open={!!activeChatId}
-                      onClose={() => setActiveChatId(null)}
-                      user={allUsers.find(u => u.id === activeChatId)}
-                      messages={chats[activeChatId]?.messages || []}
-                      onSend={text => sendMessage(activeChatId, text)}
-                    />
-                  )}
+                  <Route path="/chat/:id" element={<Chat currentUser={currentUser} />} />
                 </Box>
                 <SidebarRight
                   users={allUsers}
@@ -606,8 +595,8 @@ const App = ({ themeMode, onThemeToggle }) => {
             </Box>
           } />
         </Routes>
-      </ThemeProvider>
-    </Router>
+      </Router>
+    </ThemeProvider>
   );
 };
 
