@@ -629,18 +629,6 @@ const App = ({ themeMode, onThemeToggle }) => {
         socket={socket}
         feedData={feedData}
         setFeedData={setFeedData}
-        analyticsOpen={analyticsOpen}
-        setAnalyticsOpen={setAnalyticsOpen}
-        searchOpen={searchOpen}
-        setSearchOpen={setSearchOpen}
-        notificationsOpen={notificationsOpen}
-        setNotificationsOpen={setNotificationsOpen}
-        gamificationOpen={gamificationOpen}
-        setGamificationOpen={setGamificationOpen}
-        settingsOpen={settingsOpen}
-        setSettingsOpen={setSettingsOpen}
-        adminPanelOpen={adminPanelOpen}
-        setAdminPanelOpen={setAdminPanelOpen}
         setCurrentUser={setCurrentUser}
         fetchUsers={fetchUsers}
       />

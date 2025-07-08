@@ -188,7 +188,7 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
   // Уведомления
   const [notifications, setNotifications] = useState([]);
   // Настройки пользователя
-  const [settingsOpen, setSettingsOpen] = useState(false);
+
   const [userSettings, setUserSettings] = useState(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxImages, setLightboxImages] = useState([]);
@@ -876,7 +876,7 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
           <Tooltip title="Настройки">
             <IconButton
               size={isSmallMobile ? "small" : "medium"}
-              onClick={() => setSettingsOpen(true)}
+                              onClick={() => window.location.href = '/settings'}
               sx={{ 
                 bgcolor: 'primary.50',
                 '&:hover': { bgcolor: 'primary.100' }
@@ -1084,12 +1084,7 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
         </Fab>
       )}
 
-      {/* Компонент настроек пользователя */}
-      <UserSettings
-        open={settingsOpen}
-        onClose={() => setSettingsOpen(false)}
-        onSettingsChange={handleSettingsChange}
-      />
+
 
       {/* Lightbox Dialog */}
       <Dialog
