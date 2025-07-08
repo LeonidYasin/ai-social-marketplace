@@ -146,6 +146,8 @@ function MainLayout({
           setTimeout(() => fetchUsers(), 1000);
         }}
         posts={feedData.posts}
+        currentUser={currentUser}
+        setCurrentUser={setCurrentUser}
       />
       {/* Админская панель */}
       <AdminPanel

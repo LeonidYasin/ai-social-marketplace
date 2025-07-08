@@ -148,7 +148,7 @@ const MOCK_POSTS = [
   { id: '3', userId: 'anna', text: 'Куплю ноутбук', createdAt: '2024-05-03', images: [] },
 ];
 
-const UserSettings = ({ open, onClose, onUserChange, posts = [] }) => {
+const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, setCurrentUser }) => {
   const [tab, setTab] = useState(0);
   const [profile, setProfile] = useState({
     name: 'Александр',
@@ -172,7 +172,7 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [] }) => {
     showComments: true,
     minReactions: 0,
   });
-  const [currentUser, setCurrentUser] = useState(null);
+
   const [logoutConfirm, setLogoutConfirm] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editName, setEditName] = useState('');
@@ -240,12 +240,7 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [] }) => {
     }
   }, []);
 
-  useEffect(() => {
-    const saved = localStorage.getItem('currentUser');
-    if (saved) {
-      setCurrentUser(JSON.parse(saved));
-    }
-  }, [open]);
+
 
   // Автоматическое заполнение данными из куков при переходе на экран входа
   useEffect(() => {
