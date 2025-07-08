@@ -35,7 +35,10 @@ param(
     [string]$Description,
     
     [Parameter(Mandatory=$false)]
-    [string[]]$Files
+    [string[]]$Files,
+
+    [switch]$Force, # Не спрашивать подтверждение
+    [switch]$Push   # Автоматически пушить после коммита
 )
 
 # Устанавливаем UTF-8 кодировку
@@ -110,25 +113,32 @@ try {
         Write-Host "  $_" -ForegroundColor White
     }
     
-    # Запрашиваем подтверждение
-    Write-Host ""
-    $confirm = Read-Host "🤔 Создать коммит? (y/N)"
-    
-    if ($confirm -eq 'y' -or $confirm -eq 'Y') {
-        # Создаем коммит
-        git commit -F $tempFile
-        
+    # Запрашиваем подтверждение, если не указан -Force
+    if (-not $Force) {
         Write-Host ""
-        Write-Host "✅ Коммит создан успешно!" -ForegroundColor Green
-        
-        # Показываем последний коммит
-        Write-Host ""
-        Write-Host "📋 Последний коммит:" -ForegroundColor Cyan
-        git log --oneline -1
-        
-    } else {
-        Write-Host "❌ Коммит отменен" -ForegroundColor Yellow
+        $confirm = Read-Host "🤔 Создать коммит? (y/N)"
+        if ($confirm -ne 'y' -and $confirm -ne 'Y') {
+            Write-Host "❌ Коммит отменен" -ForegroundColor Yellow
+            exit 0
+        }
     }
+
+    # Создаем коммит
+    git commit -F $tempFile
+    
+    Write-Host ""
+    Write-Host "✅ Коммит создан успешно!" -ForegroundColor Green
+
+    # Автоматический push, если указан -Push
+    if ($Push) {
+        Write-Host "🚀 Выполняю git push..." -ForegroundColor Cyan
+        git push
+    }
+
+    # Показываем последний коммит
+    Write-Host ""
+    Write-Host "📋 Последний коммит:" -ForegroundColor Cyan
+    git log --oneline -1
     
 } finally {
     # Удаляем временный файл

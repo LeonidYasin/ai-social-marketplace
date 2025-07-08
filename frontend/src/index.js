@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import App from './App';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 // Создаем темы
 const createAppTheme = (mode) => createTheme({
@@ -74,6 +75,8 @@ const AppWrapper = () => {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <AppWrapper />
+    <Router>
+      <AppWrapper />
+    </Router>
   </React.StrictMode>
 ); 
