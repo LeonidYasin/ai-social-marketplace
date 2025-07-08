@@ -3,16 +3,13 @@ services:
   - type: web
     name: social-marketplace-api
     runtime: node
-    plan: free  # Изменено с starter на free
+    plan: free
     buildCommand: |
-      # apt-get update && \
-      # apt-get install -y python3 make g++ libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev && \
       cd backend && npm install
     startCommand: cd backend && npm run init-db && npm start
     envVars:
       - key: NODE_ENV
         value: production
-
       - key: DATABASE_URL
         fromDatabase:
           name: social-marketplace-db
@@ -32,46 +29,42 @@ services:
         value: 0.0.0.0
       - key: RENDER_SYSLOG_ENABLED
         value: true
-      - key: RENDER_SYSLOG_ENDPOINT
-        value: ${RENDER_SERVICE_URL}
+      # Удалены переменные, использующие property: url
       - key: SYSLOG_PORT
         fromService:
           name: social-marketplace-api
           type: web
           property: port
-      - key: RENDER_SERVICE_URL
-        fromService:
-          name: social-marketplace-api
-          type: web
-          property: url
-    # Disk for logs storage
-    disk:
-      name: logs-disk
-      mountPath: /opt/render/project/src/backend/logs
-      sizeGB: 1
-
   # Frontend Static Site (Free)
   - type: web
     name: social-marketplace-frontend
     runtime: static
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: ./frontend/build
-    # Environment variables for frontend-backend connection
     envVars:
-      - key: REACT_APP_API_URL
+      - key: REACT_APP_API_HOST
         fromService:
           name: social-marketplace-api
           type: web
-          property: url
-      - key: REACT_APP_WS_URL
+          property: host
+      - key: REACT_APP_API_PORT
         fromService:
           name: social-marketplace-api
           type: web
-          property: url
+          property: port
+      - key: REACT_APP_WS_HOST
+        fromService:
+          name: social-marketplace-api
+          type: web
+          property: host
+      - key: REACT_APP_WS_PORT
+        fromService:
+          name: social-marketplace-api
+          type: web
+          property: port
 
 databases:
-  # PostgreSQL Database (Free)
   - name: social-marketplace-db
-    plan: free  # Изменено с basic-256mb на free
+    plan: free
     databaseName: social_marketplace
     user: app_user 
