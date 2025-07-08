@@ -13,6 +13,11 @@ import Gamification from './components/Gamification';
 import UserSettings from './components/UserSettings';
 import OAuthSuccess from './components/OAuthSuccess';
 import AdminPanel from './components/AdminPanel';
+import SettingsPage from './components/SettingsPage';
+import AnalyticsPage from './components/AnalyticsPage';
+import NotificationsPage from './components/NotificationsPage';
+import GamificationPage from './components/GamificationPage';
+import AdminPage from './components/AdminPage';
 import { facebookTheme, neonTheme } from './config/themes';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -50,30 +55,19 @@ function MainLayout({
   socket,
   feedData,
   setFeedData,
-  analyticsOpen,
-  setAnalyticsOpen,
-  searchOpen,
-  setSearchOpen,
-  notificationsOpen,
-  setNotificationsOpen,
-  gamificationOpen,
-  setGamificationOpen,
-  settingsOpen,
-  setSettingsOpen,
-  adminPanelOpen,
-  setAdminPanelOpen,
   setCurrentUser,
   fetchUsers,
 }) {
+  const navigate = useNavigate();
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: theme => theme.palette.background.default }}>
       <AppBarMain
-        onAnalyticsOpen={() => setAnalyticsOpen(true)}
-        onSearchOpen={() => setSearchOpen(true)}
-        onNotificationsOpen={() => setNotificationsOpen(true)}
-        onGamificationOpen={() => setGamificationOpen(true)}
-        onUserSettingsOpen={() => setSettingsOpen(true)}
-        onAdminPanelOpen={() => setAdminPanelOpen(true)}
+        onAnalyticsOpen={() => navigate('/analytics')}
+        onSearchOpen={() => navigate('/search')}
+        onNotificationsOpen={() => navigate('/notifications')}
+        onGamificationOpen={() => navigate('/gamification')}
+        onUserSettingsOpen={() => navigate('/settings')}
+        onAdminPanelOpen={() => navigate('/admin')}
         currentUser={currentUser}
         themeName={themeName}
         setThemeName={setThemeName}
@@ -104,58 +98,7 @@ function MainLayout({
           loading={loadingUsers}
         />
       </Box>
-      {/* Аналитика */}
-      <Analytics
-        open={analyticsOpen}
-        onClose={() => setAnalyticsOpen(false)}
-        posts={feedData.posts}
-        userReactions={feedData.userReactions}
-        comments={feedData.comments}
-      />
-      {/* Поиск */}
-      <SearchDialog
-        open={searchOpen}
-        onClose={() => setSearchOpen(false)}
-        onSearchResult={(results) => {
-          console.log('Search results:', results);
-        }}
-      />
-      {/* Уведомления */}
-      <NotificationsManager
-        open={notificationsOpen}
-        onClose={() => setNotificationsOpen(false)}
-        currentUser={currentUser}
-      />
-      {/* Гамификация */}
-      <Gamification
-        open={gamificationOpen}
-        onClose={() => setGamificationOpen(false)}
-        userStats={{
-          totalPosts: feedData.posts?.length || 0,
-          totalReactions: Object.values(feedData.userReactions || {}).filter(r => r).length,
-          totalComments: Object.values(feedData.comments || {}).flat().length,
-          totalXP: 450,
-          totalViews: 1234,
-          soldItems: 2,
-        }}
-      />
-      {/* Настройки пользователя и mock-логин */}
-      <UserSettings
-        open={settingsOpen}
-        onClose={() => setSettingsOpen(false)}
-        onUserChange={(user) => {
-          setCurrentUser(user);
-          setTimeout(() => fetchUsers(), 1000);
-        }}
-        posts={feedData.posts}
-        currentUser={currentUser}
-        setCurrentUser={setCurrentUser}
-      />
-      {/* Админская панель */}
-      <AdminPanel
-        open={adminPanelOpen}
-        onClose={() => setAdminPanelOpen(false)}
-      />
+
     </Box>
   );
 }
@@ -211,18 +154,6 @@ const AppWithRouter = (props) => {
           socket={props.socket}
           feedData={props.feedData}
           setFeedData={props.setFeedData}
-          analyticsOpen={props.analyticsOpen}
-          setAnalyticsOpen={props.setAnalyticsOpen}
-          searchOpen={props.searchOpen}
-          setSearchOpen={props.setSearchOpen}
-          notificationsOpen={props.notificationsOpen}
-          setNotificationsOpen={props.setNotificationsOpen}
-          gamificationOpen={props.gamificationOpen}
-          setGamificationOpen={props.setGamificationOpen}
-          settingsOpen={props.settingsOpen}
-          setSettingsOpen={props.setSettingsOpen}
-          adminPanelOpen={props.adminPanelOpen}
-          setAdminPanelOpen={props.setAdminPanelOpen}
           setCurrentUser={props.setCurrentUser}
           fetchUsers={props.fetchUsers}
         />
@@ -237,6 +168,31 @@ const AppWithRouter = (props) => {
           setRightSidebarOpen={props.setRightSidebarOpen}
         />} />
         <Route path="chat/:id" element={<Chat currentUser={props.currentUser} />} />
+        <Route path="settings" element={<SettingsPage 
+          currentUser={props.currentUser}
+          setCurrentUser={props.setCurrentUser}
+          fetchUsers={props.fetchUsers}
+          posts={props.feedData.posts}
+        />} />
+        <Route path="analytics" element={<AnalyticsPage 
+          posts={props.feedData.posts}
+          userReactions={props.feedData.userReactions}
+          comments={props.feedData.comments}
+        />} />
+        <Route path="notifications" element={<NotificationsPage 
+          currentUser={props.currentUser}
+        />} />
+        <Route path="gamification" element={<GamificationPage 
+          userStats={{
+            totalPosts: props.feedData.posts?.length || 0,
+            totalReactions: Object.values(props.feedData.userReactions || {}).filter(r => r).length,
+            totalComments: Object.values(props.feedData.comments || {}).flat().length,
+            totalXP: 450,
+            totalViews: 1234,
+            soldItems: 2,
+          }}
+        />} />
+        <Route path="admin" element={<AdminPage />} />
       </Route>
     </Routes>
   );
@@ -249,15 +205,9 @@ const App = ({ themeMode, onThemeToggle }) => {
   });
   const [activeChatId, setActiveChatId] = useState(null);
   const [searchChat, setSearchChat] = useState('');
-  const [analyticsOpen, setAnalyticsOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [notificationsOpen, setNotificationsOpen] = useState(false);
-  const [gamificationOpen, setGamificationOpen] = useState(false);
   const [feedData, setFeedData] = useState({ posts: [], userReactions: {}, comments: {} });
   const [currentUser, setCurrentUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const [adminPanelOpen, setAdminPanelOpen] = useState(false);
   const [themeName, setThemeName] = React.useState(() => localStorage.getItem('theme') || 'facebook');
   const theme = themeName === 'neon' ? neonTheme : facebookTheme;
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -549,10 +499,8 @@ const App = ({ themeMode, onThemeToggle }) => {
   useEffect(() => {
     console.log('CURRENT USER CHANGED:', currentUser);
     if (!loadingUser && !currentUser) {
-      setSettingsOpen(true);
-    } else if (currentUser && settingsOpen) {
-      // Если пользователь вошел и диалог настроек открыт, закрываем его через небольшую задержку
-      setTimeout(() => setSettingsOpen(false), 1000);
+      // Перенаправляем на страницу настроек вместо открытия модального окна
+      window.location.href = '/settings';
     }
   }, [loadingUser, currentUser]);
 
@@ -646,12 +594,8 @@ const App = ({ themeMode, onThemeToggle }) => {
     // Используем функцию из API для правильного выхода
     authAPI.logout();
     setCurrentUser(null);
-    // Закрываем все модальные окна
-    setSettingsOpen(false);
-    setAnalyticsOpen(false);
-    setSearchOpen(false);
-    setNotificationsOpen(false);
-    setGamificationOpen(false);
+    // Перенаправляем на страницу настроек
+    window.location.href = '/settings';
   };
 
   // Функция для отладки пользователей
