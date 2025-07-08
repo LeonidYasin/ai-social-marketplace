@@ -156,6 +156,86 @@ function MainLayout({
   );
 }
 
+const AppWithRouter = (props) => {
+  const navigate = useNavigate();
+  const openChat = (userId) => {
+    navigate(`/chat/${userId}`);
+  };
+
+  // Список чатов для левого сайдбара (фильтрация по поиску)
+  const chatList = useMemo(() => {
+    return Object.values(props.chats || {})
+      .map(chat => {
+        const user = props.allUsers.find(u => u.id === chat.userId);
+        const lastMsg = chat.messages && chat.messages.length > 0 ? chat.messages[chat.messages.length - 1] : null;
+        return {
+          userId: chat.userId,
+          name: user?.name || chat.userId,
+          isAI: user?.isAI,
+          lastMsg: lastMsg?.text || '',
+        };
+      })
+      .filter(chat =>
+        chat.name.toLowerCase().includes((props.searchChat || '').toLowerCase()) ||
+        chat.lastMsg.toLowerCase().includes((props.searchChat || '').toLowerCase())
+      );
+  }, [props.chats, props.searchChat, props.allUsers]);
+
+  if (props.loadingUser) return null;
+
+  return (
+    <Routes>
+      <Route path="/oauth-success" element={<OAuthSuccess />} />
+      <Route path="/post/new" element={<CreatePostPage currentUser={props.currentUser} />} />
+      <Route path="/" element={
+        <MainLayout
+          chatList={chatList}
+          openChat={openChat}
+          searchChat={props.searchChat}
+          setSearchChat={props.setSearchChat}
+          leftSidebarOpen={props.leftSidebarOpen}
+          setLeftSidebarOpen={props.setLeftSidebarOpen}
+          rightSidebarOpen={props.rightSidebarOpen}
+          setRightSidebarOpen={props.setRightSidebarOpen}
+          isMobile={props.isMobile}
+          allUsers={props.allUsers}
+          loadingUsers={props.loadingUsers}
+          currentUser={props.currentUser}
+          themeName={props.themeName}
+          setThemeName={props.setThemeName}
+          debugUsers={props.debugUsers}
+          socket={props.socket}
+          feedData={props.feedData}
+          setFeedData={props.setFeedData}
+          analyticsOpen={props.analyticsOpen}
+          setAnalyticsOpen={props.setAnalyticsOpen}
+          searchOpen={props.searchOpen}
+          setSearchOpen={props.setSearchOpen}
+          notificationsOpen={props.notificationsOpen}
+          setNotificationsOpen={props.setNotificationsOpen}
+          gamificationOpen={props.gamificationOpen}
+          setGamificationOpen={props.setGamificationOpen}
+          settingsOpen={props.settingsOpen}
+          setSettingsOpen={props.setSettingsOpen}
+          adminPanelOpen={props.adminPanelOpen}
+          setAdminPanelOpen={props.setAdminPanelOpen}
+        />
+      }>
+        <Route index element={<Feed
+          onDataUpdate={props.setFeedData}
+          currentUser={props.currentUser}
+          isMobile={props.isMobile}
+          leftSidebarOpen={props.leftSidebarOpen}
+          setLeftSidebarOpen={props.setLeftSidebarOpen}
+          rightSidebarOpen={props.rightSidebarOpen}
+          setRightSidebarOpen={props.setRightSidebarOpen}
+        />} />
+        <Route path="chat/:id" element={<Chat currentUser={props.currentUser} />} />
+      </Route>
+    </Routes>
+  );
+};
+
 const App = ({ themeMode, onThemeToggle }) => {
   // Чаты: { userId, messages: [{text, isUser, timestamp}] }
   const [chats, setChats] = useState({
@@ -578,87 +658,40 @@ const App = ({ themeMode, onThemeToggle }) => {
     console.log('==================');
   };
 
-  // Список чатов для левого сайдбара (фильтрация по поиску)
-  const chatList = useMemo(() => {
-    return Object.values(chats || {})
-      .map(chat => {
-        const user = allUsers.find(u => u.id === chat.userId);
-        const lastMsg = chat.messages && chat.messages.length > 0 ? chat.messages[chat.messages.length - 1] : null;
-        return {
-          userId: chat.userId,
-          name: user?.name || chat.userId,
-          isAI: user?.isAI,
-          lastMsg: lastMsg?.text || '',
-        };
-      })
-      .filter(chat =>
-        chat.name.toLowerCase().includes((searchChat || '').toLowerCase()) ||
-        chat.lastMsg.toLowerCase().includes((searchChat || '').toLowerCase())
-      );
-  }, [chats, searchChat, allUsers]);
-
-  // Функция для открытия чата теперь использует navigate
-  const navigate = useNavigate();
-  const openChat = (userId) => {
-    navigate(`/chat/${userId}`);
-  };
-
-  if (loadingUser) return null;
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Router>
-        <Routes>
-          <Route path="/oauth-success" element={<OAuthSuccess />} />
-          <Route path="/post/new" element={<CreatePostPage currentUser={currentUser} />} />
-          <Route path="/" element={
-            <MainLayout
-              chatList={chatList}
-              openChat={openChat}
-              searchChat={searchChat}
-              setSearchChat={setSearchChat}
-              leftSidebarOpen={leftSidebarOpen}
-              setLeftSidebarOpen={setLeftSidebarOpen}
-              rightSidebarOpen={rightSidebarOpen}
-              setRightSidebarOpen={setRightSidebarOpen}
-              isMobile={isMobile}
-              allUsers={allUsers}
-              loadingUsers={loadingUsers}
-              currentUser={currentUser}
-              themeName={themeName}
-              setThemeName={setThemeName}
-              debugUsers={debugUsers}
-              socket={socket}
-              feedData={feedData}
-              setFeedData={setFeedData}
-              analyticsOpen={analyticsOpen}
-              setAnalyticsOpen={setAnalyticsOpen}
-              searchOpen={searchOpen}
-              setSearchOpen={setSearchOpen}
-              notificationsOpen={notificationsOpen}
-              setNotificationsOpen={setNotificationsOpen}
-              gamificationOpen={gamificationOpen}
-              setGamificationOpen={setGamificationOpen}
-              settingsOpen={settingsOpen}
-              setSettingsOpen={setSettingsOpen}
-              adminPanelOpen={adminPanelOpen}
-              setAdminPanelOpen={setAdminPanelOpen}
-            />
-          }>
-            <Route index element={<Feed
-              onDataUpdate={setFeedData}
-              currentUser={currentUser}
-              isMobile={isMobile}
-              leftSidebarOpen={leftSidebarOpen}
-              setLeftSidebarOpen={setLeftSidebarOpen}
-              rightSidebarOpen={rightSidebarOpen}
-              setRightSidebarOpen={setRightSidebarOpen}
-            />} />
-            <Route path="chat/:id" element={<Chat currentUser={currentUser} />} />
-          </Route>
-        </Routes>
-      </Router>
+      <AppWithRouter
+        chats={chats}
+        allUsers={allUsers}
+        searchChat={searchChat}
+        setSearchChat={setSearchChat}
+        leftSidebarOpen={leftSidebarOpen}
+        setLeftSidebarOpen={setLeftSidebarOpen}
+        rightSidebarOpen={rightSidebarOpen}
+        setRightSidebarOpen={setRightSidebarOpen}
+        isMobile={isMobile}
+        loadingUsers={loadingUsers}
+        currentUser={currentUser}
+        themeName={themeName}
+        setThemeName={setThemeName}
+        debugUsers={debugUsers}
+        socket={socket}
+        feedData={feedData}
+        setFeedData={setFeedData}
+        analyticsOpen={analyticsOpen}
+        setAnalyticsOpen={setAnalyticsOpen}
+        searchOpen={searchOpen}
+        setSearchOpen={setSearchOpen}
+        notificationsOpen={notificationsOpen}
+        setNotificationsOpen={setNotificationsOpen}
+        gamificationOpen={gamificationOpen}
+        setGamificationOpen={setGamificationOpen}
+        settingsOpen={settingsOpen}
+        setSettingsOpen={setSettingsOpen}
+        adminPanelOpen={adminPanelOpen}
+        setAdminPanelOpen={setAdminPanelOpen}
+      />
     </ThemeProvider>
   );
 };
