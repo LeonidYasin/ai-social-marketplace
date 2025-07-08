@@ -105,6 +105,14 @@ function MainLayout({
 
 const AppWithRouter = (props) => {
   const navigate = useNavigate();
+  
+  // Обработка навигации при отсутствии пользователя
+  useEffect(() => {
+    if (!props.loadingUser && !props.currentUser) {
+      navigate('/settings');
+    }
+  }, [props.loadingUser, props.currentUser, navigate]);
+  
   const openChat = (userId) => {
     navigate(`/chat/${userId}`);
   };
@@ -500,7 +508,7 @@ const App = ({ themeMode, onThemeToggle }) => {
     console.log('CURRENT USER CHANGED:', currentUser);
     if (!loadingUser && !currentUser) {
       // Перенаправляем на страницу настроек вместо открытия модального окна
-      window.location.href = '/settings';
+      // Навигация будет обработана в AppWithRouter
     }
   }, [loadingUser, currentUser]);
 
@@ -594,8 +602,7 @@ const App = ({ themeMode, onThemeToggle }) => {
     // Используем функцию из API для правильного выхода
     authAPI.logout();
     setCurrentUser(null);
-    // Перенаправляем на страницу настроек
-    window.location.href = '/settings';
+    // Перенаправление будет обработано в AppWithRouter
   };
 
   // Функция для отладки пользователей
