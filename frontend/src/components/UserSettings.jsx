@@ -1580,18 +1580,6 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
           maxWidth: '100%',
           overflow: 'auto'
         }}>
-          {/* Кнопка выхода для режима страницы */}
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={handleLogout}
-              startIcon={<LogoutIcon />}
-            >
-              Выйти
-            </Button>
-          </Box>
-          
           {renderAuthScreen()}
         </Box>
       );

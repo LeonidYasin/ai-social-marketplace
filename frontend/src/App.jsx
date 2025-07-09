@@ -106,56 +106,6 @@ function MainLayout({
         />
       </Box>
 
-      {/* Кнопки развертывания панелей в верхних углах центральной области */}
-      {/* Debug: leftSidebarOpen = {leftSidebarOpen}, rightSidebarOpen = {rightSidebarOpen} */}
-      {!leftSidebarOpen && (
-        <IconButton 
-          onClick={() => setLeftSidebarOpen(true)} 
-          sx={{ 
-            position: 'fixed',
-            top: 70,
-            left: 10,
-            zIndex: 1000,
-            bgcolor: 'primary.main',
-            color: 'white',
-            boxShadow: 3,
-            '&:hover': {
-              bgcolor: 'primary.dark',
-              transform: 'scale(1.1)',
-              boxShadow: 6,
-            },
-            transition: 'all 0.2s ease-in-out',
-          }}
-          title="Открыть левую панель"
-        >
-          <MenuIcon />
-        </IconButton>
-      )}
-      
-      {!rightSidebarOpen && (
-        <IconButton 
-          onClick={() => setRightSidebarOpen(true)} 
-          sx={{ 
-            position: 'fixed',
-            top: 70,
-            right: 10,
-            zIndex: 1000,
-            bgcolor: 'primary.main',
-            color: 'white',
-            boxShadow: 3,
-            '&:hover': {
-              bgcolor: 'primary.dark',
-              transform: 'scale(1.1)',
-              boxShadow: 6,
-            },
-            transition: 'all 0.2s ease-in-out',
-          }}
-          title="Открыть правую панель"
-        >
-          <PeopleIcon />
-        </IconButton>
-      )}
-
     </Box>
   );
 }
