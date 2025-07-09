@@ -10,8 +10,6 @@ const AdminPage = () => {
       </Typography>
       <Paper sx={{ p: 2, mt: 2 }}>
         <AdminPanel
-          open={true}
-          onClose={() => {}} // Пустая функция для режима страницы
           isPageMode={true}
         />
       </Paper>

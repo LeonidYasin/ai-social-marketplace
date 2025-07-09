@@ -121,7 +121,7 @@ const generateAchievements = () => [
   { id: 6, name: 'Топ продавец', description: 'Продали 5+ товаров', icon: '💰', earned: false, progress: 20 },
 ];
 
-const Analytics = ({ open, onClose, posts, userReactions, comments }) => {
+const Analytics = ({ open, onClose, posts, userReactions, comments, isPageMode = false }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [activeTab, setActiveTab] = useState(0);
@@ -390,6 +390,31 @@ const Analytics = ({ open, onClose, posts, userReactions, comments }) => {
     { label: 'Топ посты', content: renderTopPostsTab() },
     { label: 'Достижения', content: renderAchievementsTab() },
   ];
+
+  if (isPageMode) {
+    return (
+      <Box>
+        {/* Вкладки */}
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs 
+            value={activeTab} 
+            onChange={(e, newValue) => setActiveTab(newValue)}
+            variant={isMobile ? "scrollable" : "fullWidth"}
+            scrollButtons={isMobile ? "auto" : false}
+          >
+            {tabs.map((tab, index) => (
+              <Tab key={index} label={tab.label} sx={{ textTransform: 'none' }} />
+            ))}
+          </Tabs>
+        </Box>
+
+        {/* Содержимое */}
+        <Box sx={{ p: 2 }}>
+          {tabs[activeTab].content}
+        </Box>
+      </Box>
+    );
+  }
 
   return (
     <Box

@@ -148,7 +148,7 @@ const MOCK_POSTS = [
   { id: '3', userId: 'anna', text: 'Куплю ноутбук', createdAt: '2024-05-03', images: [] },
 ];
 
-const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, setCurrentUser }) => {
+const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, setCurrentUser, isPageMode = false }) => {
   const [tab, setTab] = useState(0);
   const [profile, setProfile] = useState({
     name: 'Александр',
@@ -1377,6 +1377,13 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
 
   // Если пользователь не авторизован, показываем экран аутентификации
   if (!currentUser) {
+    if (isPageMode) {
+      return (
+        <Box sx={{ p: 3 }}>
+          {renderAuthScreen()}
+        </Box>
+      );
+    }
     return (
       <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
         <DialogTitle sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -1401,32 +1408,28 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
     );
   }
 
-  return (
-    <Dialog 
-      open={open} 
-      onClose={onClose} 
-      maxWidth="md" 
-      fullWidth
-      data-testid="user-settings-dialog"
-    >
-      <DialogTitle sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        Настройки
-        <Box>
-          <Tooltip title="Открыть геймификацию в отдельном окне">
-            <IconButton onClick={() => setGamificationModalOpen(true)} size="small" sx={{ ml: 1 }}>
-              <EmojiEventsIcon />
+  const renderContent = () => (
+    <>
+      {!isPageMode && (
+        <DialogTitle sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          Настройки
+          <Box>
+            <Tooltip title="Открыть геймификацию в отдельном окне">
+              <IconButton onClick={() => setGamificationModalOpen(true)} size="small" sx={{ ml: 1 }}>
+                <EmojiEventsIcon />
+              </IconButton>
+            </Tooltip>
+            <IconButton onClick={onClose} size="small">
+              <CloseIcon />
             </IconButton>
-          </Tooltip>
-          <IconButton onClick={onClose} size="small">
-            <CloseIcon />
-          </IconButton>
-        </Box>
-      </DialogTitle>
-      <DialogContent
+          </Box>
+        </DialogTitle>
+      )}
+      <Box
         sx={{
-          maxHeight: { xs: '70vh', sm: '70vh', md: '70vh' },
-          overflowY: 'auto',
-          p: { xs: 1, sm: 2 },
+          maxHeight: isPageMode ? 'none' : { xs: '70vh', sm: '70vh', md: '70vh' },
+          overflowY: isPageMode ? 'visible' : 'auto',
+          p: isPageMode ? 0 : { xs: 1, sm: 2 },
         }}
       >
         {/* Информация о текущем пользователе */}
@@ -1481,6 +1484,48 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
         {tab === 6 && currentUser?.role === 'admin' && renderAdminTab()}
         {/* Если не админ — показать форму стать админом */}
         {currentUser?.role !== 'admin' && renderChangeAdminPassword()}
+      </Box>
+    </>
+  );
+
+  // Рендерим содержимое в зависимости от режима
+  if (isPageMode) {
+    return (
+      <>
+        {renderContent()}
+        
+        {/* Диалог подтверждения выхода */}
+        <Dialog open={logoutConfirm} onClose={cancelLogout}>
+          <DialogTitle>Подтверждение выхода</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Вы уверены, что хотите выйти из системы?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={cancelLogout}>Отмена</Button>
+            <Button onClick={confirmLogout} color="error" variant="contained">
+              Выйти
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* Модальное окно геймификации */}
+        <Gamification open={gamificationModalOpen} onClose={() => setGamificationModalOpen(false)} userStats={userStats} />
+      </>
+    );
+  }
+
+  return (
+    <Dialog 
+      open={open} 
+      onClose={onClose} 
+      maxWidth="md" 
+      fullWidth
+      data-testid="user-settings-dialog"
+    >
+      <DialogContent>
+        {renderContent()}
       </DialogContent>
       
       {/* Диалог подтверждения выхода */}

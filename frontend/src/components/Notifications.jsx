@@ -132,7 +132,7 @@ const generateMockNotifications = () => [
   },
 ];
 
-const NotificationsManager = ({ socket, currentUser }) => {
+const NotificationsManager = ({ socket, currentUser, isPageMode = false }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   
@@ -367,179 +367,191 @@ const NotificationsManager = ({ socket, currentUser }) => {
     return `${days} дн назад`;
   };
 
+  const renderContent = () => (
+    <>
+      {/* Статус браузерных уведомлений */}
+      <Card variant="outlined" sx={{ m: 2, mb: 0 }}>
+        <CardContent sx={{ py: 2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              {browserPermission === 'granted' ? (
+                <NotificationsActiveIcon color="success" />
+              ) : (
+                <NotificationsOffIcon color="error" />
+              )}
+              <Typography variant="body2">
+                {browserPermission === 'granted' 
+                  ? 'Браузерные уведомления включены' 
+                  : 'Браузерные уведомления отключены'
+                }
+              </Typography>
+            </Box>
+            {browserPermission !== 'granted' && (
+              <Button 
+                size="small" 
+                variant="outlined" 
+                onClick={requestPermission}
+              >
+                Включить
+              </Button>
+            )}
+          </Box>
+        </CardContent>
+      </Card>
+
+      {/* Действия */}
+      {(notifications || []).length > 0 && (
+        <Box sx={{ p: 2, pb: 1 }}>
+          <Stack direction="row" spacing={1}>
+            <Button 
+              size="small" 
+              variant="outlined" 
+              onClick={markAllAsRead}
+              disabled={unreadCount === 0}
+            >
+              Отметить все как прочитанные
+            </Button>
+            <Button 
+              size="small" 
+              variant="outlined" 
+              color="error" 
+              onClick={clearAllNotifications}
+            >
+              Очистить все
+            </Button>
+          </Stack>
+        </Box>
+      )}
+
+      {/* Список уведомлений */}
+      {(notifications || []).length === 0 ? (
+        <Box sx={{ textAlign: 'center', py: 4 }}>
+          <NotificationsOffIcon sx={{ fontSize: 64, color: 'grey.400', mb: 2 }} />
+          <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
+            Нет уведомлений
+          </Typography>
+          <Typography color="text.secondary">
+            Новые уведомления появятся здесь
+          </Typography>
+        </Box>
+      ) : (
+        <List sx={{ p: 0 }}>
+          {notifications.map((notification, index) => (
+            <React.Fragment key={notification.id}>
+              <ListItem
+                sx={{
+                  bgcolor: notification.read ? 'transparent' : 'action.hover',
+                  '&:hover': { bgcolor: 'action.hover' },
+                }}
+              >
+                <ListItemIcon>
+                  <Box sx={{ 
+                    color: getNotificationColor(notification.type),
+                    opacity: notification.read ? 0.6 : 1,
+                  }}>
+                    {getNotificationIcon(notification.type)}
+                  </Box>
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Typography 
+                        variant="body2" 
+                        sx={{ 
+                          fontWeight: notification.read ? 400 : 600,
+                          flex: 1,
+                        }}
+                      >
+                        {notification.title}
+                      </Typography>
+                      {!notification.read && (
+                        <Box sx={{ 
+                          width: 8, 
+                          height: 8, 
+                          borderRadius: '50%', 
+                          bgcolor: 'primary.main' 
+                        }} />
+                      )}
+                    </Box>
+                  }
+                  secondary={
+                    <Box>
+                      <Typography variant="body2" color="text.secondary">
+                        {notification.content}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        {formatTime(notification.timestamp)}
+                      </Typography>
+                    </Box>
+                  }
+                />
+                <ListItemSecondaryAction>
+                  <Stack direction="row" spacing={1}>
+                    {!notification.read && (
+                      <Button 
+                        size="small" 
+                        onClick={() => markAsRead(notification.id)}
+                      >
+                        Прочитано
+                      </Button>
+                    )}
+                    <IconButton 
+                      size="small" 
+                      onClick={() => deleteNotification(notification.id)}
+                    >
+                      <CloseIcon fontSize="small" />
+                    </IconButton>
+                  </Stack>
+                </ListItemSecondaryAction>
+              </ListItem>
+              {index < (notifications || []).length - 1 && <Divider />}
+            </React.Fragment>
+          ))}
+        </List>
+      )}
+    </>
+  );
+
   return (
     <>
-      <Dialog
-        open={showNotificationsList}
-        onClose={() => setShowNotificationsList(false)}
-        fullScreen={isMobile}
-        maxWidth="md"
-        fullWidth
-      >
-        <DialogTitle sx={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'space-between',
-          pb: 1
-        }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <NotificationsIcon />
-            <Typography variant="h6">
-              Уведомления {unreadCount > 0 && `(${unreadCount})`}
-            </Typography>
-          </Box>
-          <Box>
-            <IconButton onClick={() => setShowSettings(true)}>
-              <SettingsIcon />
-            </IconButton>
-            <IconButton onClick={() => setShowNotificationsList(false)}>
-              <CloseIcon />
-            </IconButton>
-          </Box>
-        </DialogTitle>
-
-        <DialogContent sx={{ p: 0 }}>
-          {/* Статус браузерных уведомлений */}
-          <Card variant="outlined" sx={{ m: 2, mb: 0 }}>
-            <CardContent sx={{ py: 2 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  {browserPermission === 'granted' ? (
-                    <NotificationsActiveIcon color="success" />
-                  ) : (
-                    <NotificationsOffIcon color="error" />
-                  )}
-                  <Typography variant="body2">
-                    {browserPermission === 'granted' 
-                      ? 'Браузерные уведомления включены' 
-                      : 'Браузерные уведомления отключены'
-                    }
-                  </Typography>
-                </Box>
-                {browserPermission !== 'granted' && (
-                  <Button 
-                    size="small" 
-                    variant="outlined" 
-                    onClick={requestPermission}
-                  >
-                    Включить
-                  </Button>
-                )}
-              </Box>
-            </CardContent>
-          </Card>
-
-          {/* Действия */}
-          {(notifications || []).length > 0 && (
-            <Box sx={{ p: 2, pb: 1 }}>
-              <Stack direction="row" spacing={1}>
-                <Button 
-                  size="small" 
-                  variant="outlined" 
-                  onClick={markAllAsRead}
-                  disabled={unreadCount === 0}
-                >
-                  Отметить все как прочитанные
-                </Button>
-                <Button 
-                  size="small" 
-                  variant="outlined" 
-                  color="error" 
-                  onClick={clearAllNotifications}
-                >
-                  Очистить все
-                </Button>
-              </Stack>
-            </Box>
-          )}
-
-          {/* Список уведомлений */}
-          {(notifications || []).length === 0 ? (
-            <Box sx={{ textAlign: 'center', py: 4 }}>
-              <NotificationsOffIcon sx={{ fontSize: 64, color: 'grey.400', mb: 2 }} />
-              <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
-                Нет уведомлений
-              </Typography>
-              <Typography color="text.secondary">
-                Новые уведомления появятся здесь
+      {isPageMode ? (
+        <Box>
+          {renderContent()}
+        </Box>
+      ) : (
+        <Dialog
+          open={showNotificationsList}
+          onClose={() => setShowNotificationsList(false)}
+          fullScreen={isMobile}
+          maxWidth="md"
+          fullWidth
+        >
+          <DialogTitle sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between',
+            pb: 1
+          }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <NotificationsIcon />
+              <Typography variant="h6">
+                Уведомления {unreadCount > 0 && `(${unreadCount})`}
               </Typography>
             </Box>
-          ) : (
-            <List sx={{ p: 0 }}>
-              {notifications.map((notification, index) => (
-                <React.Fragment key={notification.id}>
-                  <ListItem
-                    sx={{
-                      bgcolor: notification.read ? 'transparent' : 'action.hover',
-                      '&:hover': { bgcolor: 'action.hover' },
-                    }}
-                  >
-                    <ListItemIcon>
-                      <Box sx={{ 
-                        color: getNotificationColor(notification.type),
-                        opacity: notification.read ? 0.6 : 1,
-                      }}>
-                        {getNotificationIcon(notification.type)}
-                      </Box>
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                          <Typography 
-                            variant="body2" 
-                            sx={{ 
-                              fontWeight: notification.read ? 400 : 600,
-                              flex: 1,
-                            }}
-                          >
-                            {notification.title}
-                          </Typography>
-                          {!notification.read && (
-                            <Box sx={{ 
-                              width: 8, 
-                              height: 8, 
-                              borderRadius: '50%', 
-                              bgcolor: 'primary.main' 
-                            }} />
-                          )}
-                        </Box>
-                      }
-                      secondary={
-                        <Box>
-                          <Typography variant="body2" color="text.secondary">
-                            {notification.content}
-                          </Typography>
-                          <Typography variant="caption" color="text.secondary">
-                            {formatTime(notification.timestamp)}
-                          </Typography>
-                        </Box>
-                      }
-                    />
-                    <ListItemSecondaryAction>
-                      <Stack direction="row" spacing={1}>
-                        {!notification.read && (
-                          <Button 
-                            size="small" 
-                            onClick={() => markAsRead(notification.id)}
-                          >
-                            Прочитано
-                          </Button>
-                        )}
-                        <IconButton 
-                          size="small" 
-                          onClick={() => deleteNotification(notification.id)}
-                        >
-                          <CloseIcon fontSize="small" />
-                        </IconButton>
-                      </Stack>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                  {index < (notifications || []).length - 1 && <Divider />}
-                </React.Fragment>
-              ))}
-            </List>
-          )}
-        </DialogContent>
+            <Box>
+              <IconButton onClick={() => setShowSettings(true)}>
+                <SettingsIcon />
+              </IconButton>
+              <IconButton onClick={() => setShowNotificationsList(false)}>
+                <CloseIcon />
+              </IconButton>
+            </Box>
+          </DialogTitle>
+
+          <DialogContent sx={{ p: 0 }}>
+            {renderContent()}
+          </DialogContent>
+        
       </Dialog>
 
       {/* Настройки уведомлений */}

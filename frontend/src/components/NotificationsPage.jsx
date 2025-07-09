@@ -10,8 +10,6 @@ const NotificationsPage = ({ currentUser }) => {
       </Typography>
       <Paper sx={{ p: 2, mt: 2 }}>
         <NotificationsManager
-          open={true}
-          onClose={() => {}} // Пустая функция для режима страницы
           currentUser={currentUser}
           isPageMode={true}
         />

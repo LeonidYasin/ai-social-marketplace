@@ -10,8 +10,6 @@ const SettingsPage = ({ currentUser, setCurrentUser, fetchUsers, posts = [] }) =
       </Typography>
       <Paper sx={{ p: 2, mt: 2 }}>
         <UserSettings
-          open={true}
-          onClose={() => {}} // Пустая функция, так как мы не закрываем модальное окно
           onUserChange={(user) => {
             setCurrentUser(user);
             setTimeout(() => fetchUsers(), 1000);

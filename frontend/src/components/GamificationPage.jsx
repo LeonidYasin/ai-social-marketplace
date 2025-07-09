@@ -10,8 +10,6 @@ const GamificationPage = ({ userStats }) => {
       </Typography>
       <Paper sx={{ p: 2, mt: 2 }}>
         <Gamification
-          open={true}
-          onClose={() => {}} // Пустая функция для режима страницы
           userStats={userStats}
           isPageMode={true}
         />

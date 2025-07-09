@@ -160,7 +160,7 @@ const RATINGS = [
   { id: 5, name: 'Ольга Морозова', avatar: 'ОМ', level: 4, xp: 720, posts: 12, reactions: 198 },
 ];
 
-const Gamification = ({ open, onClose, userStats }) => {
+const Gamification = ({ open, onClose, userStats, isPageMode = false }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   
@@ -570,8 +570,8 @@ const Gamification = ({ open, onClose, userStats }) => {
     }
   };
 
-  if (typeof open === 'undefined') {
-    // Использование как вкладка: просто рендерим содержимое без Dialog
+  if (isPageMode) {
+    // Использование как страница: просто рендерим содержимое без Dialog
     return (
       <Box>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

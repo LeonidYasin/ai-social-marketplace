@@ -10,8 +10,6 @@ const AnalyticsPage = ({ posts, userReactions, comments }) => {
       </Typography>
       <Paper sx={{ p: 2, mt: 2 }}>
         <Analytics
-          open={true}
-          onClose={() => {}} // Пустая функция для режима страницы
           posts={posts}
           userReactions={userReactions}
           comments={comments}

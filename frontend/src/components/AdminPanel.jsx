@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import API_CONFIG from '../config/api';
 
-const AdminPanel = () => {
+const AdminPanel = ({ isPageMode = false }) => {
   const [password, setPassword] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(false);
