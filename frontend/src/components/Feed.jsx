@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Box, Card, CardContent, Typography, TextField, Button, Select, MenuItem, InputLabel, FormControl, CardMedia, Grid, Avatar, IconButton, Stack, Tabs, Tab, Divider, Tooltip, ToggleButtonGroup, ToggleButton, Popover, Chip, useTheme, useMediaQuery, Fab, InputBase, CircularProgress, Alert } from '@mui/material';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
@@ -22,8 +22,9 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import UserSettings from './UserSettings';
 import PostCard from './PostCard';
 import { postsAPI } from '../services/api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import PeopleIcon from '@mui/icons-material/People';
+import StarIcon from '@mui/icons-material/Star';
 
 const initialPosts = [
   { id: 1, text: 'Продаю iPhone 13', images: [], video: null, doc: null, bg: '', section: 'sell', privacy: 'all', reactions: { like: 3, love: 2, laugh: 1, wow: 0, sad: 0, angry: 0 } },
@@ -156,6 +157,7 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const navigate = useNavigate();
+  const { showPresentation, onHidePresentation } = useOutletContext();
   
   // Автоматически закрываем сайдбары при переходе на мобильный размер
   useEffect(() => {
@@ -205,6 +207,8 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
   // Состояния для формы создания поста
   const [loadingPost, setLoadingPost] = useState(false);
   const [errorPost, setErrorPost] = useState('');
+
+  const postInputRef = useRef(null);
 
   // Загрузка постов с backend
   const loadPosts = async () => {
@@ -824,20 +828,35 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
   // Получение отфильтрованных постов
   const filteredPosts = getFilteredAndSortedPosts();
 
+  useEffect(() => {
+    if (open && postInputRef.current) {
+      postInputRef.current.focus();
+    }
+  }, [open]);
+
   return (
     <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', m: 0, p: 0, maxWidth: 'none', bgcolor: 'background.default' }}>
       {/* Верхняя панель с кнопками открытия боковых панелей */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 1, py: 1, mb: 1 }}>
+        {/* Кнопка открытия левой панели */}
         {!leftSidebarOpen && (
           <IconButton 
-            onClick={() => setLeftSidebarOpen(true)} 
-            sx={{ bgcolor: 'primary.main', color: 'white', boxShadow: 2 }}
-            title="Открыть левую панель"
+            onClick={e => {
+              if (e.altKey || e.ctrlKey) {
+                onHidePresentation();
+              } else {
+                setLeftSidebarOpen(true);
+              }
+            }} 
+            sx={{ bgcolor: 'primary.main', color: 'white', boxShadow: 2, mr: 1 }}
+            title="Открыть левую панель (Alt/Ctrl+клик — презентация)"
           >
             <MenuIcon />
           </IconButton>
         )}
+        {/* Логотип */}
         <Box sx={{ flex: 1 }} />
+        {/* Кнопка открытия правой панели */}
         {!rightSidebarOpen && (
           <IconButton 
             onClick={() => setRightSidebarOpen(true)} 
@@ -848,6 +867,63 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
           </IconButton>
         )}
       </Box>
+
+      {/* Презентационный пост */}
+      {showPresentation && (
+        <Card sx={{
+          mb: 3,
+          borderRadius: 4,
+          boxShadow: 8,
+          bgcolor: 'linear-gradient(135deg, #fffde4 0%, #fcb69f 100%)',
+          border: '2px solid',
+          borderColor: 'primary.main',
+          position: 'relative',
+          overflow: 'hidden',
+          animation: 'fadeIn 0.5s',
+          '@keyframes fadeIn': {
+            from: { opacity: 0, transform: 'translateY(-24px)' },
+            to: { opacity: 1, transform: 'none' }
+          }
+        }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: { xs: 2, sm: 3 } }}>
+            <StarIcon sx={{ fontSize: 56, color: 'primary.main', mb: 1, filter: 'drop-shadow(0 4px 16px #ffeb3b88)' }} />
+            <Typography variant="h4" sx={{ fontWeight: 900, color: 'primary.main', mb: 1, textAlign: 'center', textShadow: '0 2px 8px #ffeb3b44' }}>
+              AI Market — ваш умный маркетплейс
+            </Typography>
+            <Typography variant="subtitle1" sx={{ color: 'text.secondary', mb: 2, textAlign: 'center' }}>
+              Современная платформа для общения, продаж, покупок и обмена опытом с AI-помощником.
+            </Typography>
+            <Box sx={{ mb: 2, width: '100%' }}>
+              <Typography variant="body1" sx={{ mb: 1 }}>
+                <b>Возможности:</b>
+              </Typography>
+              <ul style={{ margin: 0, paddingLeft: 20, color: '#444', fontSize: 16 }}>
+                <li>Публикация и поиск объявлений (продажа, покупка, обмен)</li>
+                <li>AI-ассистент для генерации текстов, советов, поиска товаров</li>
+                <li>Умная лента с реакциями, комментариями и быстрыми уведомлениями</li>
+                <li>Мобильная адаптивность и современный дизайн</li>
+                <li>Безопасность и приватность ваших данных</li>
+              </ul>
+            </Box>
+            <Box sx={{ mb: 2, width: '100%' }}>
+              <Typography variant="body1" sx={{ mb: 1 }}>
+                <b>Почему выбирают нас?</b>
+              </Typography>
+              <ul style={{ margin: 0, paddingLeft: 20, color: '#444', fontSize: 16 }}>
+                <li>Интуитивный интерфейс</li>
+                <li>Мгновенные уведомления о событиях</li>
+                <li>AI-помощник всегда под рукой</li>
+                <li>Яркий и запоминающийся стиль</li>
+              </ul>
+            </Box>
+            {onHidePresentation && (
+              <Button variant="contained" color="primary" onClick={onHidePresentation} sx={{ mt: 2, fontWeight: 700, borderRadius: 2 }}>
+                Скрыть презентацию
+              </Button>
+            )}
+          </Box>
+        </Card>
+      )}
 
       {/* Панель статуса времени и шестеренки */}
       <Box 
@@ -899,6 +975,30 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
                 }
               </Typography>
             </Box>
+          </Box>
+          {/* Вставляем notifications */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 1, maxWidth: isMobile ? '60vw' : 340, overflowX: 'auto' }}>
+            {notifications.map(n => (
+              <Box key={n.id} sx={{
+                bgcolor: 'primary.50',
+                color: 'primary.main',
+                borderRadius: 2,
+                px: 1.5,
+                py: 0.5,
+                fontSize: isMobile ? '0.7rem' : '0.8rem',
+                boxShadow: 1,
+                whiteSpace: 'nowrap',
+                mr: 1,
+                minWidth: 0,
+                maxWidth: isMobile ? 120 : 180,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                transition: 'opacity 0.3s',
+                opacity: 0.95
+              }}>
+                {n.message}
+              </Box>
+            ))}
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
             {!isMobile && (
@@ -1002,6 +1102,7 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
             </Stack>
             {errorPost && <Alert severity="error" sx={{ mb: 2 }}>{errorPost}</Alert>}
             <TextField
+              inputRef={postInputRef}
               label="Текст поста"
               multiline
               fullWidth

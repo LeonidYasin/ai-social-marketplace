@@ -52,7 +52,7 @@ const notifications = [
   { id: 3, text: 'Появился новый пост в "Продам"' },
 ];
 
-const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGamificationOpen, onUserSettingsOpen, onAdminPanelOpen, currentUser, themeName, setThemeName, onDebugUsers, socket, setLeftSidebarOpen, setRightSidebarOpen }) => {
+const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGamificationOpen, onUserSettingsOpen, onAdminPanelOpen, currentUser, themeName, setThemeName, onDebugUsers, socket, setLeftSidebarOpen, setRightSidebarOpen, onShowPresentation }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [active, setActive] = useState('home');
@@ -101,9 +101,14 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
     <AppBar position="fixed" color="default" elevation={1} sx={{ zIndex: 1201 }}>
       <Toolbar sx={{ minHeight: 64, justifyContent: 'space-between', px: isMobile ? 1 : 2, position: 'relative' }}>
 
-        <Box sx={{ fontWeight: 700, fontSize: 24, color: 'primary.main', letterSpacing: 1, zIndex: 2 }}>
-          M
-        </Box>
+        <Tooltip title="О проекте" arrow>
+          <Box
+            sx={{ fontWeight: 700, fontSize: 24, color: 'primary.main', letterSpacing: 1, zIndex: 2, cursor: 'pointer', userSelect: 'none' }}
+            onClick={onShowPresentation}
+          >
+            M
+          </Box>
+        </Tooltip>
         <Stack
           direction="row"
           spacing={isMobile ? 0.5 : 1.5}

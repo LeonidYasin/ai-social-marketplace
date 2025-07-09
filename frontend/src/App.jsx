@@ -62,6 +62,9 @@ function MainLayout({
   aiChatOpen,
   setAiChatOpen,
   openAIChat,
+  showPresentation,
+  onShowPresentation,
+  onHidePresentation,
 }) {
   const navigate = useNavigate();
   return (
@@ -80,6 +83,7 @@ function MainLayout({
         socket={socket}
         setLeftSidebarOpen={setLeftSidebarOpen}
         setRightSidebarOpen={setRightSidebarOpen}
+        onShowPresentation={onShowPresentation}
       />
       <Box sx={{ display: 'flex' }}>
         <SidebarLeft
@@ -93,7 +97,10 @@ function MainLayout({
           onAIChatClick={openAIChat}
         />
         <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8, mb: 2, position: 'relative' }}>
-          <Outlet />
+          <Outlet context={{
+            showPresentation,
+            onHidePresentation
+          }} />
         </Box>
         <SidebarRight
           users={allUsers}
@@ -186,6 +193,9 @@ const AppWithRouter = (props) => {
           aiChatOpen={props.aiChatOpen}
           setAiChatOpen={props.setAiChatOpen}
           openAIChat={props.openAIChat}
+          showPresentation={props.showPresentation}
+          onShowPresentation={props.onShowPresentation}
+          onHidePresentation={props.onHidePresentation}
         />
       }>
         <Route index element={<Feed
@@ -249,11 +259,6 @@ const App = ({ themeMode, onThemeToggle }) => {
   // Состояние для управления AI-ассистентом
   const [aiChatOpen, setAiChatOpen] = useState(false);
   
-  // Функция для открытия AI чата
-  const openAIChat = () => {
-    setAiChatOpen(true);
-  };
-  
   // Новое состояние для реальных пользователей
   const [realUsers, setRealUsers] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
@@ -263,6 +268,10 @@ const App = ({ themeMode, onThemeToggle }) => {
   
   // Mobile detection
   const isMobile = useMediaQuery(theme => theme.breakpoints.down('md'));
+
+  // Глобальный state для презентации
+  const [showPresentation, setShowPresentation] = useState(false);
+  const togglePresentation = () => setShowPresentation(v => !v);
 
   // Функция загрузки пользователей из API
   const fetchUsers = async () => {
@@ -681,6 +690,9 @@ const App = ({ themeMode, onThemeToggle }) => {
         aiChatOpen={aiChatOpen}
         setAiChatOpen={setAiChatOpen}
         openAIChat={() => setAiChatOpen(true)}
+        showPresentation={showPresentation}
+        onShowPresentation={togglePresentation}
+        onHidePresentation={() => setShowPresentation(false)}
       />
     </ThemeProvider>
   );
