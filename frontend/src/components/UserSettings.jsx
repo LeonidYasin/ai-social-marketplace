@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Card,
@@ -28,6 +29,8 @@ import {
   Tooltip,
   Alert,
   CircularProgress,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import {
   Settings as SettingsIcon,
@@ -51,6 +54,8 @@ import {
   Email as EmailIcon,
   Save as SaveIcon,
   Cancel as CancelIcon,
+  Logout as LogoutIcon,
+  AdminPanelSettings as AdminPanelSettingsIcon,
 } from '@mui/icons-material';
 import { v4 as uuidv4 } from 'uuid';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -149,6 +154,10 @@ const MOCK_POSTS = [
 ];
 
 const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, setCurrentUser, isPageMode = false }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+  
   const [tab, setTab] = useState(0);
   const [profile, setProfile] = useState({
     name: 'Александр',
@@ -156,7 +165,7 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
     bio: 'Люблю технологии и новые знакомства',
     avatar: null,
   });
-  const [theme, setTheme] = useState('light');
+  const [themeName, setThemeName] = useState('light');
   const [primaryColor, setPrimaryColor] = useState('#1976d2');
   const [notifications, setNotifications] = useState({
     newPosts: true,
@@ -177,7 +186,6 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
   const [editMode, setEditMode] = useState(false);
   const [editName, setEditName] = useState('');
   const [editEmail, setEditEmail] = useState('');
-  const [gamificationModalOpen, setGamificationModalOpen] = useState(false);
   
   // Новые состояния для аутентификации
   const [authStep, setAuthStep] = useState('welcome'); // 'welcome', 'choose-method', 'login'
@@ -203,6 +211,17 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
   const [changePwd, setChangePwd] = useState({ old: '', new1: '', new2: '' });
   const [changePwdMsg, setChangePwdMsg] = useState('');
   const [changePwdLoading, setChangePwdLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  // Сброс состояния авторизации при изменении пользователя
+  useEffect(() => {
+    if (currentUser) {
+      setAuthStep('welcome');
+      setAuthError('');
+      setIsLoading(false);
+    }
+  }, [currentUser]);
 
   // Функция для получения значения из куков
   const getCookie = (name) => {
@@ -233,7 +252,7 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
     if (savedSettings) {
       const settings = JSON.parse(savedSettings);
       setProfile(settings.profile || profile);
-      setTheme(settings.theme || 'light');
+      setThemeName(settings.theme || 'light');
       setPrimaryColor(settings.primaryColor || '#1976d2');
       setNotifications(settings.notifications || notifications);
       setFilters(settings.filters || filters);
@@ -271,13 +290,13 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
   useEffect(() => {
     const settings = {
       profile,
-      theme,
+      themeName,
       primaryColor,
       notifications,
       filters,
     };
     localStorage.setItem('userSettings', JSON.stringify(settings));
-  }, [profile, theme, primaryColor, notifications, filters]);
+  }, [profile, themeName, primaryColor, notifications, filters]);
 
   // Функция для создания первого пользователя браузера
   const createFirstUser = async () => {
@@ -318,7 +337,13 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
           localStorage.setItem('authToken', loginResponse.token);
           if (onUserChange) onUserChange(newUser);
           
-          onClose();
+          // Перенаправляем на главную страницу в режиме страницы
+          if (isPageMode) {
+            console.log('Перенаправляем на главную страницу после входа как гость');
+            navigate('/');
+          } else {
+            onClose();
+          }
           return;
         } catch (error) {
           console.log('Не удалось войти с сохраненными данными, создаем нового гостя');
@@ -367,8 +392,13 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
       
       if (onUserChange) onUserChange(newUser);
       
-      // Закрываем диалог после успешного создания гостевого пользователя
-      onClose();
+      // Перенаправляем на главную страницу в режиме страницы
+      if (isPageMode) {
+        console.log('Перенаправляем на главную страницу после входа как гость');
+        navigate('/');
+      } else {
+        onClose();
+      }
       
     } catch (error) {
       setAuthError('Ошибка создания гостевого пользователя: ' + error.message);
@@ -713,7 +743,7 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
   };
 
   const handleThemeChange = (newTheme) => {
-    setTheme(newTheme);
+    setThemeName(newTheme);
     setPrimaryColor(THEMES[newTheme].primary);
   };
 
@@ -945,21 +975,22 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
 
   // Рендер профиля пользователя
   const renderProfileTab = () => (
-    <Box>
-      <Typography variant="h6" sx={{ mb: 3 }}>Профиль пользователя</Typography>
+    <Box sx={{ width: '100%', maxWidth: '100%', overflow: 'auto' }}>
+      <Typography variant="h6" sx={{ mb: { xs: 2, sm: 3 }, fontSize: { xs: '1.1rem', sm: '1.25rem' } }}>Профиль пользователя</Typography>
       
-      <Stack spacing={3}>
+      <Stack spacing={{ xs: 2, sm: 3 }}>
         {/* Аватар */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 2 }, flexWrap: 'wrap' }}>
           <Box sx={{ position: 'relative' }}>
             <Avatar
               src={currentUser?.avatar || profile.avatar}
-              sx={{ width: 80, height: 80, fontSize: 32 }}
+              sx={{ width: { xs: 60, sm: 80 }, height: { xs: 60, sm: 80 }, fontSize: { xs: 24, sm: 32 } }}
             >
               {(currentUser?.name || profile.name)[0]}
             </Avatar>
             <IconButton
               component="label"
+              size={isMobile ? "small" : "medium"}
               sx={{
                 position: 'absolute',
                 bottom: 0,
@@ -969,27 +1000,29 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
                 '&:hover': { bgcolor: 'primary.dark' },
               }}
             >
-              <PhotoCameraIcon />
+              <PhotoCameraIcon fontSize={isMobile ? "small" : "medium"} />
               <input type="file" hidden accept="image/*" onChange={handleAvatarChange} />
             </IconButton>
           </Box>
-          <Box>
-            <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+          <Box sx={{ minWidth: 0, flex: 1 }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 600, fontSize: { xs: '0.9rem', sm: '1rem' } }}>
               {currentUser?.name || profile.name}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
               {currentUser?.email || profile.email}
             </Typography>
           </Box>
         </Box>
 
         {/* Кнопки редактирования */}
-        <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
+        <Box sx={{ display: 'flex', gap: { xs: 1, sm: 2 }, justifyContent: 'flex-end', flexWrap: 'wrap' }}>
           {!editMode ? (
             <Button
               variant="outlined"
+              size={isMobile ? "small" : "medium"}
               onClick={startEdit}
               startIcon={<EditIcon />}
+              sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
             >
               Редактировать
             </Button>
@@ -997,15 +1030,19 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
             <>
               <Button
                 variant="contained"
+                size={isMobile ? "small" : "medium"}
                 onClick={saveEdit}
                 startIcon={<SaveIcon />}
+                sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
               >
                 Сохранить
               </Button>
               <Button
                 variant="outlined"
+                size={isMobile ? "small" : "medium"}
                 onClick={cancelEdit}
                 startIcon={<CancelIcon />}
+                sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
               >
                 Отмена
               </Button>
@@ -1020,6 +1057,7 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
           onChange={(e) => editMode ? setEditName(e.target.value) : setProfile(prev => ({ ...prev, name: e.target.value }))}
           fullWidth
           disabled={!editMode}
+          size={isMobile ? "small" : "medium"}
         />
 
         {/* Email */}
@@ -1030,17 +1068,19 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
           onChange={(e) => editMode ? setEditEmail(e.target.value) : setProfile(prev => ({ ...prev, email: e.target.value }))}
           fullWidth
           disabled={!editMode}
+          size={isMobile ? "small" : "medium"}
         />
 
         {/* Биография */}
         <TextField
           label="О себе"
           multiline
-          rows={3}
+          rows={isMobile ? 2 : 3}
           value={profile.bio}
           onChange={(e) => setProfile(prev => ({ ...prev, bio: e.target.value }))}
           fullWidth
           disabled={!editMode}
+          size={isMobile ? "small" : "medium"}
         />
       </Stack>
     </Box>
@@ -1048,23 +1088,23 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
 
   // Рендер внешнего вида
   const renderThemeTab = () => (
-    <Box>
-      <Typography variant="h6" sx={{ mb: 3 }}>Внешний вид</Typography>
+    <Box sx={{ width: '100%', maxWidth: '100%', overflow: 'auto' }}>
+      <Typography variant="h6" sx={{ mb: { xs: 2, sm: 3 }, fontSize: { xs: '1.1rem', sm: '1.25rem' } }}>Внешний вид</Typography>
       
-      <Stack spacing={3}>
+      <Stack spacing={{ xs: 2, sm: 3 }}>
         {/* Выбор темы */}
         <Box>
-          <Typography variant="subtitle1" sx={{ mb: 2 }}>Тема оформления</Typography>
-          <Grid container spacing={2}>
+          <Typography variant="subtitle1" sx={{ mb: { xs: 1, sm: 2 }, fontSize: { xs: '0.9rem', sm: '1rem' } }}>Тема оформления</Typography>
+          <Grid container spacing={{ xs: 1, sm: 2 }}>
             {Object.entries(THEMES).map(([key, themeData]) => (
               <Grid item xs={6} sm={4} key={key}>
                 <Card
                   onClick={() => handleThemeChange(key)}
                   sx={{
                     cursor: 'pointer',
-                    border: theme === key ? '2px solid' : '1px solid',
-                    borderColor: theme === key ? 'primary.main' : 'divider',
-                    bgcolor: theme === key ? 'primary.50' : 'background.paper',
+                    border: themeName === key ? '2px solid' : '1px solid',
+                    borderColor: themeName === key ? 'primary.main' : 'divider',
+                    bgcolor: themeName === key ? 'primary.50' : 'background.paper',
                     transition: 'all 0.2s',
                     '&:hover': {
                       transform: 'translateY(-2px)',
@@ -1072,11 +1112,11 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
                     },
                   }}
                 >
-                  <CardContent sx={{ textAlign: 'center', py: 2 }}>
+                  <CardContent sx={{ textAlign: 'center', py: { xs: 1, sm: 2 }, px: { xs: 1, sm: 2 } }}>
                     <Box sx={{ mb: 1, color: themeData.primary }}>
-                      {themeData.icon}
+                      {React.cloneElement(themeData.icon, { fontSize: isMobile ? "small" : "medium" })}
                     </Box>
-                    <Typography variant="body2">{themeData.name}</Typography>
+                    <Typography variant="body2" sx={{ fontSize: { xs: '0.7rem', sm: '0.875rem' } }}>{themeData.name}</Typography>
                   </CardContent>
                 </Card>
               </Grid>
@@ -1086,12 +1126,12 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
 
         {/* Основной цвет */}
         <Box>
-          <Typography variant="subtitle1" sx={{ mb: 2 }}>Основной цвет</Typography>
-          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          <Typography variant="subtitle1" sx={{ mb: { xs: 1, sm: 2 }, fontSize: { xs: '0.9rem', sm: '1rem' } }}>Основной цвет</Typography>
+          <Box sx={{ display: 'flex', gap: { xs: 1, sm: 2 }, alignItems: 'center' }}>
             <Box
               sx={{
-                width: 40,
-                height: 40,
+                width: { xs: 32, sm: 40 },
+                height: { xs: 32, sm: 40 },
                 borderRadius: '50%',
                 bgcolor: primaryColor,
                 border: '2px solid',
@@ -1099,7 +1139,7 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
                 cursor: 'pointer',
               }}
             />
-            <Typography variant="body2">{primaryColor}</Typography>
+            <Typography variant="body2" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>{primaryColor}</Typography>
           </Box>
         </Box>
       </Stack>
@@ -1108,21 +1148,28 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
 
   // Рендер уведомлений
   const renderNotificationsTab = () => (
-    <Box>
-      <Typography variant="h6" sx={{ mb: 3 }}>Уведомления</Typography>
+    <Box sx={{ width: '100%', maxWidth: '100%', overflow: 'auto' }}>
+      <Typography variant="h6" sx={{ mb: { xs: 2, sm: 3 }, fontSize: { xs: '1.1rem', sm: '1.25rem' } }}>Уведомления</Typography>
       
-      <Stack spacing={2}>
+      <Stack spacing={{ xs: 1.5, sm: 2 }}>
         {NOTIFICATION_TYPES.map((type) => (
-          <Box key={type.key} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Box>
-              <Typography variant="subtitle2">{type.label}</Typography>
-              <Typography variant="body2" color="text.secondary">
+          <Box key={type.key} sx={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: { xs: 1, sm: 2 }
+          }}>
+            <Box sx={{ minWidth: 0, flex: 1 }}>
+              <Typography variant="subtitle2" sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}>{type.label}</Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.7rem', sm: '0.875rem' } }}>
                 {type.description}
               </Typography>
             </Box>
             <Switch
               checked={notifications[type.key]}
               onChange={() => handleNotificationChange(type.key)}
+              size={isMobile ? "small" : "medium"}
             />
           </Box>
         ))}
@@ -1132,14 +1179,14 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
 
   // Рендер фильтров
   const renderFiltersTab = () => (
-    <Box>
-      <Typography variant="h6" sx={{ mb: 3 }}>Фильтры контента</Typography>
+    <Box sx={{ width: '100%', maxWidth: '100%', overflow: 'auto' }}>
+      <Typography variant="h6" sx={{ mb: { xs: 2, sm: 3 }, fontSize: { xs: '1.1rem', sm: '1.25rem' } }}>Фильтры контента</Typography>
       
-      <Stack spacing={3}>
+      <Stack spacing={{ xs: 2, sm: 3 }}>
         {/* Разделы */}
         <Box>
-          <Typography variant="subtitle1" sx={{ mb: 2 }}>Разделы</Typography>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+          <Typography variant="subtitle1" sx={{ mb: { xs: 1, sm: 2 }, fontSize: { xs: '0.9rem', sm: '1rem' } }}>Разделы</Typography>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: { xs: 0.5, sm: 1 } }}>
             {SECTIONS.map((section) => (
               <Chip
                 key={section.value}
@@ -1147,14 +1194,18 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
                 onClick={() => handleSectionFilterChange(section.value)}
                 color={filters.sections.includes(section.value) ? 'primary' : 'default'}
                 variant={filters.sections.includes(section.value) ? 'filled' : 'outlined'}
-                sx={{ cursor: 'pointer' }}
+                size={isMobile ? "small" : "medium"}
+                sx={{ 
+                  cursor: 'pointer',
+                  fontSize: { xs: '0.7rem', sm: '0.875rem' }
+                }}
               />
             ))}
           </Box>
         </Box>
 
         {/* Сортировка */}
-        <FormControl fullWidth>
+        <FormControl fullWidth size={isMobile ? "small" : "medium"}>
           <InputLabel>Сортировка</InputLabel>
           <Select
             value={filters.sortBy}
@@ -1170,7 +1221,7 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
 
         {/* Минимальное количество реакций */}
         <Box>
-          <Typography variant="subtitle1" sx={{ mb: 2 }}>
+          <Typography variant="subtitle1" sx={{ mb: { xs: 1, sm: 2 }, fontSize: { xs: '0.9rem', sm: '1rem' } }}>
             Минимальное количество реакций: {filters.minReactions}
           </Typography>
           <Slider
@@ -1183,30 +1234,33 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
               { value: 25, label: '25' },
               { value: 50, label: '50' },
             ]}
+            size={isMobile ? "small" : "medium"}
           />
         </Box>
 
         {/* Дополнительные настройки */}
         <Box>
-          <Typography variant="subtitle1" sx={{ mb: 2 }}>Отображение</Typography>
-          <Stack spacing={1}>
+          <Typography variant="subtitle1" sx={{ mb: { xs: 1, sm: 2 }, fontSize: { xs: '0.9rem', sm: '1rem' } }}>Отображение</Typography>
+          <Stack spacing={{ xs: 0.5, sm: 1 }}>
             <FormControlLabel
               control={
                 <Switch
                   checked={filters.showReactions}
                   onChange={(e) => handleFilterChange('showReactions', e.target.checked)}
+                  size={isMobile ? "small" : "medium"}
                 />
               }
-              label="Показывать реакции"
+              label={<Typography sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}>Показывать реакции</Typography>}
             />
             <FormControlLabel
               control={
                 <Switch
                   checked={filters.showComments}
                   onChange={(e) => handleFilterChange('showComments', e.target.checked)}
+                  size={isMobile ? "small" : "medium"}
                 />
               }
-              label="Показывать комментарии"
+              label={<Typography sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}>Показывать комментарии</Typography>}
             />
           </Stack>
         </Box>
@@ -1216,7 +1270,7 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
 
   // Рендер геймификации
   const renderGamificationTab = () => (
-    <Gamification userStats={userStats} />
+    <Gamification userStats={userStats} isPageMode={true} />
   );
 
   // --- Админская вкладка пользователей ---
@@ -1259,19 +1313,36 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
   }, [tab]);
 
   const renderAdminUsersTab = () => (
-    <Box>
-      <Typography variant="h6" sx={{ mb: 2 }}>Пользователи в базе</Typography>
-      {usersLoading ? <Typography>Загрузка...</Typography> : null}
-      {deleteError && <Alert severity="error">{deleteError}</Alert>}
-      <Stack spacing={2}>
+    <Box sx={{ width: '100%', maxWidth: '100%', overflow: 'auto' }}>
+      <Typography variant="h6" sx={{ mb: { xs: 2, sm: 3 }, fontSize: { xs: '1.1rem', sm: '1.25rem' } }}>Пользователи в базе</Typography>
+      {usersLoading ? <Typography sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}>Загрузка...</Typography> : null}
+      {deleteError && <Alert severity="error" sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}>{deleteError}</Alert>}
+      <Stack spacing={{ xs: 1.5, sm: 2 }}>
         {(Array.isArray(users) ? users : []).map(user => (
-          <Box key={user.id} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Avatar src={user.avatar_url || ''}>{user.username?.[0]}</Avatar>
-            <Box sx={{ flex: 1 }}>
-              <Typography>{user.username} ({user.email})</Typography>
-              <Typography variant="caption" color="text.secondary">{user.first_name} {user.last_name}</Typography>
-              <Typography variant="caption" color="text.secondary">Роль: {user.role}</Typography>
-              <FormControl size="small" sx={{ minWidth: 120, ml: 2 }}>
+          <Box key={user.id} sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: { xs: 1, sm: 2 },
+            flexWrap: 'wrap',
+            p: { xs: 1, sm: 2 },
+            border: '1px solid',
+            borderColor: 'divider',
+            borderRadius: 1
+          }}>
+            <Avatar src={user.avatar_url || ''} sx={{ width: { xs: 32, sm: 40 }, height: { xs: 32, sm: 40 } }}>
+              {user.username?.[0]}
+            </Avatar>
+            <Box sx={{ minWidth: 0, flex: 1 }}>
+              <Typography sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}>
+                {user.username} ({user.email})
+              </Typography>
+              <Typography variant="caption" color="text.secondary" sx={{ fontSize: { xs: '0.7rem', sm: '0.75rem' } }}>
+                {user.first_name} {user.last_name}
+              </Typography>
+              <Typography variant="caption" color="text.secondary" sx={{ fontSize: { xs: '0.7rem', sm: '0.75rem' } }}>
+                Роль: {user.role}
+              </Typography>
+              <FormControl size="small" sx={{ minWidth: { xs: 80, sm: 120 }, ml: { xs: 0, sm: 2 }, mt: { xs: 1, sm: 0 } }}>
                 <InputLabel>Роль</InputLabel>
                 <Select
                   value={user.role || 'member'}
@@ -1284,7 +1355,14 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
                 </Select>
               </FormControl>
             </Box>
-            <Button color="error" variant="outlined" onClick={() => handleDeleteUser(user.id)} disabled={user.id === currentUser?.id}>
+            <Button 
+              color="error" 
+              variant="outlined" 
+              size={isMobile ? "small" : "medium"}
+              onClick={() => handleDeleteUser(user.id)} 
+              disabled={user.id === currentUser?.id}
+              sx={{ fontSize: { xs: '0.7rem', sm: '0.875rem' } }}
+            >
               Удалить
             </Button>
           </Box>
@@ -1293,54 +1371,70 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
     </Box>
   );
 
-  // Смена admin-пароля
-  const renderChangeAdminPassword = () => (
-    <Box sx={{ mt: 2, mb: 2, p: 2, bgcolor: '#e6f7ff', borderRadius: 2, border: '1px solid #91d5ff' }}>
-      <Typography variant="h6" sx={{ mb: 1 }}>Сменить пароль администратора</Typography>
-      <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+  // Получение роли администратора
+  const renderGetAdminRole = () => (
+    <Box sx={{ 
+      mt: { xs: 1, sm: 2 }, 
+      mb: { xs: 1, sm: 2 }, 
+      p: { xs: 1, sm: 2 }, 
+      bgcolor: '#e6f7ff', 
+      borderRadius: 2, 
+      border: '1px solid #91d5ff',
+      width: '100%',
+      maxWidth: '100%',
+      overflow: 'auto'
+    }}>
+      <Typography variant="h6" sx={{ mb: { xs: 1, sm: 2 }, fontSize: { xs: '1rem', sm: '1.25rem' } }}>
+        Получить роль администратора
+      </Typography>
+      <Box sx={{ 
+        display: 'flex', 
+        gap: { xs: 1, sm: 2 }, 
+        alignItems: 'center', 
+        flexWrap: 'wrap',
+        flexDirection: { xs: 'column', sm: 'row' }
+      }}>
         <TextField
           type="password"
-          label="Старый пароль"
+          label="Пароль администратора"
           value={changePwd.old}
           onChange={e => setChangePwd({ ...changePwd, old: e.target.value })}
-          size="small"
-        />
-        <TextField
-          type="password"
-          label="Новый пароль"
-          value={changePwd.new1}
-          onChange={e => setChangePwd({ ...changePwd, new1: e.target.value })}
-          size="small"
-        />
-        <TextField
-          type="password"
-          label="Повторите новый пароль"
-          value={changePwd.new2}
-          onChange={e => setChangePwd({ ...changePwd, new2: e.target.value })}
-          size="small"
+          size={isMobile ? "small" : "medium"}
+          fullWidth={isMobile}
+          sx={{ minWidth: { xs: '100%', sm: 'auto' } }}
+          placeholder="Введите пароль администратора"
         />
         <Button
           variant="contained"
           color="primary"
-          disabled={changePwdLoading || !changePwd.old || !changePwd.new1 || changePwd.new1 !== changePwd.new2}
+          size={isMobile ? "small" : "medium"}
+          disabled={changePwdLoading || !changePwd.old}
           onClick={async () => {
             setChangePwdLoading(true);
             setChangePwdMsg('');
             try {
-              const res = await fetch('/api/admin/change-admin-password', {
+              const res = await fetch('/api/admin/verify-admin-password', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
                   'Authorization': `Bearer ${localStorage.getItem('authToken')}`
                 },
-                body: JSON.stringify({ oldPassword: changePwd.old, newPassword: changePwd.new1 })
+                body: JSON.stringify({ password: changePwd.old })
               });
               const data = await res.json();
               if (res.ok) {
                 setChangePwd({ old: '', new1: '', new2: '' });
-                setChangePwdMsg('Пароль успешно изменён!');
+                setChangePwdMsg('Роль администратора получена!');
+                // Обновляем роль пользователя
+                if (setCurrentUser && currentUser) {
+                  setCurrentUser({ ...currentUser, role: 'admin' });
+                }
+                // Перезагружаем страницу через секунду
+                setTimeout(() => {
+                  window.location.reload();
+                }, 1000);
               } else {
-                setChangePwdMsg(data.error || data.message || 'Ошибка');
+                setChangePwdMsg(data.error || data.message || 'Неверный пароль администратора');
               }
             } catch (e) {
               setChangePwdMsg('Ошибка запроса: ' + e.message);
@@ -1348,20 +1442,122 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
               setChangePwdLoading(false);
             }
           }}
+          sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
         >
-          {changePwdLoading ? 'Смена...' : 'Сменить пароль'}
+          {changePwdLoading ? 'Проверка...' : 'Получить роль администратора'}
         </Button>
       </Box>
-      {changePwdMsg && <Typography color={changePwdMsg.includes('успешно') ? 'primary' : 'error'} sx={{ mt: 1 }}>{changePwdMsg}</Typography>}
+      {changePwdMsg && (
+        <Typography 
+          color={changePwdMsg.includes('успешно') ? 'primary' : 'error'} 
+          sx={{ mt: 1, fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
+        >
+          {changePwdMsg}
+        </Typography>
+      )}
     </Box>
   );
 
   // Вкладка администрирования
   const renderAdminTab = () => (
-    <Box>
-      <Typography variant="h6" sx={{ mb: 2 }}>Администрирование</Typography>
-      <Typography variant="body2" sx={{ mb: 2 }}>Здесь доступны функции для администраторов системы.</Typography>
-      {renderChangeAdminPassword()}
+    <Box sx={{ width: '100%', maxWidth: '100%', overflow: 'auto' }}>
+      <Typography variant="h6" sx={{ mb: { xs: 2, sm: 3 }, fontSize: { xs: '1.1rem', sm: '1.25rem' } }}>Администрирование</Typography>
+      <Typography variant="body2" sx={{ mb: { xs: 2, sm: 3 }, fontSize: { xs: '0.8rem', sm: '0.875rem' } }}>
+        Здесь доступны функции для администраторов системы.
+      </Typography>
+      <Button
+        variant="contained"
+        color="primary"
+        startIcon={<AdminPanelSettingsIcon />}
+        sx={{ mb: 2 }}
+        onClick={() => navigate('/admin')}
+      >
+        Открыть админ-панель
+      </Button>
+      {/* Форма смены пароля администратора для уже админов */}
+      <Box sx={{ 
+        mt: { xs: 1, sm: 2 }, 
+        mb: { xs: 1, sm: 2 }, 
+        p: { xs: 1, sm: 2 }, 
+        bgcolor: '#fff3e0', 
+        borderRadius: 2, 
+        border: '1px solid #ffb74d',
+        width: '100%',
+        maxWidth: '100%',
+        overflow: 'auto'
+      }}>
+        <Typography variant="h6" sx={{ mb: { xs: 1, sm: 2 }, fontSize: { xs: '1rem', sm: '1.25rem' } }}>
+          Сменить пароль администратора
+        </Typography>
+        <Box sx={{ 
+          display: 'flex', 
+          gap: { xs: 1, sm: 2 }, 
+          alignItems: 'center', 
+          flexWrap: 'wrap',
+          flexDirection: { xs: 'column', sm: 'row' }
+        }}>
+          <TextField
+            type="password"
+            label="Старый пароль"
+            value={changePwd.new1}
+            onChange={e => setChangePwd({ ...changePwd, new1: e.target.value })}
+            size={isMobile ? "small" : "medium"}
+            fullWidth={isMobile}
+            sx={{ minWidth: { xs: '100%', sm: 'auto' } }}
+          />
+          <TextField
+            type="password"
+            label="Новый пароль"
+            value={changePwd.new2}
+            onChange={e => setChangePwd({ ...changePwd, new2: e.target.value })}
+            size={isMobile ? "small" : "medium"}
+            fullWidth={isMobile}
+            sx={{ minWidth: { xs: '100%', sm: 'auto' } }}
+          />
+          <Button
+            variant="contained"
+            color="warning"
+            size={isMobile ? "small" : "medium"}
+            disabled={changePwdLoading || !changePwd.new1 || !changePwd.new2 || changePwd.new1 !== changePwd.new2}
+            onClick={async () => {
+              setChangePwdLoading(true);
+              setChangePwdMsg('');
+              try {
+                const res = await fetch('/api/admin/change-admin-password', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                  },
+                  body: JSON.stringify({ oldPassword: changePwd.new1, newPassword: changePwd.new2 })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                  setChangePwd({ old: '', new1: '', new2: '' });
+                  setChangePwdMsg('Пароль успешно изменён!');
+                } else {
+                  setChangePwdMsg(data.error || data.message || 'Ошибка');
+                }
+              } catch (e) {
+                setChangePwdMsg('Ошибка запроса: ' + e.message);
+              } finally {
+                setChangePwdLoading(false);
+              }
+            }}
+            sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
+          >
+            {changePwdLoading ? 'Смена...' : 'Сменить пароль'}
+          </Button>
+        </Box>
+        {changePwdMsg && (
+          <Typography 
+            color={changePwdMsg.includes('успешно') ? 'primary' : 'error'} 
+            sx={{ mt: 1, fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
+          >
+            {changePwdMsg}
+          </Typography>
+        )}
+      </Box>
       {/* Здесь могут быть другие админские функции */}
     </Box>
   );
@@ -1379,7 +1575,23 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
   if (!currentUser) {
     if (isPageMode) {
       return (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ 
+          p: { xs: 1, sm: 2, md: 3 },
+          maxWidth: '100%',
+          overflow: 'auto'
+        }}>
+          {/* Кнопка выхода для режима страницы */}
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={handleLogout}
+              startIcon={<LogoutIcon />}
+            >
+              Выйти
+            </Button>
+          </Box>
+          
           {renderAuthScreen()}
         </Box>
       );
@@ -1411,17 +1623,17 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
   const renderContent = () => (
     <>
       {!isPageMode && (
-        <Box sx={{ mb: 2, p: 2, bgcolor: 'background.paper', borderRadius: 1, border: 1, borderColor: 'divider' }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Avatar sx={{ width: 40, height: 40 }}>
+        <Box sx={{ mb: 2, p: { xs: 1, sm: 2 }, bgcolor: 'background.paper', borderRadius: 1, border: 1, borderColor: 'divider' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 2 }, minWidth: 0, flex: 1 }}>
+              <Avatar sx={{ width: { xs: 32, sm: 40 }, height: { xs: 32, sm: 40 } }}>
                 {currentUser.name[0]}
               </Avatar>
-              <Box>
-                <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+              <Box sx={{ minWidth: 0, flex: 1 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 600, fontSize: { xs: '0.9rem', sm: '1rem' } }}>
                   {currentUser.name}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
                   {currentUser.email || 'Email не указан'}
                 </Typography>
               </Box>
@@ -1429,8 +1641,9 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
             <Button
               variant="outlined"
               color="error"
-              size="small"
+              size={isMobile ? "small" : "medium"}
               onClick={handleLogout}
+              sx={{ flexShrink: 0 }}
             >
               Выйти
             </Button>
@@ -1441,10 +1654,20 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
       <Tabs
         value={tab}
         onChange={(_, v) => setTab(v)}
-        sx={{ mb: 2 }}
+        sx={{ 
+          mb: 2,
+          '& .MuiTabs-flexContainer': {
+            flexWrap: 'wrap !important',
+            gap: '4px !important'
+          },
+          '& .MuiTab-root': {
+            minWidth: 'auto !important',
+            flex: '0 0 auto !important'
+          }
+        }}
         variant="scrollable"
         scrollButtons="auto"
-        allowScrollButtonsMobile
+        allowScrollButtonsMobile={true}
       >
         <Tab label="Профиль" />
         <Tab label="Внешний вид" />
@@ -1454,24 +1677,119 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
         <Tab label="Пользователи" />
         {currentUser?.role === 'admin' && <Tab label="Администрирование" />}
       </Tabs>
-      {tab === 0 && renderProfileTab()}
-      {tab === 1 && renderThemeTab()}
-      {tab === 2 && renderNotificationsTab()}
-      {tab === 3 && renderFiltersTab()}
-      {tab === 4 && renderGamificationTab()}
-      {tab === 5 && renderAdminUsersTab()}
-      {tab === 6 && currentUser?.role === 'admin' && renderAdminTab()}
-      {/* Если не админ — показать форму стать админом */}
-      {currentUser?.role !== 'admin' && renderChangeAdminPassword()}
+      <Box sx={{ 
+        p: { xs: 0.5, sm: 2 },
+        width: '100%',
+        maxWidth: '100%',
+        overflow: 'auto',
+        '& *': {
+          maxWidth: '100% !important'
+        },
+        '& .MuiFormControl-root': {
+          width: '100%',
+          maxWidth: '100%'
+        },
+        '& .MuiTextField-root': {
+          width: '100%'
+        },
+        '& .MuiSelect-root': {
+          width: '100%'
+        },
+        '& .MuiButton-root': {
+          fontSize: { xs: '0.75rem', sm: '0.875rem' }
+        },
+        '& .MuiGrid-root': {
+          width: '100%'
+        },
+        '& .MuiCard-root': {
+          width: '100%',
+          maxWidth: '100%'
+        },
+        '& .MuiPaper-root': {
+          width: '100%',
+          maxWidth: '100%'
+        },
+        '& .MuiStack-root': {
+          width: '100%'
+        },
+        '& .MuiTabs-root': {
+          width: '100%'
+        },
+        '& .MuiTab-root': {
+          minWidth: 'auto !important'
+        }
+      }}>
+        {tab === 0 && renderProfileTab()}
+        {tab === 1 && renderThemeTab()}
+        {tab === 2 && renderNotificationsTab()}
+        {tab === 3 && renderFiltersTab()}
+        {tab === 4 && renderGamificationTab()}
+        {tab === 5 && renderAdminUsersTab()}
+        {tab === 6 && currentUser?.role === 'admin' && renderAdminTab()}
+        {/* Если не админ — показать форму стать админом */}
+        {currentUser?.role !== 'admin' && renderGetAdminRole()}
+      </Box>
     </>
   );
 
   // Рендерим содержимое в зависимости от режима
   if (isPageMode) {
     return (
-      <>
+      <Box sx={{ 
+        width: '100%',
+        maxWidth: '100%',
+        overflow: 'auto',
+        p: { xs: 1, sm: 2 },
+        '& *': {
+          maxWidth: '100% !important'
+        },
+        '& .MuiBox-root': {
+          width: '100%',
+          maxWidth: '100%'
+        },
+        '& .MuiPaper-root': {
+          width: '100%',
+          maxWidth: '100%'
+        },
+        '& .MuiCard-root': {
+          width: '100%',
+          maxWidth: '100%'
+        },
+        '& .MuiGrid-root': {
+          width: '100%'
+        },
+        '& .MuiFormControl-root': {
+          width: '100%',
+          maxWidth: '100%'
+        },
+        '& .MuiTextField-root': {
+          width: '100%'
+        },
+        '& .MuiSelect-root': {
+          width: '100%'
+        },
+        '& .MuiStack-root': {
+          width: '100%'
+        },
+        '& .MuiTabs-root': {
+          width: '100%'
+        },
+        '& .MuiTab-root': {
+          minWidth: 'auto !important',
+          flex: '0 0 auto !important'
+        },
+        '& .MuiTabs-flexContainer': {
+          flexWrap: 'wrap !important',
+          gap: '4px !important'
+        }
+      }}>
+        {/* Крестик для закрытия панели */}
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+          <IconButton onClick={() => navigate('/')} size="large">
+            <CloseIcon />
+          </IconButton>
+        </Box>
         {renderContent()}
-        
         {/* Диалог подтверждения выхода */}
         <Dialog open={logoutConfirm} onClose={cancelLogout}>
           <DialogTitle>Подтверждение выхода</DialogTitle>
@@ -1487,10 +1805,7 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
             </Button>
           </DialogActions>
         </Dialog>
-
-        {/* Модальное окно геймификации */}
-        <Gamification open={gamificationModalOpen} onClose={() => setGamificationModalOpen(false)} userStats={userStats} />
-      </>
+      </Box>
     );
   }
 
@@ -1521,9 +1836,6 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
           </Button>
         </DialogActions>
       </Dialog>
-
-      {/* Модальное окно геймификации */}
-      <Gamification open={gamificationModalOpen} onClose={() => setGamificationModalOpen(false)} userStats={userStats} />
     </Dialog>
   );
 };

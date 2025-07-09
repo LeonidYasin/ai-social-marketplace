@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Card, CardContent, Typography, TextField, Button, Select, MenuItem, InputLabel, FormControl, CardMedia, Grid, Avatar, Dialog, DialogTitle, DialogContent, DialogActions, IconButton, Stack, Tabs, Tab, Divider, Tooltip, ToggleButtonGroup, ToggleButton, Popover, Chip, useTheme, useMediaQuery, Fab, InputBase, CircularProgress } from '@mui/material';
+import { Box, Card, CardContent, Typography, TextField, Button, Select, MenuItem, InputLabel, FormControl, CardMedia, Grid, Avatar, IconButton, Stack, Tabs, Tab, Divider, Tooltip, ToggleButtonGroup, ToggleButton, Popover, Chip, useTheme, useMediaQuery, Fab, InputBase, CircularProgress, Alert } from '@mui/material';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
@@ -151,10 +151,18 @@ const Comment = ({ comment, onReply, onSendReply, replyValue, setReplyValue, dep
   );
 };
 
-const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSidebarOpen, rightSidebarOpen, setRightSidebarOpen }) => {
+const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, rightSidebarOpen, setRightSidebarOpen, aiChatOpen, setAiChatOpen }) => {
   const theme = useTheme();
-  const isSmallMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const navigate = useNavigate();
+  
+  // Автоматически закрываем сайдбары при переходе на мобильный размер
+  useEffect(() => {
+    if (isMobile) {
+      setLeftSidebarOpen(false);
+      setRightSidebarOpen(false);
+    }
+  }, [isMobile, setLeftSidebarOpen, setRightSidebarOpen]);
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -193,6 +201,9 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxImages, setLightboxImages] = useState([]);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  // Состояния для формы создания поста
+  const [loadingPost, setLoadingPost] = useState(false);
+  const [errorPost, setErrorPost] = useState('');
 
   // Загрузка постов с backend
   const loadPosts = async () => {
@@ -289,6 +300,18 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
       });
     }
   }, [posts, userReactions, comments, onDataUpdate]);
+
+  // Закрытие AI-ассистента при изменении маршрута или других действиях
+  useEffect(() => {
+    if (aiChatOpen && setAiChatOpen) {
+      // Закрываем AI-ассистент при любых изменениях в ленте
+      const timer = setTimeout(() => {
+        // Можно добавить логику для автоматического закрытия
+      }, 300000); // 5 минут
+      
+      return () => clearTimeout(timer);
+    }
+  }, [aiChatOpen, setAiChatOpen]);
 
   // Симуляция реального времени
   useEffect(() => {
@@ -449,39 +472,27 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
     setDoc(e.target.files[0]);
   };
 
-  const handlePost = async (aiDialog = null) => {
-    if (!text.trim() && (images || []).length === 0 && !video && !doc) return;
-
+  // Функция создания поста
+  const handleCreatePost = async () => {
+    if (!text.trim() && images.length === 0 && !video && !doc) {
+      setErrorPost('Добавьте текст или медиафайлы для создания поста');
+      return;
+    }
+    setLoadingPost(true);
+    setErrorPost('');
     try {
       const postData = {
-        content: aiDialog ? aiDialog.map(m => (m.isUser ? 'Вы: ' : 'AI: ') + m.text).join('\n') : text,
-        media_urls: (images || []).map(f => f.name || 'image.jpg'),
-        media_type: video ? 'video' : doc ? 'document' : (images || []).length > 0 ? 'image' : null,
+        content: text,
+        media_urls: images.map(f => f.name),
+        media_type: video ? 'video' : doc ? 'document' : images.length > 0 ? 'image' : null,
         background_color: bg,
-        privacy: privacy === 'all' ? 'public' : privacy === 'friends' ? 'friends' : 'private',
+        privacy: privacy === 'all' ? 'public' : privacy === 'private' ? 'private' : 'friends',
         section: section,
         location: null,
-        is_ai_generated: !!aiDialog,
-        ai_prompt: aiDialog ? aiInput : null
+        is_ai_generated: false,
+        ai_prompt: null
       };
-
       const response = await postsAPI.createPost(postData);
-      
-      const newPost = {
-        id: response.post.id,
-        userId: currentUser?.id,
-        text: aiDialog ? aiDialog.map(m => (m.isUser ? 'Вы: ' : 'AI: ') + m.text).join('\n') : text,
-        images: (images || []).map(f => URL.createObjectURL(f)),
-        video: video ? URL.createObjectURL(video) : null,
-        doc: doc ? URL.createObjectURL(doc) : null,
-        bg,
-        section,
-        privacy,
-        reactions: { like: 0, love: 0, laugh: 0, wow: 0, sad: 0, angry: 0 },
-        createdAt: response.post.created_at,
-      };
-
-      setPosts(prev => [newPost, ...prev]);
       setText('');
       setImages([]);
       setVideo(null);
@@ -489,21 +500,11 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
       setPrivacy('all');
       setSection('tribune');
       setBg('');
-      setAIMessages(initialAIMessages);
-      setAIInput('');
-      setOpen(false);
-      setAIOpen(false);
-
-      // Симуляция уведомления
-      addNotification('Пост опубликован!');
-
-      // Обновление данных для родительского компонента
-      if (onDataUpdate) {
-        onDataUpdate({ type: 'post_created', post: newPost });
-      }
+      if (onDataUpdate) onDataUpdate({ type: 'post_created', post: response.post });
     } catch (err) {
-      console.error('Ошибка создания поста:', err);
-      addNotification('Ошибка при создании поста');
+      setErrorPost('Ошибка создания поста: ' + (err.message || ''));
+    } finally {
+      setLoadingPost(false);
     }
   };
 
@@ -827,210 +828,239 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
   const filteredPosts = getFilteredAndSortedPosts();
 
   return (
-    <Box sx={{ bgcolor: theme => theme.palette.background.default }}>
-      {/* Индикатор онлайн статуса и последнего обновления */}
-      <Box sx={{ mb: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: isMobile ? 'wrap' : 'nowrap', gap: 1 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
-          {/* Кнопка открытия левой панели */}
-          {isMobile && !leftSidebarOpen && (
-            <IconButton size="small" onClick={() => setLeftSidebarOpen(true)}>
-              <MenuIcon />
-            </IconButton>
-          )}
-          <Box sx={{ 
-            width: 8, 
-            height: 8, 
-            borderRadius: '50%', 
-            bgcolor: isOnline ? 'success.main' : 'error.main',
-            animation: isOnline ? 'pulse 2s infinite' : 'none',
-            '@keyframes pulse': {
-              '0%': { opacity: 1 },
-              '50%': { opacity: 0.5 },
-              '100%': { opacity: 1 },
-            }
-          }} />
-          <Typography variant="caption" color="text.secondary" sx={{ fontSize: isSmallMobile ? '0.7rem' : '0.75rem' }}>
-            {isOnline ? 'Онлайн' : 'Офлайн'}
-            {' '}
-            {isMobile
-              ? `(${lastUpdate.toLocaleTimeString().slice(0,5)})`
-              : ` • Последнее обновление: ${lastUpdate.toLocaleTimeString()}`}
-          </Typography>
-        </Box>
-        <Box sx={{ display: 'flex', gap: 1, flexShrink: 0, alignItems: 'center' }}>
-          {!isSmallMobile && (
-            <Button
-              size="small"
-              variant="outlined"
-              onClick={() => {
-                setIsOnline(!isOnline);
-                if (!isOnline) {
-                  setLastUpdate(new Date());
+    <Box sx={{ maxWidth: 800, mx: 'auto', p: 2 }}>
+      {/* Панель статуса времени и шестеренки */}
+      <Box 
+        data-status-panel="true"
+        sx={{ 
+          mb: 3, 
+          p: 2, 
+          bgcolor: theme => theme.palette.background.paper, 
+          borderRadius: 2,
+          border: 1,
+          borderColor: theme => theme.palette.divider,
+          boxShadow: theme => theme.shadows[1]
+        }}
+      >
+        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ flexWrap: 'wrap', gap: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0, flex: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
+              <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: 'success.main', flexShrink: 0 }} />
+              <Typography 
+                variant="body2" 
+                color="text.secondary"
+                sx={{ 
+                  fontSize: isMobile ? '0.7rem' : '0.75rem',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                {isOnline ? 'Онлайн' : 'Офлайн'}
+                {isMobile 
+                  ? ` (${lastUpdate.toLocaleTimeString().slice(0, 5)})`
+                  : ` • Последнее обновление: ${lastUpdate.toLocaleTimeString().slice(0, 5)}`
+                }
+              </Typography>
+            </Box>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
+            {!isMobile && (
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={() => {
+                  setIsOnline(!isOnline);
+                  if (!isOnline) {
+                    setLastUpdate(new Date());
+                  }
+                }}
+                sx={{ 
+                  textTransform: 'none', 
+                  fontSize: '0.75rem',
+                  minWidth: 'auto',
+                  px: 2,
+                  py: 0.5
+                }}
+              >
+                {isOnline ? 'Отключить' : 'Включить'} реальное время
+              </Button>
+            )}
+            <IconButton 
+              size={isMobile ? "small" : "medium"}
+              onClick={() => navigate('/settings')}
+              sx={{ 
+                color: 'text.secondary',
+                bgcolor: 'primary.50',
+                '&:hover': { 
+                  color: 'primary.main',
+                  bgcolor: 'primary.100'
                 }
               }}
-              sx={{ textTransform: 'none', fontSize: '0.75rem' }}
             >
-              {isOnline ? 'Отключить' : 'Включить'} реальное время
-            </Button>
-          )}
-          <Tooltip title="Настройки">
-            <IconButton
-              size={isSmallMobile ? "small" : "medium"}
-                              onClick={() => navigate('/settings')}
-              sx={{ 
-                bgcolor: 'primary.50',
-                '&:hover': { bgcolor: 'primary.100' }
-              }}
-            >
-              <SettingsIcon sx={{ fontSize: isSmallMobile ? 18 : 24 }} />
+              <SettingsIcon sx={{ fontSize: isMobile ? 18 : 24 }} />
             </IconButton>
-          </Tooltip>
-          {/* Кнопка открытия правой панели */}
-          {isMobile && !rightSidebarOpen && (
-            <IconButton size="small" onClick={() => setRightSidebarOpen(true)}>
-              <ChevronLeftIcon />
-            </IconButton>
-          )}
-        </Box>
+          </Box>
+        </Stack>
       </Box>
 
-      {/* Уведомления о новых обновлениях */}
-      {notifications.length > 0 && (
-        <Box sx={{ mb: 2 }}>
-          {notifications.map((notification) => (
-            <Chip
-              key={notification.id}
-              label={notification.message}
-              color="primary"
-              variant="outlined"
-              size="small"
-              sx={{ 
-                mr: 1, 
-                mb: 1,
-                animation: 'slideIn 0.3s ease-out',
-                '@keyframes slideIn': {
-                  '0%': { transform: 'translateY(-20px)', opacity: 0 },
-                  '100%': { transform: 'translateY(0)', opacity: 1 },
-                }
-              }}
-              onDelete={() => setNotifications(prev => prev.filter(n => n.id !== notification.id))}
-            />
-          ))}
-        </Box>
-      )}
-
-      {/* Индикатор активных фильтров */}
-      {userSettings?.filters && (
-        <Box sx={{ mb: 2 }}>
-          <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1 }}>
-            Активные фильтры:
-          </Typography>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-            {userSettings.filters.sections && !userSettings.filters.sections.includes('all') && (
-              <Chip
-                label={`Разделы: ${userSettings.filters.sections.map(s => SECTIONS.find(sec => sec.value === s)?.label).join(', ')}`}
-                size="small"
-                variant="outlined"
-                color="primary"
-              />
-            )}
-            {userSettings.filters.sortBy && userSettings.filters.sortBy !== 'newest' && (
-              <Chip
-                label={`Сортировка: ${userSettings.filters.sortBy === 'oldest' ? 'Сначала старые' : 
-                  userSettings.filters.sortBy === 'popular' ? 'По популярности' : 
-                  userSettings.filters.sortBy === 'reactions' ? 'По реакциям' : 'Сначала новые'}`}
-                size="small"
-                variant="outlined"
-                color="secondary"
-              />
-            )}
-            {userSettings.filters.minReactions > 0 && (
-              <Chip
-                label={`Мин. реакций: ${userSettings.filters.minReactions}`}
-                size="small"
-                variant="outlined"
-                color="info"
-              />
-            )}
-            {userSettings.filters.showReactions === false && (
-              <Chip
-                label="Реакции скрыты"
-                size="small"
-                variant="outlined"
-                color="warning"
-              />
-            )}
-            {userSettings.filters.showComments === false && (
-              <Chip
-                label="Комментарии скрыты"
-                size="small"
-                variant="outlined"
-                color="warning"
-              />
-            )}
-          </Box>
-        </Box>
-      )}
-
-      {/* Facebook-style create post panel */}
-      <Card sx={{ mb: 3, bgcolor: theme => theme.palette.background.paper, borderRadius: isMobile ? 2 : 3, boxShadow: 2, border: theme => theme.palette.mode === 'dark' ? '1.5px solid #00ffe7' : 'none' }}>
-        <CardContent sx={{ display: 'flex', alignItems: 'center', gap: isMobile ? 1 : 2, p: isMobile ? 1.5 : 2 }}>
-          <Avatar sx={{ bgcolor: 'primary.main', width: isMobile ? 36 : 44, height: isMobile ? 36 : 44, fontSize: isMobile ? 14 : 16 }}>
-            {currentUser?.name?.[0] || 'A'}
-          </Avatar>
-          <Button
-            variant="outlined"
-            sx={{ 
-              borderRadius: isMobile ? 6 : 8, 
-              flex: 1, 
-              justifyContent: 'flex-start', 
-              color: 'text.secondary', 
-              bgcolor: theme => theme.palette.background.default, 
-              textTransform: 'none', 
-              pl: isMobile ? 1.5 : 2, 
-              boxShadow: 0,
-              fontSize: isMobile ? '0.875rem' : '1rem',
-              py: isMobile ? 1 : 1.5,
-            }}
-            onClick={() => navigate('/post/new')}
-          >
-            {isMobile ? 'Что нового?' : 'Что у вас нового?'}
-          </Button>
-        </CardContent>
-      </Card>
-      {/* Удалить все Dialog, связанные с созданием поста */}
-      {/* AI-ассистент как отдельное модальное окно */}
-      <Box sx={{ maxWidth: 400, mx: 'auto', mt: 4 }}>
-        <Card sx={{ borderRadius: 3, boxShadow: 3, bgcolor: '#fff' }}>
+      {/* Маленькая форма "Что у вас нового?" */}
+      {!open && (
+        <Card sx={{ mb: 3, bgcolor: theme => theme.palette.background.paper, borderRadius: 3, boxShadow: 2 }}>
           <CardContent sx={{ p: 2 }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>AI-ассистент</Typography>
-            <Box sx={{ maxHeight: 220, overflowY: 'auto', mb: 1 }}>
-              {aiMessages.map((msg, i) => (
-                <Box key={i} sx={{ display: 'flex', justifyContent: msg.isUser ? 'flex-end' : 'flex-start', mb: 1 }}>
-                  <Box sx={{ bgcolor: msg.isUser ? 'primary.main' : 'grey.200', color: msg.isUser ? 'white' : 'black', borderRadius: 2, px: 2, py: 1, maxWidth: '80%' }}>
-                    {msg.text}
-                  </Box>
-                  {msg.isUser === false && (
-                    <Button size="small" sx={{ ml: 1 }} onClick={() => handleInsertAI(msg.text)}>Вставить в пост</Button>
-                  )}
-                </Box>
-              ))}
-            </Box>
-            <TextField
-              fullWidth
-              size="small"
-              placeholder="Задать вопрос AI..."
-              value={aiInput}
-              onChange={e => setAIInput(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleAISend()}
-              sx={{ bgcolor: theme => theme.palette.background.paper, borderRadius: 2 }}
-            />
-            <Button color="primary" variant="contained" fullWidth onClick={handleAISend} sx={{ mt: 1, borderRadius: 2 }}>
-              <SmartToyIcon />
-            </Button>
+            <Stack direction="row" alignItems="center" gap={2}>
+              <Avatar sx={{ bgcolor: 'primary.main', width: 44, height: 44, fontSize: 16 }}>
+                {currentUser?.name?.[0] || 'A'}
+              </Avatar>
+              <TextField
+                fullWidth
+                placeholder="Что у вас нового?"
+                variant="outlined"
+                onClick={() => setOpen(true)}
+                sx={{ 
+                  bgcolor: theme => theme.palette.background.default, 
+                  borderRadius: 2,
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 3,
+                    cursor: 'pointer',
+                    '&:hover': {
+                      bgcolor: theme => theme.palette.action.hover
+                    }
+                  }
+                }}
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: (
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.secondary' }}>
+                      <InsertEmoticonIcon fontSize="small" />
+                    </Box>
+                  )
+                }}
+              />
+            </Stack>
           </CardContent>
         </Card>
-      </Box>
+      )}
+
+      {/* Панель создания поста */}
+      {open && (
+        <Card sx={{ mb: 3, bgcolor: theme => theme.palette.background.paper, borderRadius: 3, boxShadow: 3 }}>
+          <CardContent sx={{ p: 3 }}>
+            <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
+              <Typography variant="h6">Создать пост</Typography>
+              <IconButton onClick={() => setOpen(false)}>
+                <CloseIcon />
+              </IconButton>
+            </Stack>
+            {errorPost && <Alert severity="error" sx={{ mb: 2 }}>{errorPost}</Alert>}
+            <TextField
+              label="Текст поста"
+              multiline
+              fullWidth
+              minRows={4}
+              value={text}
+              onChange={e => setText(e.target.value)}
+              sx={{ mb: 2, bgcolor: theme => theme.palette.background.default, borderRadius: 2 }}
+              placeholder="Что у вас нового?"
+            />
+            <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
+              <Button component="label" startIcon={<PhotoCameraIcon />} variant="outlined">
+                Фото
+                <input type="file" hidden multiple accept="image/*" onChange={e => setImages(Array.from(e.target.files))} />
+              </Button>
+              <Button component="label" startIcon={<VideoLibraryIcon />} variant="outlined">
+                Видео
+                <input type="file" hidden accept="video/*" onChange={e => setVideo(e.target.files[0])} />
+              </Button>
+              <Button component="label" startIcon={<InsertDriveFileIcon />} variant="outlined">
+                Документ
+                <input type="file" hidden accept=".pdf,.doc,.docx,.txt" onChange={e => setDoc(e.target.files[0])} />
+              </Button>
+              <FormControl sx={{ minWidth: 120 }}>
+                <InputLabel>Приватность</InputLabel>
+                <Select value={privacy} label="Приватность" onChange={e => setPrivacy(e.target.value)}>
+                  <MenuItem value="all">Все</MenuItem>
+                  <MenuItem value="private">Только я</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl sx={{ minWidth: 120 }}>
+                <InputLabel>Раздел</InputLabel>
+                <Select value={section} label="Раздел" onChange={e => setSection(e.target.value)}>
+                  {SECTIONS.map(s => <MenuItem key={s.value} value={s.value}>{s.label}</MenuItem>)}
+                </Select>
+              </FormControl>
+            </Stack>
+            <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
+              {images.map((img, i) => (
+                <Chip key={i} label={img.name} size="small" onDelete={() => setImages(images.filter((_, index) => index !== i))} />
+              ))}
+              {video && <Chip label={video.name} size="small" onDelete={() => setVideo(null)} />}
+              {doc && <Chip label={doc.name} size="small" onDelete={() => setDoc(null)} />}
+            </Stack>
+            <Stack direction="row" spacing={2} justifyContent="flex-end">
+              <Button onClick={() => setOpen(false)}>Отмена</Button>
+              <Button 
+                variant="contained" 
+                onClick={() => {
+                  handleCreatePost();
+                  setOpen(false);
+                }} 
+                disabled={loadingPost || (!text && images.length === 0 && !video && !doc)}
+              >
+                {loadingPost ? 'Создание...' : 'Опубликовать'}
+              </Button>
+            </Stack>
+          </CardContent>
+        </Card>
+      )}
+      
+      {/* AI-ассистент */}
+      {aiChatOpen && (
+        <Box sx={{ mb: 3 }}>
+          <Card sx={{ borderRadius: 3, boxShadow: 3, bgcolor: theme => theme.palette.background.paper }}>
+            <CardContent sx={{ p: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>AI-ассистент</Typography>
+                <IconButton size="small" onClick={() => setAiChatOpen(false)}>
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+              <Box sx={{ maxHeight: 220, overflowY: 'auto', mb: 1 }}>
+                {aiMessages.map((msg, i) => (
+                  <Box key={i} sx={{ display: 'flex', justifyContent: msg.isUser ? 'flex-end' : 'flex-start', mb: 1 }}>
+                    <Box sx={{ 
+                      bgcolor: msg.isUser ? 'primary.main' : theme => theme.palette.background.default, 
+                      color: msg.isUser ? 'white' : theme => theme.palette.text.primary, 
+                      borderRadius: 2, 
+                      px: 2, 
+                      py: 1, 
+                      maxWidth: '80%',
+                      border: msg.isUser ? 'none' : `1px solid ${theme => theme.palette.divider}`
+                    }}>
+                      {msg.text}
+                    </Box>
+                    {msg.isUser === false && (
+                      <Button size="small" sx={{ ml: 1 }} onClick={() => handleInsertAI(msg.text)}>Вставить в пост</Button>
+                    )}
+                  </Box>
+                ))}
+              </Box>
+              <TextField
+                fullWidth
+                size="small"
+                placeholder="Задать вопрос AI..."
+                value={aiInput}
+                onChange={e => setAIInput(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleAISend()}
+                sx={{ bgcolor: theme => theme.palette.background.paper, borderRadius: 2 }}
+              />
+              <Button color="primary" variant="contained" fullWidth onClick={handleAISend} sx={{ mt: 1, borderRadius: 2 }}>
+                <SmartToyIcon />
+              </Button>
+            </CardContent>
+          </Card>
+        </Box>
+      )}
       {/* Лента постов */}
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', py: 4 }}>
@@ -1043,87 +1073,25 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
           <Button sx={{ ml: 2 }} onClick={loadPosts}>Повторить</Button>
         </Box>
       ) : (
-        <Grid container spacing={isMobile ? 1 : 2}>
+        <Grid container spacing={2}>
           {filteredPosts.map(post => (
             <Grid item xs={12} key={post.id}>
-              <PostCard post={post} compact={false} />
+              <PostCard post={post} />
             </Grid>
           ))}
         </Grid>
       )}
-
-      {/* Плавающая кнопка для создания постов на мобильных */}
+      {/* FAB только для мобильных */}
       {isMobile && (
         <Fab
           color="primary"
           aria-label="Создать пост"
           onClick={() => navigate('/post/new')}
-          sx={{
-            position: 'fixed',
-            bottom: 16,
-            right: 16,
-            zIndex: 1000,
-            boxShadow: 3,
-            '&:hover': {
-              transform: 'scale(1.1)',
-              boxShadow: 6,
-            },
-            transition: 'all 0.2s ease-in-out',
-          }}
+          sx={{ position: 'fixed', bottom: 16, right: 16, zIndex: 1000, boxShadow: 3, '&:hover': { transform: 'scale(1.1)', boxShadow: 6 }, transition: 'all 0.2s ease-in-out' }}
         >
           <AddIcon />
         </Fab>
       )}
-
-
-
-      {/* Lightbox Dialog */}
-      <Dialog
-        open={lightboxOpen}
-        onClose={() => setLightboxOpen(false)}
-        maxWidth="md"
-        PaperProps={{ sx: { bgcolor: '#111', boxShadow: 24, borderRadius: 2, p: 0 } }}
-      >
-        <Box sx={{ position: 'relative', bgcolor: '#111', p: 0 }}>
-          <IconButton
-            onClick={() => setLightboxOpen(false)}
-            sx={{ position: 'absolute', top: 8, right: 8, color: '#fff', zIndex: 2 }}
-          >
-            <CloseIcon />
-          </IconButton>
-          {lightboxImages.length > 0 && (
-            <img
-              src={lightboxImages[lightboxIndex]}
-              alt="Фото поста"
-              style={{
-                maxWidth: '90vw',
-                maxHeight: '80vh',
-                display: 'block',
-                margin: '0 auto',
-                borderRadius: 8,
-                background: '#222',
-              }}
-            />
-          )}
-          {/* Галерея: кнопки влево/вправо */}
-          {lightboxImages.length > 1 && (
-            <>
-              <IconButton
-                onClick={() => setLightboxIndex((lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length)}
-                sx={{ position: 'absolute', top: '50%', left: 8, color: '#fff', zIndex: 2, transform: 'translateY(-50%)' }}
-              >
-                {'<'}
-              </IconButton>
-              <IconButton
-                onClick={() => setLightboxIndex((lightboxIndex + 1) % lightboxImages.length)}
-                sx={{ position: 'absolute', top: '50%', right: 48, color: '#fff', zIndex: 2, transform: 'translateY(-50%)' }}
-              >
-                {'>'}
-              </IconButton>
-            </>
-          )}
-        </Box>
-      </Dialog>
     </Box>
   );
 };

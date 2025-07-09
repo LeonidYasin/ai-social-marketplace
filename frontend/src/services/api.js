@@ -195,37 +195,84 @@ export const postsAPI = {
       const result = await apiRequest('/posts');
       return result;
     } catch (error) {
+      let errorMsg = 'Ошибка загрузки постов';
+      if (error && error.message) {
+        if (error.message.includes('Failed to fetch')) {
+          errorMsg = 'Нет соединения с сервером. Проверьте подключение к интернету или работу бэкенда.';
+        } else if (error.message.includes('401')) {
+          errorMsg = 'Вы не авторизованы. Пожалуйста, войдите в систему.';
+        } else if (error.message.includes('500')) {
+          errorMsg = 'Внутренняя ошибка сервера или базы данных.';
+        } else {
+          errorMsg = 'Ошибка: ' + error.message;
+        }
+      }
       console.error('postsAPI.getPosts error:', error);
-      
-    // Логируем ошибку
-    logger.logApiError(method, url, error);
-    throw error;
+      alert(errorMsg + (error && error.stack ? '\n' + error.stack : ''));
+      logger.logApiError('GET', '/posts', error);
+      throw error;
     }
   },
 
   // Создать пост
   createPost: async (postData) => {
     try {
-      return await apiRequest('/posts', {
+      console.log('🚀 postsAPI.createPost - Начинаем создание поста');
+      console.log('📝 Данные поста:', postData);
+      
+      // Проверяем авторизацию
+      const token = getAuthToken();
+      if (!token) {
+        throw new Error('Токен авторизации не найден');
+      }
+      
+      console.log('🔑 Токен найден:', token.substring(0, 20) + '...');
+      
+      const response = await apiRequest('/posts', {
         method: 'POST',
         body: JSON.stringify(postData)
       });
+      
+      console.log('✅ Пост создан успешно:', response);
+      return response;
     } catch (error) {
+      console.error('❌ postsAPI.createPost error:', error);
+      
       // Отправляем лог на backend
       sendClientLog('error', 'Ошибка создания поста', {
         postData,
-        error: error.message
+        error: error.message,
+        stack: error.stack
       });
       
-    // Логируем ошибку
-    logger.logApiError(method, url, error);
-    throw error;
+      // Логируем ошибку
+      logger.logApiError('POST', '/posts', error);
+      throw error;
     }
   },
 
   // Получить пост по ID
   getPost: async (postId) => {
-    return apiRequest(`/posts/${postId}`);
+    try {
+      return await apiRequest(`/posts/${postId}`);
+    } catch (error) {
+      let errorMsg = 'Ошибка загрузки поста';
+      if (error && error.message) {
+        if (error.message.includes('Failed to fetch')) {
+          errorMsg = 'Нет соединения с сервером. Проверьте подключение к интернету или работу бэкенда.';
+        } else if (error.message.includes('401')) {
+          errorMsg = 'Вы не авторизованы. Пожалуйста, войдите в систему.';
+        } else if (error.message.includes('500')) {
+          errorMsg = 'Внутренняя ошибка сервера или базы данных.';
+        } else {
+          errorMsg = 'Ошибка: ' + error.message;
+        }
+      }
+      console.error('postsAPI.getPost error:', error);
+      alert(errorMsg + (error && error.stack ? '\n' + error.stack : ''));
+      logger.logApiError('GET', `/posts/${postId}`, error);
+      throw error;
+    }
   },
 
   // Обновить пост
@@ -253,10 +300,29 @@ export const commentsAPI = {
 
   // Добавить комментарий
   addComment: async (postId, commentData) => {
-    return apiRequest(`/posts/${postId}/comments`, {
-      method: 'POST',
-      body: JSON.stringify(commentData)
-    });
+    try {
+      return await apiRequest(`/posts/${postId}/comments`, {
+        method: 'POST',
+        body: JSON.stringify(commentData)
+      });
+    } catch (error) {
+      let errorMsg = 'Ошибка добавления комментария';
+      if (error && error.message) {
+        if (error.message.includes('Failed to fetch')) {
+          errorMsg = 'Нет соединения с сервером. Проверьте подключение к интернету или работу бэкенда.';
+        } else if (error.message.includes('401')) {
+          errorMsg = 'Вы не авторизованы. Пожалуйста, войдите в систему.';
+        } else if (error.message.includes('500')) {
+          errorMsg = 'Внутренняя ошибка сервера или базы данных.';
+        } else {
+          errorMsg = 'Ошибка: ' + error.message;
+        }
+      }
+      console.error('commentsAPI.addComment error:', error);
+      alert(errorMsg + (error && error.stack ? '\n' + error.stack : ''));
+      logger.logApiError('POST', `/posts/${postId}/comments`, error);
+      throw error;
+    }
   }
 };
 
@@ -269,10 +335,29 @@ export const reactionsAPI = {
 
   // Добавить/обновить реакцию
   addReaction: async (postId, reactionData) => {
-    return apiRequest(`/posts/${postId}/reactions`, {
-      method: 'POST',
-      body: JSON.stringify(reactionData)
-    });
+    try {
+      return await apiRequest(`/posts/${postId}/reactions`, {
+        method: 'POST',
+        body: JSON.stringify(reactionData)
+      });
+    } catch (error) {
+      let errorMsg = 'Ошибка добавления реакции';
+      if (error && error.message) {
+        if (error.message.includes('Failed to fetch')) {
+          errorMsg = 'Нет соединения с сервером. Проверьте подключение к интернету или работу бэкенда.';
+        } else if (error.message.includes('401')) {
+          errorMsg = 'Вы не авторизованы. Пожалуйста, войдите в систему.';
+        } else if (error.message.includes('500')) {
+          errorMsg = 'Внутренняя ошибка сервера или базы данных.';
+        } else {
+          errorMsg = 'Ошибка: ' + error.message;
+        }
+      }
+      console.error('reactionsAPI.addReaction error:', error);
+      alert(errorMsg + (error && error.stack ? '\n' + error.stack : ''));
+      logger.logApiError('POST', `/posts/${postId}/reactions`, error);
+      throw error;
+    }
   }
 };
 

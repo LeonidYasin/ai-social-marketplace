@@ -94,5 +94,17 @@ export const neonTheme = createTheme({
         },
       },
     },
+    MuiBox: {
+      styleOverrides: {
+        root: {
+          '&[data-status-panel="true"]': {
+            background: 'linear-gradient(135deg, #23272f 60%, #181a20 100%)',
+            boxShadow: '0 2px 24px #00ffe733, 0 0 16px #00ffe755',
+            border: '1.5px solid #00ffe7',
+            borderRadius: 16,
+          },
+        },
+      },
+    },
   },
 }); 

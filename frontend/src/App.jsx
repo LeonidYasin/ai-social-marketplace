@@ -22,6 +22,7 @@ import { facebookTheme, neonTheme } from './config/themes';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import PeopleIcon from '@mui/icons-material/People';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { v4 as uuidv4 } from 'uuid';
 import { BrowserRouter as Router, Routes, Route, useNavigate, Outlet } from 'react-router-dom';
@@ -29,6 +30,7 @@ import { authAPI } from './services/api';
 import API_CONFIG from './config/api';
 import Chat from './components/Chat';
 import CreatePostPage from './components/CreatePostPage';
+import ProfilePage from './components/ProfilePage';
 
 // const USERS = [
 //   { id: 'ai', name: 'AI Ассистент', isAI: true },
@@ -57,6 +59,9 @@ function MainLayout({
   setFeedData,
   setCurrentUser,
   fetchUsers,
+  aiChatOpen,
+  setAiChatOpen,
+  openAIChat,
 }) {
   const navigate = useNavigate();
   return (
@@ -84,7 +89,8 @@ function MainLayout({
           setSearchChat={setSearchChat}
           open={leftSidebarOpen}
           onClose={() => setLeftSidebarOpen(false)}
-          variant={isMobile ? 'temporary' : 'permanent'}
+          variant={leftSidebarOpen ? "permanent" : "temporary"}
+          onAIChatClick={openAIChat}
         />
         <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8, mb: 2, position: 'relative' }}>
           <Outlet />
@@ -94,10 +100,61 @@ function MainLayout({
           onUserClick={openChat}
           open={rightSidebarOpen}
           onClose={() => setRightSidebarOpen(false)}
-          variant={isMobile ? 'temporary' : 'permanent'}
+          variant={rightSidebarOpen ? "permanent" : "temporary"}
           loading={loadingUsers}
+          onAIChatClick={openAIChat}
         />
       </Box>
+
+      {/* Кнопки развертывания панелей в верхних углах центральной области */}
+      {/* Debug: leftSidebarOpen = {leftSidebarOpen}, rightSidebarOpen = {rightSidebarOpen} */}
+      {!leftSidebarOpen && (
+        <IconButton 
+          onClick={() => setLeftSidebarOpen(true)} 
+          sx={{ 
+            position: 'fixed',
+            top: 70,
+            left: 10,
+            zIndex: 1000,
+            bgcolor: 'primary.main',
+            color: 'white',
+            boxShadow: 3,
+            '&:hover': {
+              bgcolor: 'primary.dark',
+              transform: 'scale(1.1)',
+              boxShadow: 6,
+            },
+            transition: 'all 0.2s ease-in-out',
+          }}
+          title="Открыть левую панель"
+        >
+          <MenuIcon />
+        </IconButton>
+      )}
+      
+      {!rightSidebarOpen && (
+        <IconButton 
+          onClick={() => setRightSidebarOpen(true)} 
+          sx={{ 
+            position: 'fixed',
+            top: 70,
+            right: 10,
+            zIndex: 1000,
+            bgcolor: 'primary.main',
+            color: 'white',
+            boxShadow: 3,
+            '&:hover': {
+              bgcolor: 'primary.dark',
+              transform: 'scale(1.1)',
+              boxShadow: 6,
+            },
+            transition: 'all 0.2s ease-in-out',
+          }}
+          title="Открыть правую панель"
+        >
+          <PeopleIcon />
+        </IconButton>
+      )}
 
     </Box>
   );
@@ -113,11 +170,13 @@ const AppWithRouter = (props) => {
     // 2. Пользователь не авторизован
     // 3. Нет токена в localStorage
     // 4. Мы не находимся уже на странице settings
+    // 5. Мы не находимся на главной странице (чтобы не перенаправлять обратно)
     if (
       !props.loadingUser && 
       !props.currentUser && 
       !localStorage.getItem('authToken') &&
-      window.location.pathname !== '/settings'
+      window.location.pathname !== '/settings' &&
+      window.location.pathname !== '/'
     ) {
       navigate('/settings');
     }
@@ -174,6 +233,9 @@ const AppWithRouter = (props) => {
           setFeedData={props.setFeedData}
           setCurrentUser={props.setCurrentUser}
           fetchUsers={props.fetchUsers}
+          aiChatOpen={props.aiChatOpen}
+          setAiChatOpen={props.setAiChatOpen}
+          openAIChat={props.openAIChat}
         />
       }>
         <Route index element={<Feed
@@ -184,6 +246,8 @@ const AppWithRouter = (props) => {
           setLeftSidebarOpen={props.setLeftSidebarOpen}
           rightSidebarOpen={props.rightSidebarOpen}
           setRightSidebarOpen={props.setRightSidebarOpen}
+          aiChatOpen={props.aiChatOpen}
+          setAiChatOpen={props.setAiChatOpen}
         />} />
         <Route path="chat/:id" element={<Chat currentUser={props.currentUser} />} />
         <Route path="settings" element={<SettingsPage 
@@ -211,6 +275,7 @@ const AppWithRouter = (props) => {
         }}
         />} />
         <Route path="admin" element={<AdminPage />} />
+        <Route path="profile" element={<ProfilePage currentUser={props.currentUser} onLogout={props.handleLogout || (() => { localStorage.clear(); window.location.reload(); })} />} />
       </Route>
     </Routes>
   );
@@ -228,9 +293,16 @@ const App = ({ themeMode, onThemeToggle }) => {
   const [loadingUser, setLoadingUser] = useState(true);
   const [themeName, setThemeName] = React.useState(() => localStorage.getItem('theme') || 'facebook');
   const theme = themeName === 'neon' ? neonTheme : facebookTheme;
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [leftSidebarOpen, setLeftSidebarOpen] = useState(!isMobile);
-  const [rightSidebarOpen, setRightSidebarOpen] = useState(!isMobile);
+  const [leftSidebarOpen, setLeftSidebarOpen] = useState(true);
+  const [rightSidebarOpen, setRightSidebarOpen] = useState(true);
+  
+  // Состояние для управления AI-ассистентом
+  const [aiChatOpen, setAiChatOpen] = useState(false);
+  
+  // Функция для открытия AI чата
+  const openAIChat = () => {
+    setAiChatOpen(true);
+  };
   
   // Новое состояние для реальных пользователей
   const [realUsers, setRealUsers] = useState([]);
@@ -238,6 +310,9 @@ const App = ({ themeMode, onThemeToggle }) => {
   
   // WebSocket соединение
   const [socket, setSocket] = useState(null);
+  
+  // Mobile detection
+  const isMobile = useMediaQuery(theme => theme.breakpoints.down('md'));
 
   // Функция загрузки пользователей из API
   const fetchUsers = async () => {
@@ -443,7 +518,7 @@ const App = ({ themeMode, onThemeToggle }) => {
       // Проверяем состояние подключения через 2 секунды
       setTimeout(() => {
         if (!newSocket.connected) {
-          console.error('App.jsx: WebSocket не подключился за 2 секунды');
+          console.warn('App.jsx: WebSocket не подключился за 2 секунды (это нормально для разработки)');
           console.log('App.jsx: Состояние socket:', {
             connected: newSocket.connected,
             id: newSocket.id,
@@ -630,24 +705,32 @@ const App = ({ themeMode, onThemeToggle }) => {
       <CssBaseline />
       <AppWithRouter
         chats={chats}
-        allUsers={allUsers}
-              searchChat={searchChat}
-              setSearchChat={setSearchChat}
-              leftSidebarOpen={leftSidebarOpen}
-              setLeftSidebarOpen={setLeftSidebarOpen}
-              rightSidebarOpen={rightSidebarOpen}
-              setRightSidebarOpen={setRightSidebarOpen}
-              isMobile={isMobile}
-              loadingUsers={loadingUsers}
-              currentUser={currentUser}
-              themeName={themeName}
-              setThemeName={setThemeName}
-              debugUsers={debugUsers}
-              socket={socket}
-              feedData={feedData}
-              setFeedData={setFeedData}
+        setChats={setChats}
+        activeChatId={activeChatId}
+        setActiveChatId={setActiveChatId}
+        searchChat={searchChat}
+        setSearchChat={setSearchChat}
+        feedData={feedData}
+        setFeedData={setFeedData}
+        currentUser={currentUser}
         setCurrentUser={setCurrentUser}
+        loadingUser={loadingUser}
+        setLoadingUser={setLoadingUser}
+        themeName={themeName}
+        setThemeName={setThemeName}
+        isMobile={isMobile}
+        leftSidebarOpen={leftSidebarOpen}
+        setLeftSidebarOpen={setLeftSidebarOpen}
+        rightSidebarOpen={rightSidebarOpen}
+        setRightSidebarOpen={setRightSidebarOpen}
+        allUsers={allUsers}
+        loadingUsers={loadingUsers}
+        debugUsers={debugUsers}
+        socket={socket}
         fetchUsers={fetchUsers}
+        aiChatOpen={aiChatOpen}
+        setAiChatOpen={setAiChatOpen}
+        openAIChat={() => setAiChatOpen(true)}
       />
     </ThemeProvider>
   );

@@ -21,6 +21,7 @@ import {
   Zoom,
   Tooltip,
   Badge,
+  Button,
 } from '@mui/material';
 import {
   EmojiEvents as TrophyIcon,
@@ -154,7 +155,7 @@ const RATINGS = [
   { id: 5, name: 'Ольга Морозова', avatar: 'ОМ', level: 4, xp: 720, posts: 12, reactions: 198 },
 ];
 
-const Gamification = ({ open, onClose, userStats, isPageMode = false }) => {
+const Gamification = ({ userStats, isPageMode = false }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   
@@ -598,72 +599,52 @@ const Gamification = ({ open, onClose, userStats, isPageMode = false }) => {
   }
 
   return (
-    <>
-      <Dialog
-        open={open}
-        onClose={onClose}
-        fullScreen={isMobile}
-        maxWidth="lg"
-        fullWidth
-      >
-        <DialogTitle sx={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'space-between',
-          pb: 1
+    <Box>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Stack direction="row" spacing={0}>
+          {tabs.map((tab, index) => (
+            <Button
+              key={tab.value}
+              onClick={() => setActiveTab(index)}
+              sx={{
+                flex: 1,
+                py: 2,
+                borderRadius: 0,
+                borderBottom: activeTab === index ? 2 : 0,
+                borderColor: 'primary.main',
+                color: activeTab === index ? 'primary.main' : 'text.secondary',
+                fontWeight: activeTab === index ? 600 : 400,
+                textTransform: 'none',
+              }}
+            >
+              {tab.label}
+            </Button>
+          ))}
+        </Stack>
+      </Box>
+
+      <Box sx={{ p: 3 }}>
+        {renderTabContent()}
+      </Box>
+
+      {/* Детали достижения - заменяем Dialog на Card */}
+      {selectedAchievement && (
+        <Box sx={{ 
+          position: 'fixed', 
+          top: 0, 
+          left: 0, 
+          right: 0, 
+          bottom: 0, 
+          bgcolor: 'rgba(0,0,0,0.5)', 
+          zIndex: 1300,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          p: 2
         }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <TrophyIcon color="primary" />
-            <Typography variant="h6">
-              Гамификация
-            </Typography>
-          </Box>
-          <IconButton onClick={onClose}>
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-
-        <DialogContent sx={{ p: 0 }}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Stack direction="row" spacing={0}>
-              {tabs.map((tab, index) => (
-                <Button
-                  key={tab.value}
-                  onClick={() => setActiveTab(index)}
-                  sx={{
-                    flex: 1,
-                    py: 2,
-                    borderRadius: 0,
-                    borderBottom: activeTab === index ? 2 : 0,
-                    borderColor: 'primary.main',
-                    color: activeTab === index ? 'primary.main' : 'text.secondary',
-                    fontWeight: activeTab === index ? 600 : 400,
-                    textTransform: 'none',
-                  }}
-                >
-                  {tab.label}
-                </Button>
-              ))}
-            </Stack>
-          </Box>
-
-          <Box sx={{ p: 3 }}>
-            {renderTabContent()}
-          </Box>
-        </DialogContent>
-      </Dialog>
-
-      {/* Детали достижения */}
-      <Dialog
-        open={!!selectedAchievement}
-        onClose={() => setSelectedAchievement(null)}
-        maxWidth="sm"
-        fullWidth
-      >
-        {selectedAchievement && (
-          <>
-            <DialogTitle>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Card sx={{ maxWidth: 400, width: '100%' }}>
+            <CardContent>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
                 <Typography variant="h4">
                   {selectedAchievement.icon}
                 </Typography>
@@ -676,8 +657,7 @@ const Gamification = ({ open, onClose, userStats, isPageMode = false }) => {
                   </Typography>
                 </Box>
               </Box>
-            </DialogTitle>
-            <DialogContent>
+              
               <Box sx={{ textAlign: 'center', py: 2 }}>
                 <Typography variant="h6" color="primary" sx={{ mb: 2 }}>
                   Награда: {selectedAchievement.xpReward} XP
@@ -702,16 +682,17 @@ const Gamification = ({ open, onClose, userStats, isPageMode = false }) => {
                   </Box>
                 )}
               </Box>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setSelectedAchievement(null)}>
-                Закрыть
-              </Button>
-            </DialogActions>
-          </>
-        )}
-      </Dialog>
-    </>
+              
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button onClick={() => setSelectedAchievement(null)}>
+                  Закрыть
+                </Button>
+              </Box>
+            </CardContent>
+          </Card>
+        </Box>
+      )}
+    </Box>
   );
 };
 

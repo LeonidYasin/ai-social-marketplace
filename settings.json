@@ -1,0 +1,18 @@
+{
+    "window.commandCenter": true,
+    "git.autofetch": true,
+    "cursor.composer.shouldChimeAfterChatFinishes": true,
+    "files.autoSave": "afterDelay",
+    "cursor.composer.shouldAutoAcceptDiffs": false,
+    "cursor.terminal.usePreviewBox": true,
+    "cursor.windowSwitcher.sidebarHoverCollapsed": true,
+    "cursor.composer.textSizeScale": 1.3,
+    "terminal.integrated.accessibleViewFocusOnCommandExecution": true,
+    "terminal.integrated.automationProfile.windows": {
+
+    },
+    "terminal.integrated.env.windows": {
+
+    },
+    "terminal.integrated.defaultProfile.windows": "Git Bash"
+}

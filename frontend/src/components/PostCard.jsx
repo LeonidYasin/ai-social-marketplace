@@ -18,7 +18,7 @@ const REACTIONS = {
   angry: { icon: '😠', label: 'Злость', color: '#f02849' },
 };
 
-const PostCard = ({ post, compact = false }) => {
+const PostCard = ({ post }) => {
   // Lightbox
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
@@ -129,7 +129,7 @@ const PostCard = ({ post, compact = false }) => {
         {replyTo === comment.id && (
           <Box sx={{ mt: 1, mb: 1 }}>
             <TextField
-              size={compact ? 'small' : 'medium'}
+              size="medium"
               placeholder="Ваш ответ..."
               value={replyValue}
               onChange={e => setReplyValue(e.target.value)}
@@ -151,12 +151,8 @@ const PostCard = ({ post, compact = false }) => {
 
   // Основной рендер
   return (
-    <Card sx={{ 
-      mb: 2, 
-      borderRadius: 2, 
-      boxShadow: 1,
-    }}>
-      <CardContent>
+    <Card sx={{ mb: 2, borderRadius: 2, boxShadow: 1 }}>
+      <CardContent sx={{ p: 2 }}>
         {/* Автор и дата */}
         {post.author && (
           <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
@@ -168,21 +164,8 @@ const PostCard = ({ post, compact = false }) => {
           </Box>
         )}
         {/* Текст поста */}
-        <Box sx={{
-          background: post.bg || post.background_color || 'transparent',
-          backgroundImage: (post.bg || post.background_color)?.includes('gradient') ? (post.bg || post.background_color) : undefined,
-          backgroundSize: (post.bg || post.background_color)?.includes('gradient') ? 'cover' : undefined,
-          borderRadius: 2,
-          p: (post.bg || post.background_color) ? 2 : 0,
-          mb: post.images && post.images.length > 0 ? 2 : 0,
-        }}>
-          <Typography 
-            variant="body1" 
-            sx={{ 
-              color: (post.bg || post.background_color) ? '#fff' : 'inherit',
-              textShadow: (post.bg || post.background_color) ? '0 1px 2px rgba(0,0,0,0.3)' : 'none',
-            }}
-          >
+        <Box sx={{ background: post.bg || post.background_color || 'transparent', backgroundImage: (post.bg || post.background_color)?.includes('gradient') ? (post.bg || post.background_color) : undefined, backgroundSize: (post.bg || post.background_color)?.includes('gradient') ? 'cover' : undefined, borderRadius: 2, p: (post.bg || post.background_color) ? 2 : 0, mb: post.images && post.images.length > 0 ? 2 : 0 }}>
+          <Typography variant="body1" sx={{ color: (post.bg || post.background_color) ? '#fff' : 'inherit', textShadow: (post.bg || post.background_color) ? '0 1px 2px rgba(0,0,0,0.3)' : 'none', fontSize: '1rem', lineHeight: 1.5 }}>
             {post.text}
           </Typography>
         </Box>
@@ -190,42 +173,8 @@ const PostCard = ({ post, compact = false }) => {
         {post.images && post.images.length > 0 && (
           <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 1 }}>
             {post.images.map((img, i) => (
-              <Box
-                key={i}
-                sx={{
-                  flex: '1 1 100%',
-                  maxWidth: compact ? 120 : 400,
-                  mb: 1,
-                  cursor: 'pointer',
-                  position: 'relative',
-                  bgcolor: theme => theme.palette.background.paper,
-                  borderRadius: 2,
-                  '&:hover::after': {
-                    content: '""',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    bgcolor: 'rgba(0,0,0,0.08)',
-                    borderRadius: 2,
-                  },
-                }}
-                onClick={() => handleImageClick(i)}
-              >
-                <img
-                  src={img}
-                  alt="Фото поста"
-                  style={{
-                    width: '100%',
-                    maxHeight: compact ? 120 : 400,
-                    objectFit: 'contain',
-                    borderRadius: 8,
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                    background: 'transparent',
-                    display: 'block',
-                  }}
-                />
+              <Box key={i} sx={{ flex: '1 1 100%', maxWidth: 400, mb: 1, cursor: 'pointer', position: 'relative' }} onClick={() => handleImageClick(i)}>
+                <img src={img} alt="Фото поста" style={{ width: '100%', borderRadius: 8, objectFit: 'cover', maxHeight: 300 }} />
               </Box>
             ))}
           </Box>
@@ -234,10 +183,9 @@ const PostCard = ({ post, compact = false }) => {
         <Divider sx={{ my: 2 }} />
         <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1, flexWrap: 'wrap' }}>
           <Button
-            size={compact ? 'small' : 'medium'}
             startIcon={
               <Box sx={{ position: 'relative' }}>
-                <Typography sx={{ fontSize: compact ? 18 : 20 }}>
+                <Typography sx={{ fontSize: 20 }}>
                   {userReaction ? REACTIONS[userReaction].icon : '👍'}
                 </Typography>
                 {reactionAnim && (
@@ -246,7 +194,7 @@ const PostCard = ({ post, compact = false }) => {
                       position: 'absolute',
                       top: -20,
                       left: 0,
-                      fontSize: compact ? 20 : 24,
+                      fontSize: 24,
                       animation: 'reactionFloat 0.8s ease-out',
                       '@keyframes reactionFloat': {
                         '0%': { transform: 'translateY(0) scale(1)', opacity: 1 },
@@ -265,9 +213,9 @@ const PostCard = ({ post, compact = false }) => {
               color: userReaction ? REACTIONS[userReaction].color : 'text.secondary',
               fontWeight: userReaction ? 600 : 400,
               borderRadius: 2,
-              px: compact ? 1.5 : 2,
-              py: compact ? 0.25 : 0.5,
-              fontSize: compact ? '0.75rem' : '0.875rem',
+              px: 2,
+              py: 0.5,
+              fontSize: '0.875rem',
               bgcolor: userReaction ? `${REACTIONS[userReaction].color}20` : 'transparent',
               '&:hover': { 
                 transform: 'scale(1.05)',
@@ -296,8 +244,8 @@ const PostCard = ({ post, compact = false }) => {
                     size="small"
                     onClick={() => handleReaction(key)}
                     sx={{
-                      width: compact ? 36 : 40,
-                      height: compact ? 36 : 40,
+                      width: 40,
+                      height: 40,
                       transition: 'all 0.2s',
                       '&:hover': {
                         transform: 'scale(1.2)',
@@ -308,7 +256,7 @@ const PostCard = ({ post, compact = false }) => {
                       },
                     }}
                   >
-                    <Typography sx={{ fontSize: compact ? 18 : 20 }}>
+                    <Typography sx={{ fontSize: 20 }}>
                       {reaction.icon}
                     </Typography>
                   </IconButton>
@@ -333,7 +281,7 @@ const PostCard = ({ post, compact = false }) => {
             {'В'}
           </Avatar>
           <TextField
-            size={compact ? 'small' : 'medium'}
+            size="medium"
             placeholder="Написать комментарий..."
             value={commentValue}
             onChange={e => setCommentValue(e.target.value)}
@@ -341,10 +289,10 @@ const PostCard = ({ post, compact = false }) => {
           />
           <Button 
             variant="contained" 
-            size={compact ? 'small' : 'medium'} 
+            size="medium" 
             onClick={handleAddComment} 
             disabled={!commentValue.trim()}
-            sx={{ fontSize: compact ? '0.75rem' : '0.875rem', px: compact ? 1 : 2 }}
+            sx={{ fontSize: '0.875rem', px: 2 }}
           >
             Отправить
           </Button>

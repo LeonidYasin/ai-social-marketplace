@@ -33,6 +33,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import PeopleIcon from '@mui/icons-material/People';
+import { useNavigate } from 'react-router-dom';
 
 const sections = [
   { key: 'home', label: 'Главная', icon: HomeIcon },
@@ -59,6 +61,7 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
   const [unread, setUnread] = useState(notifications.length);
   const [anchorEl, setAnchorEl] = useState(null);
   const [moreAnchor, setMoreAnchor] = useState(null);
+  const navigate = useNavigate();
 
   // Мобильная логика: показываем Home, активную вкладку (если не Home), остальные — в меню
   let visibleSections = [{ key: 'home', label: 'Главная', icon: HomeIcon }];
@@ -97,12 +100,7 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
   return (
     <AppBar position="fixed" color="default" elevation={1} sx={{ zIndex: 1201 }}>
       <Toolbar sx={{ minHeight: 64, justifyContent: 'space-between', px: isMobile ? 1 : 2, position: 'relative' }}>
-        {/* Кнопка открытия левого сайдбара на мобильных */}
-        {isMobile && setLeftSidebarOpen && (
-          <IconButton onClick={() => setLeftSidebarOpen(true)} sx={{ mr: 1 }}>
-            <MenuIcon />
-          </IconButton>
-        )}
+
         <Box sx={{ fontWeight: 700, fontSize: 24, color: 'primary.main', letterSpacing: 1, zIndex: 2 }}>
           M
         </Box>
@@ -129,7 +127,12 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
             return (
               <Tooltip key={key} title={label} arrow placement="bottom">
                 <IconButton
-                  onClick={() => setActive(key)}
+                  onClick={() => {
+                    setActive(key);
+                    if (key === 'home') {
+                      navigate('/');
+                    }
+                  }}
                   sx={{
                     width: 44,
                     height: 44,
@@ -181,11 +184,6 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
               <NightlightIcon sx={{ display: themeName === 'neon' ? 'inline' : 'none' }} />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Админская панель">
-            <IconButton color="default" onClick={onAdminPanelOpen}>
-              <AdminPanelSettingsIcon />
-            </IconButton>
-          </Tooltip>
           <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
             <MenuItem onClick={() => handleThemeChange('facebook')}>Facebook стиль</MenuItem>
             <MenuItem onClick={() => handleThemeChange('neon')}>Неоновый стиль</MenuItem>
@@ -193,7 +191,7 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
           <Tooltip title={currentUser && currentUser.name ? currentUser.name : 'Войти'}>
             <IconButton 
               color="default" 
-              onClick={onUserSettingsOpen}
+              onClick={() => navigate('/profile')}
               aria-label="Профиль"
               data-testid="profile-button"
             >
@@ -206,12 +204,7 @@ const AppBarMain = ({ onAnalyticsOpen, onSearchOpen, onNotificationsOpen, onGami
               )}
             </IconButton>
           </Tooltip>
-          {/* Кнопка открытия правого сайдбара на мобильных */}
-          {isMobile && setRightSidebarOpen && (
-            <IconButton onClick={() => setRightSidebarOpen(true)} sx={{ ml: 1 }}>
-              <ChevronRightIcon />
-            </IconButton>
-          )}
+
         </Stack>
       </Toolbar>
     </AppBar>

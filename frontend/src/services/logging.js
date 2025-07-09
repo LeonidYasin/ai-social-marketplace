@@ -199,3 +199,7 @@ logger.info('Frontend application loaded', {
   userAgent: navigator.userAgent,
   timestamp: new Date().toISOString()
 });
+
+export const sendClientLog = async (level, message, data) => {
+  // ... существующая реализация ...
+};

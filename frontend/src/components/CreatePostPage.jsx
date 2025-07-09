@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Box, Card, CardContent, Typography, TextField, Button, Select, MenuItem, InputLabel, FormControl, Avatar, Stack, IconButton, Tooltip } from '@mui/material';
+import { Box, Card, CardContent, Typography, TextField, Button, Select, MenuItem, InputLabel, FormControl, Avatar, Stack, IconButton, Tooltip, Alert, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import CloseIcon from '@mui/icons-material/Close';
+import { postsAPI } from '../services/api';
+import { sendClientLog } from '../services/logging';
 
 const SECTIONS = [
   { value: 'tribune', label: 'Трибуна' },
@@ -34,6 +36,8 @@ const CreatePostPage = ({ currentUser }) => {
   const [privacy, setPrivacy] = useState('all');
   const [section, setSection] = useState('tribune');
   const [bg, setBg] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleImageChange = (e) => {
@@ -45,9 +49,109 @@ const CreatePostPage = ({ currentUser }) => {
   const handleDocChange = (e) => {
     setDoc(e.target.files[0]);
   };
-  const handlePost = () => {
-    // TODO: реализовать отправку поста
-    navigate('/');
+
+  const handlePost = async () => {
+    if (!text.trim() && images.length === 0 && !video && !doc) {
+      setError('Добавьте текст или медиафайлы для создания поста');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      console.log('🚀 Начинаем создание поста...');
+      console.log('📝 Данные поста:', {
+        content: text,
+        media_urls: images.map(f => f.name),
+        media_type: video ? 'video' : doc ? 'document' : images.length > 0 ? 'image' : null,
+        background_color: bg,
+        privacy: privacy === 'all' ? 'public' : privacy === 'private' ? 'private' : 'friends',
+        section: section,
+        is_ai_generated: false,
+        ai_prompt: null
+      });
+
+      // Проверяем авторизацию
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        throw new Error('Пользователь не авторизован');
+      }
+
+      console.log('🔑 Токен найден:', token.substring(0, 20) + '...');
+
+      const postData = {
+        content: text,
+        media_urls: images.map(f => f.name),
+        media_type: video ? 'video' : doc ? 'document' : images.length > 0 ? 'image' : null,
+        background_color: bg,
+        privacy: privacy === 'all' ? 'public' : privacy === 'private' ? 'private' : 'friends',
+        section: section,
+        location: null,
+        is_ai_generated: false,
+        ai_prompt: null
+      };
+
+      console.log('📤 Отправляем запрос на создание поста...');
+      
+      // Отправляем лог на backend
+      sendClientLog('info', 'Создание поста', {
+        postData,
+        currentUser: currentUser?.id,
+        timestamp: new Date().toISOString()
+      });
+
+      const response = await postsAPI.createPost(postData);
+      
+      console.log('✅ Пост создан успешно:', response);
+
+      // Отправляем лог об успехе
+      sendClientLog('success', 'Пост создан успешно', {
+        postId: response.post?.id,
+        userId: currentUser?.id,
+        timestamp: new Date().toISOString()
+      });
+
+      // Перенаправляем на главную страницу
+      navigate('/');
+      
+    } catch (err) {
+      console.error('❌ Ошибка создания поста:', err);
+      
+      let errorMsg = 'Ошибка создания поста';
+      if (err && err.message) {
+        if (err.message.includes('Failed to fetch')) {
+          errorMsg = 'Нет соединения с сервером. Проверьте подключение к интернету или работу бэкенда.';
+        } else if (err.message.includes('401')) {
+          errorMsg = 'Вы не авторизованы. Пожалуйста, войдите в систему.';
+        } else if (err.message.includes('500')) {
+          errorMsg = 'Внутренняя ошибка сервера или базы данных.';
+        } else if (err.message.includes('400')) {
+          errorMsg = 'Неверные данные поста. Проверьте введенную информацию.';
+        } else {
+          errorMsg = 'Ошибка: ' + err.message;
+        }
+      }
+
+      // Отправляем лог об ошибке
+      sendClientLog('error', 'Ошибка создания поста', {
+        error: err.message,
+        stack: err.stack,
+        postData: {
+          content: text,
+          media_urls: images.map(f => f.name),
+          privacy,
+          section
+        },
+        currentUser: currentUser?.id,
+        timestamp: new Date().toISOString()
+      });
+
+      setError(errorMsg);
+      alert(errorMsg + (err && err.stack ? '\n\nДетали ошибки:\n' + err.stack : ''));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -63,6 +167,13 @@ const CreatePostPage = ({ currentUser }) => {
               <CloseIcon />
             </IconButton>
           </Stack>
+
+          {error && (
+            <Alert severity="error" sx={{ mt: 2, mb: 2 }}>
+              {error}
+            </Alert>
+          )}
+
           <TextField
             label="Текст поста"
             multiline
@@ -71,6 +182,7 @@ const CreatePostPage = ({ currentUser }) => {
             value={text}
             onChange={e => setText(e.target.value)}
             sx={{ mb: 2, mt: 2, bgcolor: theme => theme.palette.background.default, borderRadius: 2 }}
+            placeholder="Что у вас нового?"
           />
           <Box sx={{ mb: 2 }}>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
@@ -150,8 +262,17 @@ const CreatePostPage = ({ currentUser }) => {
             {doc && <Typography variant="caption">{doc.name}</Typography>}
           </Stack>
           <Stack direction="row" spacing={2} justifyContent="flex-end">
-            <Button onClick={() => navigate(-1)}>Отмена</Button>
-            <Button variant="contained" onClick={handlePost} disabled={!text && images.length === 0 && !video && !doc}>Опубликовать</Button>
+            <Button onClick={() => navigate(-1)} disabled={loading}>
+              Отмена
+            </Button>
+            <Button 
+              variant="contained" 
+              onClick={handlePost} 
+              disabled={(!text.trim() && images.length === 0 && !video && !doc) || loading}
+              startIcon={loading ? <CircularProgress size={20} /> : null}
+            >
+              {loading ? 'Создание...' : 'Опубликовать'}
+            </Button>
           </Stack>
         </CardContent>
       </Card>

@@ -18,8 +18,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import IconButton from '@mui/material/IconButton';
 import PersonIcon from '@mui/icons-material/Person';
 
-const SidebarRight = ({ users, onUserClick, open = true, onClose, variant = 'permanent', loading = false }) => {
-  console.log('SidebarRight received users:', users);
+const SidebarRight = ({ users, onUserClick, open = true, onClose, variant = 'permanent', loading = false, onAIChatClick }) => {
   
   return (
     <Drawer
@@ -40,15 +39,68 @@ const SidebarRight = ({ users, onUserClick, open = true, onClose, variant = 'per
       }}
       data-testid="sidebar-right"
     >
-      <Toolbar sx={{ minHeight: 64, display: 'flex', justifyContent: 'flex-start', p: 0 }}>
-        <IconButton onClick={onClose} size="small" sx={{ mr: 'auto', display: { xs: 'inline-flex', md: 'none' } }}>
-          <ChevronRightIcon />
+
+      <Toolbar sx={{ 
+        minHeight: 64, 
+        display: 'flex', 
+        justifyContent: 'flex-end', 
+        alignItems: 'center', 
+        p: 2, 
+        borderBottom: 1, 
+        borderColor: 'divider',
+        bgcolor: 'background.paper'
+      }}>
+        <IconButton 
+          onClick={() => {
+            console.log('SidebarRight: Кнопка сворачивания нажата');
+            onClose();
+          }} 
+          size="medium" 
+          sx={{ 
+            color: 'primary.main',
+            bgcolor: 'primary.light',
+            border: 2,
+            borderColor: 'primary.main',
+            borderRadius: 2,
+            width: 40,
+            height: 40,
+            '&:hover': {
+              color: 'white',
+              bgcolor: 'primary.main',
+              transform: 'scale(1.1)',
+              boxShadow: 3,
+            },
+            transition: 'all 0.2s ease-in-out',
+            boxShadow: 2,
+            zIndex: 1000,
+          }}
+          title="Свернуть панель"
+        >
+          <ChevronRightIcon fontSize="medium" />
         </IconButton>
       </Toolbar>
       <Box sx={{ p: 2 }}>
-        <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600 }}>
-          Пользователи ({users?.length || 0})
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <IconButton 
+            onClick={onClose} 
+            size="small" 
+            sx={{ 
+              color: 'text.secondary',
+              mr: 1,
+              '&:hover': {
+                color: 'primary.main',
+                transform: 'scale(1.1)',
+              },
+              transition: 'all 0.2s ease-in-out',
+            }}
+            title="Свернуть панель"
+          >
+            <ChevronRightIcon />
+          </IconButton>
+          <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+            Пользователи ({users?.length || 0})
+          </Typography>
+        </Box>
         
         {loading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
@@ -130,7 +182,7 @@ const SidebarRight = ({ users, onUserClick, open = true, onClose, variant = 'per
         
         {/* AI рекомендации */}
         <List>
-          <ListItem sx={{ borderRadius: 2, mb: 0.5 }}>
+          <ListItem button onClick={onAIChatClick} sx={{ borderRadius: 2, mb: 0.5 }}>
             <ListItemIcon>
               <Avatar sx={{ bgcolor: 'primary.main', width: 32, height: 32 }}>
                 <SmartToyIcon fontSize="small" />

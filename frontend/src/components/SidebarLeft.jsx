@@ -6,12 +6,16 @@ import SmartToyIcon from '@mui/icons-material/SmartToy';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import IconButton from '@mui/material/IconButton';
 
-const SidebarLeft = ({ chatList, onChatClick, searchChat, setSearchChat, open = true, onClose, variant = 'permanent', theme }) => (
+const SidebarLeft = ({ chatList, onChatClick, searchChat, setSearchChat, open = true, onClose, variant = 'permanent', theme, onAIChatClick }) => {
+  console.log('SidebarLeft props:', { open, onClose, variant });
+  
+  return (
   <Drawer
     variant={variant}
     anchor="left"
     open={open}
     onClose={onClose}
+    data-testid="sidebar-left"
     sx={{ width: 220, flexShrink: 0, [`& .MuiDrawer-paper`]: {
       width: 220,
       boxSizing: 'border-box',
@@ -24,7 +28,24 @@ const SidebarLeft = ({ chatList, onChatClick, searchChat, setSearchChat, open = 
     } }}
   >
     <Toolbar sx={{ minHeight: 64, display: 'flex', justifyContent: 'flex-end', p: 0 }}>
-      <IconButton onClick={onClose} size="small" sx={{ ml: 'auto', display: { xs: 'inline-flex', md: 'none' } }}>
+      <IconButton 
+        onClick={() => {
+          console.log('SidebarLeft: Кнопка сворачивания нажата');
+          onClose();
+        }} 
+        size="small" 
+        sx={{ 
+          ml: 'auto', 
+          display: 'inline-flex',
+          color: 'text.secondary',
+          '&:hover': {
+            color: 'primary.main',
+            transform: 'scale(1.1)',
+          },
+          transition: 'all 0.2s ease-in-out',
+        }}
+        title="Свернуть панель"
+      >
         <ChevronLeftIcon />
       </IconButton>
     </Toolbar>
@@ -39,7 +60,7 @@ const SidebarLeft = ({ chatList, onChatClick, searchChat, setSearchChat, open = 
           <ListItemIcon><StarIcon /></ListItemIcon>
           <ListItemText primary="Избранное" />
         </ListItem>
-        <ListItem button sx={{ borderRadius: 2, mb: 0.5, '&:hover': { bgcolor: theme => theme.palette.background.default } }}>
+        <ListItem button onClick={onAIChatClick} sx={{ borderRadius: 2, mb: 0.5, '&:hover': { bgcolor: theme => theme.palette.background.default } }}>
           <ListItemIcon><SmartToyIcon /></ListItemIcon>
           <ListItemText primary="AI-чаты" />
         </ListItem>
@@ -76,6 +97,7 @@ const SidebarLeft = ({ chatList, onChatClick, searchChat, setSearchChat, open = 
       </List>
     </Box>
   </Drawer>
-);
+  );
+};
 
 export default SidebarLeft; 

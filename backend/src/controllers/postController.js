@@ -122,27 +122,56 @@ const getPostById = async (req, res) => {
 // Создать новый пост
 const createPost = async (req, res) => {
   try {
+    console.log('🚀 POST /api/posts - Начинаем создание поста');
+    console.log('📝 Данные запроса:', {
+      body: req.body,
+      user: req.user,
+      headers: {
+        'content-type': req.headers['content-type'],
+        'authorization': req.headers.authorization ? 'Bearer ***' : 'none'
+      }
+    });
+
     const { 
       content, media_urls, media_type, background_color, 
       privacy, section, location, is_ai_generated, ai_prompt 
     } = req.body;
     
+    console.log('🔍 Проверяем данные поста:', {
+      content: content ? `${content.substring(0, 50)}...` : 'empty',
+      media_urls: media_urls,
+      media_type: media_type,
+      background_color: background_color,
+      privacy: privacy,
+      section: section,
+      location: location,
+      is_ai_generated: is_ai_generated,
+      ai_prompt: ai_prompt
+    });
+    
     // Проверяем, что есть либо контент, либо медиафайлы
     if (!content && (!media_urls || media_urls.length === 0)) {
+      console.log('❌ Ошибка валидации: нет контента и медиафайлов');
       return res.status(400).json({ error: 'Необходим либо текст, либо медиафайлы' });
     }
     
     const userId = req.user.id; // ID из JWT токена
     
     if (!userId) {
+      console.log('❌ Ошибка авторизации: пользователь не найден в req.user');
       return res.status(401).json({ error: 'Пользователь не авторизован' });
     }
     
+    console.log('✅ Пользователь авторизован, ID:', userId);
+    
     // Преобразуем media_urls в формат '{"url1","url2"}' для PostgreSQL
     let mediaUrlsPg = null;
-    if (Array.isArray(media_urls)) {
+    if (Array.isArray(media_urls) && media_urls.length > 0) {
       mediaUrlsPg = '{' + media_urls.map(url => '"' + url.replace(/"/g, '\"') + '"').join(',') + '}';
+      console.log('📁 Media URLs для PostgreSQL:', mediaUrlsPg);
     }
+    
+    console.log('💾 Выполняем SQL запрос для создания поста...');
     
     const result = await query(
       `INSERT INTO posts (
@@ -164,9 +193,22 @@ const createPost = async (req, res) => {
       ]
     );
     
+    console.log('✅ Пост создан успешно:', {
+      postId: result.rows[0].id,
+      userId: result.rows[0].user_id,
+      content: result.rows[0].content ? `${result.rows[0].content.substring(0, 50)}...` : 'empty',
+      createdAt: result.rows[0].created_at
+    });
+    
     res.status(201).json({ post: result.rows[0] });
   } catch (error) {
-    console.error('Ошибка при создании поста:', error);
+    console.error('❌ Ошибка при создании поста:', error);
+    console.error('📋 Детали ошибки:', {
+      message: error.message,
+      stack: error.stack,
+      code: error.code,
+      detail: error.detail
+    });
     res.status(500).json({ error: 'Внутренняя ошибка сервера' });
   }
 };
