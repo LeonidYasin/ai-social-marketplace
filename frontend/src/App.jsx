@@ -201,14 +201,14 @@ const AppWithRouter = (props) => {
           currentUser={props.currentUser}
         />} />
         <Route path="gamification" element={<GamificationPage 
-          userStats={{
+        userStats={{
             totalPosts: props.feedData.posts?.length || 0,
             totalReactions: Object.values(props.feedData.userReactions || {}).filter(r => r).length,
             totalComments: Object.values(props.feedData.comments || {}).flat().length,
-            totalXP: 450,
-            totalViews: 1234,
-            soldItems: 2,
-          }}
+          totalXP: 450,
+          totalViews: 1234,
+          soldItems: 2,
+        }}
         />} />
         <Route path="admin" element={<AdminPage />} />
       </Route>
@@ -631,21 +631,21 @@ const App = ({ themeMode, onThemeToggle }) => {
       <AppWithRouter
         chats={chats}
         allUsers={allUsers}
-        searchChat={searchChat}
-        setSearchChat={setSearchChat}
-        leftSidebarOpen={leftSidebarOpen}
-        setLeftSidebarOpen={setLeftSidebarOpen}
-        rightSidebarOpen={rightSidebarOpen}
-        setRightSidebarOpen={setRightSidebarOpen}
-        isMobile={isMobile}
-        loadingUsers={loadingUsers}
-        currentUser={currentUser}
-        themeName={themeName}
-        setThemeName={setThemeName}
-        debugUsers={debugUsers}
-        socket={socket}
-        feedData={feedData}
-        setFeedData={setFeedData}
+              searchChat={searchChat}
+              setSearchChat={setSearchChat}
+              leftSidebarOpen={leftSidebarOpen}
+              setLeftSidebarOpen={setLeftSidebarOpen}
+              rightSidebarOpen={rightSidebarOpen}
+              setRightSidebarOpen={setRightSidebarOpen}
+              isMobile={isMobile}
+              loadingUsers={loadingUsers}
+              currentUser={currentUser}
+              themeName={themeName}
+              setThemeName={setThemeName}
+              debugUsers={debugUsers}
+              socket={socket}
+              feedData={feedData}
+              setFeedData={setFeedData}
         setCurrentUser={setCurrentUser}
         fetchUsers={fetchUsers}
       />

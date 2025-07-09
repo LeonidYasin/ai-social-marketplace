@@ -1411,28 +1411,6 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
   const renderContent = () => (
     <>
       {!isPageMode && (
-        <DialogTitle sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          Настройки
-          <Box>
-            <Tooltip title="Открыть геймификацию в отдельном окне">
-              <IconButton onClick={() => setGamificationModalOpen(true)} size="small" sx={{ ml: 1 }}>
-                <EmojiEventsIcon />
-              </IconButton>
-            </Tooltip>
-            <IconButton onClick={onClose} size="small">
-              <CloseIcon />
-            </IconButton>
-          </Box>
-        </DialogTitle>
-      )}
-      <Box
-        sx={{
-          maxHeight: isPageMode ? 'none' : { xs: '70vh', sm: '70vh', md: '70vh' },
-          overflowY: isPageMode ? 'visible' : 'auto',
-          p: isPageMode ? 0 : { xs: 1, sm: 2 },
-        }}
-      >
-        {/* Информация о текущем пользователе */}
         <Box sx={{ mb: 2, p: 2, bgcolor: 'background.paper', borderRadius: 1, border: 1, borderColor: 'divider' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -1458,33 +1436,33 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
             </Button>
           </Box>
         </Box>
+      )}
 
-        <Tabs
-          value={tab}
-          onChange={(_, v) => setTab(v)}
-          sx={{ mb: 2 }}
-          variant="scrollable"
-          scrollButtons="auto"
-          allowScrollButtonsMobile
-        >
-          <Tab label="Профиль" />
-          <Tab label="Внешний вид" />
-          <Tab label="Уведомления" />
-          <Tab label="Фильтры" />
-          <Tab label="Геймификация" />
-          <Tab label="Пользователи" />
-          {currentUser?.role === 'admin' && <Tab label="Администрирование" />}
-        </Tabs>
-        {tab === 0 && renderProfileTab()}
-        {tab === 1 && renderThemeTab()}
-        {tab === 2 && renderNotificationsTab()}
-        {tab === 3 && renderFiltersTab()}
-        {tab === 4 && renderGamificationTab()}
-        {tab === 5 && renderAdminUsersTab()}
-        {tab === 6 && currentUser?.role === 'admin' && renderAdminTab()}
-        {/* Если не админ — показать форму стать админом */}
-        {currentUser?.role !== 'admin' && renderChangeAdminPassword()}
-      </Box>
+      <Tabs
+        value={tab}
+        onChange={(_, v) => setTab(v)}
+        sx={{ mb: 2 }}
+        variant="scrollable"
+        scrollButtons="auto"
+        allowScrollButtonsMobile
+      >
+        <Tab label="Профиль" />
+        <Tab label="Внешний вид" />
+        <Tab label="Уведомления" />
+        <Tab label="Фильтры" />
+        <Tab label="Геймификация" />
+        <Tab label="Пользователи" />
+        {currentUser?.role === 'admin' && <Tab label="Администрирование" />}
+      </Tabs>
+      {tab === 0 && renderProfileTab()}
+      {tab === 1 && renderThemeTab()}
+      {tab === 2 && renderNotificationsTab()}
+      {tab === 3 && renderFiltersTab()}
+      {tab === 4 && renderGamificationTab()}
+      {tab === 5 && renderAdminUsersTab()}
+      {tab === 6 && currentUser?.role === 'admin' && renderAdminTab()}
+      {/* Если не админ — показать форму стать админом */}
+      {currentUser?.role !== 'admin' && renderChangeAdminPassword()}
     </>
   );
 

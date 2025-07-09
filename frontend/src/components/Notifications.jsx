@@ -14,11 +14,6 @@ import {
   ListItemIcon,
   ListItemSecondaryAction,
   Chip,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  IconButton,
   Stack,
   useTheme,
   useMediaQuery,
@@ -519,83 +514,10 @@ const NotificationsManager = ({ socket, currentUser, isPageMode = false }) => {
           {renderContent()}
         </Box>
       ) : (
-        <Dialog
-          open={showNotificationsList}
-          onClose={() => setShowNotificationsList(false)}
-          fullScreen={isMobile}
-          maxWidth="md"
-          fullWidth
-        >
-          <DialogTitle sx={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'space-between',
-            pb: 1
-          }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <NotificationsIcon />
-              <Typography variant="h6">
-                Уведомления {unreadCount > 0 && `(${unreadCount})`}
-              </Typography>
-            </Box>
-            <Box>
-              <IconButton onClick={() => setShowSettings(true)}>
-                <SettingsIcon />
-              </IconButton>
-              <IconButton onClick={() => setShowNotificationsList(false)}>
-                <CloseIcon />
-              </IconButton>
-            </Box>
-          </DialogTitle>
-
-          <DialogContent sx={{ p: 0 }}>
-            {renderContent()}
-          </DialogContent>
-        
-      </Dialog>
-
-      {/* Настройки уведомлений */}
-      <Dialog
-        open={showSettings}
-        onClose={() => setShowSettings(false)}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>
-          <Typography variant="h6">Настройки уведомлений</Typography>
-        </DialogTitle>
-        <DialogContent>
-          <Stack spacing={2} sx={{ mt: 1 }}>
-            {NOTIFICATION_TYPES.map(type => (
-              <Box key={type.key}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={settings[type.key] || false}
-                      onChange={(e) => handleSettingChange(type.key, e.target.checked)}
-                    />
-                  }
-                  label={
-                    <Box>
-                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                        {type.label}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {type.description}
-                      </Typography>
-                    </Box>
-                  }
-                />
-              </Box>
-            ))}
-          </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setShowSettings(false)}>
-            Закрыть
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <Box>
+          {renderContent()}
+        </Box>
+      )}
 
       {/* Snackbar для сообщений */}
       <Snackbar

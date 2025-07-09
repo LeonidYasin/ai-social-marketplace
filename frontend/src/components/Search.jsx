@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Box,
-  Dialog,
-  DialogTitle,
-  DialogContent,
   TextField,
   InputAdornment,
   IconButton,
@@ -474,118 +471,128 @@ const SearchDialog = ({ open, onClose, onSearchResult }) => {
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      fullScreen={isMobile}
-      maxWidth="md"
-      fullWidth
-      TransitionComponent={Slide}
-      transitionDirection="up"
+    <Box
+      sx={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        bgcolor: 'rgba(0,0,0,0.5)',
+        display: open ? 'flex' : 'none',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1000,
+      }}
     >
-      <DialogTitle sx={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'space-between',
-        pb: 1
-      }}>
-        <Typography variant="h6">Поиск</Typography>
-        <IconButton onClick={onClose}>
-          <CloseIcon />
-        </IconButton>
-      </DialogTitle>
-      
-      <DialogContent sx={{ p: 2 }}>
-        {/* Поле поиска с автодополнением */}
-        <Box component="form" onSubmit={handleSearch} sx={{ mb: 3 }}>
-          <Autocomplete
-            freeSolo
-            options={autocompleteData}
-            value={query}
-            onChange={(event, newValue) => {
-              if (typeof newValue === 'string') {
-                setQuery(newValue);
-                performSearch(newValue);
-              }
-            }}
-            onInputChange={(event, newInputValue) => {
-              setQuery(newInputValue);
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                ref={searchInputRef}
-                fullWidth
-                placeholder="Поиск постов, пользователей, тегам..."
-                InputProps={{
-                  ...params.InputProps,
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon />
-                    </InputAdornment>
-                  ),
-                  endAdornment: query && (
-                    <InputAdornment position="end">
-                      <IconButton onClick={handleClear} size="small">
-                        <ClearIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{ mb: 2 }}
-              />
-            )}
-            PopperComponent={(props) => (
-              <Popper
-                {...props}
-                placement="bottom-start"
-                modifiers={[
-                  {
-                    name: 'offset',
-                    options: {
-                      offset: [0, 8],
-                    },
-                  },
-                ]}
-              />
-            )}
-            renderOption={(props, option) => (
-              <Box component="li" {...props}>
-                <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />
-                {option}
-              </Box>
-            )}
-          />
-          <Stack direction="row" spacing={1}>
-            <Button
-              type="submit"
-              variant="contained"
-              disabled={!query.trim() || isSearching}
-              sx={{ flex: 1 }}
-            >
-              {isSearching ? 'Поиск...' : 'Найти'}
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={() => setShowFilters(!showFilters)}
-              startIcon={<FilterIcon />}
-            >
-              Фильтры
-            </Button>
-          </Stack>
+      <Card sx={{ width: '90%', maxWidth: '800px', maxHeight: '90%', display: 'flex', flexDirection: 'column' }}>
+        <Box sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'space-between',
+          pb: 1,
+          px: 2,
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+        }}>
+          <Typography variant="h6">Поиск</Typography>
+          <IconButton onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
         </Box>
-
-        {/* Фильтры */}
-        <Fade in={showFilters}>
-          <Box>
-            {showFilters && renderFilters()}
+        
+        <Box sx={{ p: 2 }}>
+          {/* Поле поиска с автодополнением */}
+          <Box component="form" onSubmit={handleSearch} sx={{ mb: 3 }}>
+            <Autocomplete
+              freeSolo
+              options={autocompleteData}
+              value={query}
+              onChange={(event, newValue) => {
+                if (typeof newValue === 'string') {
+                  setQuery(newValue);
+                  performSearch(newValue);
+                }
+              }}
+              onInputChange={(event, newInputValue) => {
+                setQuery(newInputValue);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  ref={searchInputRef}
+                  fullWidth
+                  placeholder="Поиск постов, пользователей, тегам..."
+                  InputProps={{
+                    ...params.InputProps,
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon />
+                      </InputAdornment>
+                    ),
+                    endAdornment: query && (
+                      <InputAdornment position="end">
+                        <IconButton onClick={handleClear} size="small">
+                          <ClearIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={{ mb: 2 }}
+                />
+              )}
+              PopperComponent={(props) => (
+                <Popper
+                  {...props}
+                  placement="bottom-start"
+                  modifiers={[
+                    {
+                      name: 'offset',
+                      options: {
+                        offset: [0, 8],
+                      },
+                    },
+                  ]}
+                />
+              )}
+              renderOption={(props, option) => (
+                <Box component="li" {...props}>
+                  <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />
+                  {option}
+                </Box>
+              )}
+            />
+            <Stack direction="row" spacing={1}>
+              <Button
+                type="submit"
+                variant="contained"
+                disabled={!query.trim() || isSearching}
+                sx={{ flex: 1 }}
+              >
+                {isSearching ? 'Поиск...' : 'Найти'}
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={() => setShowFilters(!showFilters)}
+                startIcon={<FilterIcon />}
+              >
+                Фильтры
+              </Button>
+            </Stack>
           </Box>
-        </Fade>
 
-        {/* Результаты поиска */}
-        {renderSearchResults()}
-      </DialogContent>
-    </Dialog>
+          {/* Фильтры */}
+          <Fade in={showFilters}>
+            <Box>
+              {showFilters && renderFilters()}
+            </Box>
+          </Fade>
+
+          {/* Результаты поиска */}
+          {renderSearchResults()}
+        </Box>
+      </Card>
+    </Box>
   );
 };
 

@@ -1000,46 +1000,37 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
       </Card>
       {/* Удалить все Dialog, связанные с созданием поста */}
       {/* AI-ассистент как отдельное модальное окно */}
-      <Dialog open={aiOpen} onClose={() => setAIOpen(false)} maxWidth="xs" fullWidth
-        PaperProps={{ sx: { borderRadius: 3, boxShadow: 3, bgcolor: '#fff' } }}>
-        <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 2, pb: 1 }}>
-          <Avatar sx={{ bgcolor: 'primary.main', width: 40, height: 40 }}><SmartToyIcon /></Avatar>
-          <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>AI-ассистент</Typography>
-          <IconButton onClick={() => setAIOpen(false)}><CloseIcon /></IconButton>
-        </DialogTitle>
-        <DialogContent sx={{ p: 0, pt: 1 }}>
-          <Box sx={{ maxHeight: 220, overflowY: 'auto', px: 2, pb: 1 }}>
-            {aiMessages.map((msg, i) => (
-              <Box key={i} sx={{ display: 'flex', justifyContent: msg.isUser ? 'flex-end' : 'flex-start', mb: 1 }}>
-                <Box sx={{ bgcolor: msg.isUser ? 'primary.main' : 'grey.200', color: msg.isUser ? 'white' : 'black', borderRadius: 2, px: 2, py: 1, maxWidth: '80%' }}>
-                  {msg.text}
+      <Box sx={{ maxWidth: 400, mx: 'auto', mt: 4 }}>
+        <Card sx={{ borderRadius: 3, boxShadow: 3, bgcolor: '#fff' }}>
+          <CardContent sx={{ p: 2 }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>AI-ассистент</Typography>
+            <Box sx={{ maxHeight: 220, overflowY: 'auto', mb: 1 }}>
+              {aiMessages.map((msg, i) => (
+                <Box key={i} sx={{ display: 'flex', justifyContent: msg.isUser ? 'flex-end' : 'flex-start', mb: 1 }}>
+                  <Box sx={{ bgcolor: msg.isUser ? 'primary.main' : 'grey.200', color: msg.isUser ? 'white' : 'black', borderRadius: 2, px: 2, py: 1, maxWidth: '80%' }}>
+                    {msg.text}
+                  </Box>
+                  {msg.isUser === false && (
+                    <Button size="small" sx={{ ml: 1 }} onClick={() => handleInsertAI(msg.text)}>Вставить в пост</Button>
+                  )}
                 </Box>
-                {msg.isUser === false && (
-                  <Button size="small" sx={{ ml: 1 }} onClick={() => handleInsertAI(msg.text)}>Вставить в пост</Button>
-                )}
-              </Box>
-            ))}
-          </Box>
-        </DialogContent>
-        <DialogActions sx={{ px: 2, pb: 2, pt: 1 }}>
-          <TextField
-            fullWidth
-            size="small"
-            placeholder="Задать вопрос AI..."
-            value={aiInput}
-            onChange={e => setAIInput(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && handleAISend()}
-            sx={{ bgcolor: theme => theme.palette.background.paper, borderRadius: 2 }}
-          />
-          <Button color="primary" variant="contained" onClick={handleAISend} sx={{ minWidth: 40, ml: 1, borderRadius: 2 }}>
-            <SmartToyIcon />
-          </Button>
-        </DialogActions>
-        <Divider sx={{ my: 1 }} />
-        <Button variant="outlined" color="primary" fullWidth onClick={() => handlePost(aiMessages)}>
-          Опубликовать диалог как пост
-        </Button>
-      </Dialog>
+              ))}
+            </Box>
+            <TextField
+              fullWidth
+              size="small"
+              placeholder="Задать вопрос AI..."
+              value={aiInput}
+              onChange={e => setAIInput(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleAISend()}
+              sx={{ bgcolor: theme => theme.palette.background.paper, borderRadius: 2 }}
+            />
+            <Button color="primary" variant="contained" fullWidth onClick={handleAISend} sx={{ mt: 1, borderRadius: 2 }}>
+              <SmartToyIcon />
+            </Button>
+          </CardContent>
+        </Card>
+      </Box>
       {/* Лента постов */}
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', py: 4 }}>
