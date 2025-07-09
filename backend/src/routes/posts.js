@@ -14,18 +14,168 @@ const { requireAuth } = require('../middleware/checkAdmin');
 const Comment = require('../models/comment');
 const Reaction = require('../models/reaction');
 
-// Публичные маршруты
+/**
+ * @swagger
+ * /api/posts:
+ *   get:
+ *     summary: Получить список постов
+ *     tags: [Posts]
+ *     responses:
+ *       200:
+ *         description: Список постов
+ */
 router.get('/', getPosts);
+
+/**
+ * @swagger
+ * /api/posts/{id}:
+ *   get:
+ *     summary: Получить пост по ID
+ *     tags: [Posts]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID поста
+ *     responses:
+ *       200:
+ *         description: Данные поста
+ */
 router.get('/:id', getPostById);
 
-// Защищенные маршруты (требуют JWT токен)
+/**
+ * @swagger
+ * /api/posts:
+ *   post:
+ *     summary: Создать пост
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               content:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Пост создан
+ */
 router.post('/', requireAuth, createPost);
+
+/**
+ * @swagger
+ * /api/posts/{id}:
+ *   put:
+ *     summary: Обновить пост по ID
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID поста
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               content:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Пост обновлён
+ */
 router.put('/:id', requireAuth, updatePost);
+
+/**
+ * @swagger
+ * /api/posts/{id}:
+ *   delete:
+ *     summary: Удалить пост по ID
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID поста
+ *     responses:
+ *       200:
+ *         description: Пост удалён
+ */
 router.delete('/:id', requireAuth, deletePost);
+
+/**
+ * @swagger
+ * /api/posts/user/{userId}:
+ *   get:
+ *     summary: Получить посты пользователя
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID пользователя
+ *     responses:
+ *       200:
+ *         description: Список постов пользователя
+ */
 router.get('/user/:userId', requireAuth, getUserPosts);
 
 // --- Вложенные маршруты для комментариев ---
-// Создать комментарий к посту
+/**
+ * @swagger
+ * /api/posts/{postId}/comments:
+ *   post:
+ *     summary: Создать комментарий к посту
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID поста
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               content:
+ *                 type: string
+ *               parentId:
+ *                 type: string
+ *                 nullable: true
+ *     responses:
+ *       201:
+ *         description: Комментарий создан
+ */
 router.post('/:postId/comments', requireAuth, async (req, res) => {
   try {
     const { content, parentId } = req.body;
@@ -37,7 +187,25 @@ router.post('/:postId/comments', requireAuth, async (req, res) => {
     res.status(500).json({ error: 'Failed to create comment' });
   }
 });
-// Получить комментарии к посту
+/**
+ * @swagger
+ * /api/posts/{postId}/comments:
+ *   get:
+ *     summary: Получить комментарии к посту
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID поста
+ *     responses:
+ *       200:
+ *         description: Список комментариев
+ */
 router.get('/:postId/comments', requireAuth, async (req, res) => {
   try {
     const comments = await Comment.findByPost(req.params.postId);
@@ -48,7 +216,34 @@ router.get('/:postId/comments', requireAuth, async (req, res) => {
 });
 
 // --- Вложенные маршруты для реакций ---
-// Добавить реакцию к посту
+/**
+ * @swagger
+ * /api/posts/{postId}/reactions:
+ *   post:
+ *     summary: Добавить реакцию к посту
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID поста
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               type:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Реакция добавлена
+ */
 router.post('/:postId/reactions', requireAuth, async (req, res) => {
   try {
     const { type } = req.body;
@@ -60,7 +255,25 @@ router.post('/:postId/reactions', requireAuth, async (req, res) => {
     res.status(500).json({ error: 'Failed to add reaction' });
   }
 });
-// Получить статистику по реакциям к посту
+/**
+ * @swagger
+ * /api/posts/{postId}/reactions:
+ *   get:
+ *     summary: Получить статистику по реакциям к посту
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID поста
+ *     responses:
+ *       200:
+ *         description: Статистика по реакциям
+ */
 router.get('/:postId/reactions', requireAuth, async (req, res) => {
   try {
     const stats = await Reaction.getForPost(req.params.postId);

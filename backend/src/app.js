@@ -8,6 +8,8 @@ const http = require('http');
 const socketIo = require('socket.io');
 const fs = require('fs');
 const path = require('path');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./swagger');
 
 // Load environment variables FIRST, before any other imports
 dotenv.config({ path: path.join(__dirname, '..', 'config.env') });
@@ -517,6 +519,7 @@ app.use('/api/logs', logsRouter);
 app.use('/api/placeholder', placeholderRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/syslog', syslogRouter);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Test route
 app.get('/api/test', (req, res) => {

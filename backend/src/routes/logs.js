@@ -10,7 +10,32 @@ const checkAuth = (req, res, next) => {
   next();
 };
 
-// Получить логи бэкенда
+/**
+ * @swagger
+ * /api/logs/backend:
+ *   get:
+ *     summary: Получить логи бэкенда
+ *     tags: [Logs]
+ *     parameters:
+ *       - in: query
+ *         name: level
+ *         schema:
+ *           type: string
+ *         description: Уровень логирования
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Поисковый запрос
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: Максимальное количество логов
+ *     responses:
+ *       200:
+ *         description: Список логов бэкенда
+ */
 router.get('/backend', checkAuth, (req, res) => {
   try {
     const logPath = path.join(__dirname, '..', '..', 'logs', 'backend.log');
@@ -88,7 +113,32 @@ router.get('/backend', checkAuth, (req, res) => {
   }
 });
 
-// Получить логи фронтенда
+/**
+ * @swagger
+ * /api/logs/frontend:
+ *   get:
+ *     summary: Получить логи фронтенда
+ *     tags: [Logs]
+ *     parameters:
+ *       - in: query
+ *         name: level
+ *         schema:
+ *           type: string
+ *         description: Уровень логирования
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Поисковый запрос
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: Максимальное количество логов
+ *     responses:
+ *       200:
+ *         description: Список логов фронтенда
+ */
 router.get('/frontend', checkAuth, (req, res) => {
   try {
     const logPath = path.join(__dirname, '..', '..', 'logs', 'frontend.log');
@@ -163,7 +213,32 @@ router.get('/frontend', checkAuth, (req, res) => {
   }
 });
 
-// Получить все логи (объединенные)
+/**
+ * @swagger
+ * /api/logs/all:
+ *   get:
+ *     summary: Получить все логи (объединённые)
+ *     tags: [Logs]
+ *     parameters:
+ *       - in: query
+ *         name: level
+ *         schema:
+ *           type: string
+ *         description: Уровень логирования
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Поисковый запрос
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: Максимальное количество логов
+ *     responses:
+ *       200:
+ *         description: Список всех логов
+ */
 router.get('/all', checkAuth, (req, res) => {
   try {
     const backendLogPath = path.join(__dirname, '..', '..', 'logs', 'backend.log');

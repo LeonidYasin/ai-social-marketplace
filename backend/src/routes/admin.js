@@ -28,7 +28,26 @@ const checkAdminPassword = (req, res, next) => {
   next();
 };
 
-// Исправление структуры базы данных
+/**
+ * @swagger
+ * /api/admin/fix-database:
+ *   post:
+ *     summary: Исправить структуру базы данных (только для админа)
+ *     tags: [Admin]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 description: Админ-пароль
+ *     responses:
+ *       200:
+ *         description: Структура базы данных исправлена
+ */
 router.post('/fix-database', checkAdminPassword, async (req, res) => {
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
@@ -119,7 +138,22 @@ router.post('/fix-database', checkAdminPassword, async (req, res) => {
   }
 });
 
-// Получение информации о структуре базы данных
+/**
+ * @swagger
+ * /api/admin/database-info:
+ *   get:
+ *     summary: Получить информацию о структуре базы данных (только для админа)
+ *     tags: [Admin]
+ *     parameters:
+ *       - in: query
+ *         name: password
+ *         schema:
+ *           type: string
+ *         description: Админ-пароль
+ *     responses:
+ *       200:
+ *         description: Информация о структуре базы данных
+ */
 router.get('/database-info', checkAdminPassword, async (req, res) => {
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
@@ -159,7 +193,26 @@ router.get('/database-info', checkAdminPassword, async (req, res) => {
   }
 });
 
-// Пересоздание таблицы notifications с правильной структурой
+/**
+ * @swagger
+ * /api/admin/recreate-notifications:
+ *   post:
+ *     summary: Пересоздать таблицу notifications (только для админа)
+ *     tags: [Admin]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 description: Админ-пароль
+ *     responses:
+ *       200:
+ *         description: Таблица notifications пересоздана
+ */
 router.post('/recreate-notifications', checkAdminPassword, async (req, res) => {
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,

@@ -3,7 +3,32 @@ const Reaction = require('../models/reaction');
 
 const router = express.Router();
 
-// Добавить реакцию
+/**
+ * @swagger
+ * /api/reactions:
+ *   post:
+ *     summary: Добавить реакцию
+ *     tags: [Reactions]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *               postId:
+ *                 type: string
+ *               commentId:
+ *                 type: string
+ *                 nullable: true
+ *               type:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Реакция добавлена
+ */
 router.post('/', async (req, res) => {
   const { userId, postId, commentId, type } = req.body;
   try {
@@ -14,7 +39,23 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Получить статистику по реакциям к посту
+/**
+ * @swagger
+ * /api/reactions/post/{postId}:
+ *   get:
+ *     summary: Получить статистику по реакциям к посту
+ *     tags: [Reactions]
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID поста
+ *     responses:
+ *       200:
+ *         description: Статистика по реакциям к посту
+ */
 router.get('/post/:postId', async (req, res) => {
   try {
     const stats = await Reaction.getForPost(req.params.postId);
@@ -24,7 +65,23 @@ router.get('/post/:postId', async (req, res) => {
   }
 });
 
-// Получить статистику по реакциям к комментарию
+/**
+ * @swagger
+ * /api/reactions/comment/{commentId}:
+ *   get:
+ *     summary: Получить статистику по реакциям к комментарию
+ *     tags: [Reactions]
+ *     parameters:
+ *       - in: path
+ *         name: commentId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID комментария
+ *     responses:
+ *       200:
+ *         description: Статистика по реакциям к комментарию
+ */
 router.get('/comment/:commentId', async (req, res) => {
   try {
     const stats = await Reaction.getForComment(req.params.commentId);

@@ -1,7 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-// Get syslog server status
+/**
+ * @swagger
+ * /api/syslog/status:
+ *   get:
+ *     summary: Получить статус syslog-сервера
+ *     tags: [Syslog]
+ *     responses:
+ *       200:
+ *         description: Текущий статус syslog-сервера
+ */
 router.get('/status', (req, res) => {
   try {
     const syslogServer = req.app.locals.syslogServer;
@@ -25,7 +34,22 @@ router.get('/status', (req, res) => {
   }
 });
 
-// Get recent syslog logs
+/**
+ * @swagger
+ * /api/syslog/logs:
+ *   get:
+ *     summary: Получить последние syslog-логи
+ *     tags: [Syslog]
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: Максимальное количество логов
+ *     responses:
+ *       200:
+ *         description: Список логов
+ */
 router.get('/logs', (req, res) => {
   try {
     const syslogServer = req.app.locals.syslogServer;
@@ -55,7 +79,22 @@ router.get('/logs', (req, res) => {
   }
 });
 
-// Get Render-specific logs
+/**
+ * @swagger
+ * /api/syslog/render-logs:
+ *   get:
+ *     summary: Получить Render-логи
+ *     tags: [Syslog]
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: Максимальное количество логов
+ *     responses:
+ *       200:
+ *         description: Список Render-логов
+ */
 router.get('/render-logs', (req, res) => {
   try {
     const syslogServer = req.app.locals.syslogServer;
@@ -85,7 +124,16 @@ router.get('/render-logs', (req, res) => {
   }
 });
 
-// Start syslog server (admin only)
+/**
+ * @swagger
+ * /api/syslog/start:
+ *   post:
+ *     summary: Запустить syslog-сервер (только для админа)
+ *     tags: [Syslog]
+ *     responses:
+ *       200:
+ *         description: Сервер запущен
+ */
 router.post('/start', (req, res) => {
   try {
     const syslogServer = req.app.locals.syslogServer;
@@ -125,7 +173,16 @@ router.post('/start', (req, res) => {
   }
 });
 
-// Stop syslog server (admin only)
+/**
+ * @swagger
+ * /api/syslog/stop:
+ *   post:
+ *     summary: Остановить syslog-сервер (только для админа)
+ *     tags: [Syslog]
+ *     responses:
+ *       200:
+ *         description: Сервер остановлен
+ */
 router.post('/stop', (req, res) => {
   try {
     const syslogServer = req.app.locals.syslogServer;
@@ -165,7 +222,16 @@ router.post('/stop', (req, res) => {
   }
 });
 
-// Restart syslog server (admin only)
+/**
+ * @swagger
+ * /api/syslog/restart:
+ *   post:
+ *     summary: Перезапустить syslog-сервер (только для админа)
+ *     tags: [Syslog]
+ *     responses:
+ *       200:
+ *         description: Сервер перезапущен
+ */
 router.post('/restart', (req, res) => {
   try {
     const syslogServer = req.app.locals.syslogServer;
