@@ -108,7 +108,17 @@ const AppWithRouter = (props) => {
   
   // Обработка навигации при отсутствии пользователя
   useEffect(() => {
-    if (!props.loadingUser && !props.currentUser) {
+    // Перенаправляем на settings только если:
+    // 1. Загрузка завершена
+    // 2. Пользователь не авторизован
+    // 3. Нет токена в localStorage
+    // 4. Мы не находимся уже на странице settings
+    if (
+      !props.loadingUser && 
+      !props.currentUser && 
+      !localStorage.getItem('authToken') &&
+      window.location.pathname !== '/settings'
+    ) {
       navigate('/settings');
     }
   }, [props.loadingUser, props.currentUser, navigate]);
