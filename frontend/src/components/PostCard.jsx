@@ -151,8 +151,15 @@ const PostCard = ({ post }) => {
 
   // Основной рендер
   return (
-    <Card sx={{ mb: 2, borderRadius: 2, boxShadow: 1 }}>
-      <CardContent sx={{ p: 2 }}>
+    <Card sx={{
+      mb: { xs: 1, sm: 2 },
+      borderRadius: 2,
+      boxShadow: 1,
+      bgcolor: 'background.paper',
+      mx: 0,
+      width: { xs: '100%', sm: 'auto' },
+    }}>
+      <CardContent sx={{ p: { xs: 0, sm: 2 }, px: { xs: 0, sm: 2 } }}>
         {/* Автор и дата */}
         {post.author && (
           <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>

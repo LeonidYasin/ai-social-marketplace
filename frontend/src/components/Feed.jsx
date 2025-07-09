@@ -23,6 +23,7 @@ import UserSettings from './UserSettings';
 import PostCard from './PostCard';
 import { postsAPI } from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import PeopleIcon from '@mui/icons-material/People';
 
 const initialPosts = [
   { id: 1, text: 'Продаю iPhone 13', images: [], video: null, doc: null, bg: '', section: 'sell', privacy: 'all', reactions: { like: 3, love: 2, laugh: 1, wow: 0, sad: 0, angry: 0 } },
@@ -315,18 +316,14 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
 
   // Симуляция реального времени
   useEffect(() => {
+    if (!isOnline) return;
     const interval = setInterval(() => {
-      if (!isOnline) return;
-
-      // Случайные обновления каждые 5-15 секунд
-      const shouldUpdate = Math.random() < 0.3; // 30% вероятность
-      if (shouldUpdate) {
-        simulateRealTimeUpdate();
+      if (Math.random() < 0.3) {
+        simulateNewPost();
       }
-    }, 5000);
-
+    }, 5000 + Math.random() * 10000); // 5-15 секунд
     return () => clearInterval(interval);
-  }, [isOnline, posts]);
+  }, [isOnline]);
 
   // Симуляция обновлений в реальном времени
   const simulateRealTimeUpdate = () => {
@@ -828,7 +825,30 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
   const filteredPosts = getFilteredAndSortedPosts();
 
   return (
-    <Box sx={{ maxWidth: 800, mx: 'auto', p: 2 }}>
+    <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', m: 0, p: 0, maxWidth: 'none', bgcolor: 'background.default' }}>
+      {/* Верхняя панель с кнопками открытия боковых панелей */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 1, py: 1, mb: 1 }}>
+        {!leftSidebarOpen && (
+          <IconButton 
+            onClick={() => setLeftSidebarOpen(true)} 
+            sx={{ bgcolor: 'primary.main', color: 'white', boxShadow: 2 }}
+            title="Открыть левую панель"
+          >
+            <MenuIcon />
+          </IconButton>
+        )}
+        <Box sx={{ flex: 1 }} />
+        {!rightSidebarOpen && (
+          <IconButton 
+            onClick={() => setRightSidebarOpen(true)} 
+            sx={{ bgcolor: 'primary.main', color: 'white', boxShadow: 2 }}
+            title="Открыть правую панель"
+          >
+            <PeopleIcon />
+          </IconButton>
+        )}
+      </Box>
+
       {/* Панель статуса времени и шестеренки */}
       <Box 
         data-status-panel="true"
@@ -845,7 +865,23 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ flexWrap: 'wrap', gap: 1 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0, flex: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
-              <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: 'success.main', flexShrink: 0 }} />
+              <Box
+                sx={{
+                  display: 'inline-block',
+                  width: 8,
+                  height: 8,
+                  borderRadius: '50%',
+                  bgcolor: '#4caf50',
+                  boxShadow: '0 0 0 0 rgba(76, 175, 80, 0.6)',
+                  animation: 'pulseOnline 1.2s cubic-bezier(0.4,0,0.2,1) infinite',
+                  '@keyframes pulseOnline': {
+                    '0%':   { boxShadow: '0 0 0 0 rgba(76, 175, 80, 0.6)' },
+                    '10%':  { boxShadow: '0 0 0 4px rgba(76, 175, 80, 0)' },
+                    '12%':  { boxShadow: '0 0 0 4px rgba(76, 175, 80, 0)' },
+                    '100%': { boxShadow: '0 0 0 0 rgba(76, 175, 80, 0)' },
+                  },
+                }}
+              />
               <Typography 
                 variant="body2" 
                 color="text.secondary"
@@ -944,11 +980,23 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
 
       {/* Панель создания поста */}
       {open && (
-        <Card sx={{ mb: 3, bgcolor: theme => theme.palette.background.paper, borderRadius: 3, boxShadow: 3 }}>
-          <CardContent sx={{ p: 3 }}>
-            <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
-              <Typography variant="h6">Создать пост</Typography>
-              <IconButton onClick={() => setOpen(false)}>
+        <Card sx={{
+          bgcolor: theme => theme.palette.background.paper,
+          borderRadius: 3,
+          boxShadow: 3,
+          overflow: 'hidden',
+          mx: 0,
+          width: { xs: '100%', sm: 'auto' },
+          mb: { xs: 0, sm: 3 },
+        }}>
+          <CardContent sx={{ 
+            p: { xs: 0, sm: 3 },
+            px: { xs: 0, sm: 3 },
+            '&:last-child': { pb: { xs: 0, sm: 3 } }
+          }}>
+            <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: { xs: 1, sm: 2 } }}>
+              <Typography variant="h6" fontSize={{ xs: 16, sm: 20 }}>Создать пост</Typography>
+              <IconButton onClick={() => setOpen(false)} size={isMobile ? 'small' : 'medium'}>
                 <CloseIcon />
               </IconButton>
             </Stack>
@@ -957,48 +1005,147 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
               label="Текст поста"
               multiline
               fullWidth
-              minRows={4}
+              minRows={isMobile ? 2 : 4}
               value={text}
               onChange={e => setText(e.target.value)}
-              sx={{ mb: 2, bgcolor: theme => theme.palette.background.default, borderRadius: 2 }}
+              sx={{ 
+                mb: 2, 
+                bgcolor: theme => theme.palette.background.default, 
+                borderRadius: 2, 
+                fontSize: { xs: 14, sm: 16 },
+                '& .MuiOutlinedInput-root': {
+                  fontSize: { xs: 14, sm: 16 }
+                }
+              }}
               placeholder="Что у вас нового?"
             />
-            <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
-              <Button component="label" startIcon={<PhotoCameraIcon />} variant="outlined">
+            <Stack 
+              direction="row" 
+              spacing={isMobile ? 1 : 2} 
+              alignItems="center" 
+              sx={{ 
+                mb: 2, 
+                flexWrap: 'wrap',
+                gap: { xs: 0.5, sm: 1 }
+              }}
+            >
+              <Button 
+                component="label" 
+                startIcon={<PhotoCameraIcon />} 
+                variant="outlined" 
+                size={isMobile ? 'small' : 'medium'}
+                sx={{ 
+                  minWidth: { xs: 'auto', sm: 'auto' },
+                  px: { xs: 1, sm: 2 }
+                }}
+              >
                 Фото
                 <input type="file" hidden multiple accept="image/*" onChange={e => setImages(Array.from(e.target.files))} />
               </Button>
-              <Button component="label" startIcon={<VideoLibraryIcon />} variant="outlined">
+              <Button 
+                component="label" 
+                startIcon={<VideoLibraryIcon />} 
+                variant="outlined" 
+                size={isMobile ? 'small' : 'medium'}
+                sx={{ 
+                  minWidth: { xs: 'auto', sm: 'auto' },
+                  px: { xs: 1, sm: 2 }
+                }}
+              >
                 Видео
                 <input type="file" hidden accept="video/*" onChange={e => setVideo(e.target.files[0])} />
               </Button>
-              <Button component="label" startIcon={<InsertDriveFileIcon />} variant="outlined">
+              <Button 
+                component="label" 
+                startIcon={<InsertDriveFileIcon />} 
+                variant="outlined" 
+                size={isMobile ? 'small' : 'medium'}
+                sx={{ 
+                  minWidth: { xs: 'auto', sm: 'auto' },
+                  px: { xs: 1, sm: 2 }
+                }}
+              >
                 Документ
                 <input type="file" hidden accept=".pdf,.doc,.docx,.txt" onChange={e => setDoc(e.target.files[0])} />
               </Button>
-              <FormControl sx={{ minWidth: 120 }}>
+              <FormControl 
+                sx={{ 
+                  minWidth: { xs: 80, sm: 120 },
+                  flex: { xs: '1 1 auto', sm: '0 0 auto' }
+                }} 
+                size={isMobile ? 'small' : 'medium'}
+              >
                 <InputLabel>Приватность</InputLabel>
                 <Select value={privacy} label="Приватность" onChange={e => setPrivacy(e.target.value)}>
                   <MenuItem value="all">Все</MenuItem>
                   <MenuItem value="private">Только я</MenuItem>
                 </Select>
               </FormControl>
-              <FormControl sx={{ minWidth: 120 }}>
+              <FormControl 
+                sx={{ 
+                  minWidth: { xs: 80, sm: 120 },
+                  flex: { xs: '1 1 auto', sm: '0 0 auto' }
+                }} 
+                size={isMobile ? 'small' : 'medium'}
+              >
                 <InputLabel>Раздел</InputLabel>
                 <Select value={section} label="Раздел" onChange={e => setSection(e.target.value)}>
                   {SECTIONS.map(s => <MenuItem key={s.value} value={s.value}>{s.label}</MenuItem>)}
                 </Select>
               </FormControl>
             </Stack>
-            <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
+            <Stack 
+              direction="row" 
+              spacing={1} 
+              alignItems="center" 
+              sx={{ 
+                mb: 2, 
+                flexWrap: 'wrap',
+                gap: 0.5
+              }}
+            >
               {images.map((img, i) => (
-                <Chip key={i} label={img.name} size="small" onDelete={() => setImages(images.filter((_, index) => index !== i))} />
+                <Chip 
+                  key={i} 
+                  label={img.name} 
+                  size={isMobile ? 'small' : 'medium'} 
+                  onDelete={() => setImages(images.filter((_, index) => index !== i))}
+                  sx={{ maxWidth: { xs: 120, sm: 200 } }}
+                />
               ))}
-              {video && <Chip label={video.name} size="small" onDelete={() => setVideo(null)} />}
-              {doc && <Chip label={doc.name} size="small" onDelete={() => setDoc(null)} />}
+              {video && (
+                <Chip 
+                  label={video.name} 
+                  size={isMobile ? 'small' : 'medium'} 
+                  onDelete={() => setVideo(null)}
+                  sx={{ maxWidth: { xs: 120, sm: 200 } }}
+                />
+              )}
+              {doc && (
+                <Chip 
+                  label={doc.name} 
+                  size={isMobile ? 'small' : 'medium'} 
+                  onDelete={() => setDoc(null)}
+                  sx={{ maxWidth: { xs: 120, sm: 200 } }}
+                />
+              )}
             </Stack>
-            <Stack direction="row" spacing={2} justifyContent="flex-end">
-              <Button onClick={() => setOpen(false)}>Отмена</Button>
+            <Stack 
+              direction="row" 
+              spacing={isMobile ? 1 : 2} 
+              justifyContent="flex-end"
+              sx={{ 
+                flexWrap: 'wrap',
+                gap: 1
+              }}
+            >
+              <Button 
+                onClick={() => setOpen(false)} 
+                size={isMobile ? 'small' : 'medium'}
+                sx={{ minWidth: { xs: 'auto', sm: 'auto' } }}
+              >
+                Отмена
+              </Button>
               <Button 
                 variant="contained" 
                 onClick={() => {
@@ -1006,6 +1153,8 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
                   setOpen(false);
                 }} 
                 disabled={loadingPost || (!text && images.length === 0 && !video && !doc)}
+                size={isMobile ? 'small' : 'medium'}
+                sx={{ minWidth: { xs: 'auto', sm: 'auto' } }}
               >
                 {loadingPost ? 'Создание...' : 'Опубликовать'}
               </Button>
@@ -1073,9 +1222,9 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
           <Button sx={{ ml: 2 }} onClick={loadPosts}>Повторить</Button>
         </Box>
       ) : (
-        <Grid container spacing={2}>
+        <Grid container spacing={{ xs: 0, sm: 2 }} sx={{ m: 0, px: 0, maxWidth: 'none', width: '100%' }}>
           {filteredPosts.map(post => (
-            <Grid item xs={12} key={post.id}>
+            <Grid item xs={12} key={post.id} sx={{ m: 0, p: 0, mx: 0, px: 0, width: { xs: '100%', sm: 'auto' } }}>
               <PostCard post={post} />
             </Grid>
           ))}
@@ -1087,7 +1236,18 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
           color="primary"
           aria-label="Создать пост"
           onClick={() => navigate('/post/new')}
-          sx={{ position: 'fixed', bottom: 16, right: 16, zIndex: 1000, boxShadow: 3, '&:hover': { transform: 'scale(1.1)', boxShadow: 6 }, transition: 'all 0.2s ease-in-out' }}
+          sx={{ 
+            position: 'fixed', 
+            bottom: 16, 
+            right: 16, 
+            zIndex: 1000, 
+            boxShadow: 3, 
+            '&:hover': { 
+              transform: 'scale(1.1)', 
+              boxShadow: 6 
+            }, 
+            transition: 'all 0.2s ease-in-out' 
+          }}
         >
           <AddIcon />
         </Fab>
