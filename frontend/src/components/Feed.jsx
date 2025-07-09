@@ -876,7 +876,7 @@ const Feed = ({ onDataUpdate, currentUser, isMobile, leftSidebarOpen, setLeftSid
           <Tooltip title="Настройки">
             <IconButton
               size={isSmallMobile ? "small" : "medium"}
-                              onClick={() => window.location.href = '/settings'}
+                              onClick={() => navigate('/settings')}
               sx={{ 
                 bgcolor: 'primary.50',
                 '&:hover': { bgcolor: 'primary.100' }
