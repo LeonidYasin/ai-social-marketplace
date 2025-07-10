@@ -2,7 +2,23 @@ import logger from './logging';
 import { API_CONFIG, API_STATUS, ERROR_MESSAGES } from '../config/api';
 import backendManager from './backendManager';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL ? `${process.env.REACT_APP_API_URL}/api` : 'http://localhost:8000/api';
+// Определяем базовый URL API в зависимости от окружения
+const getApiBaseUrl = () => {
+  // Если есть переменная окружения, используем её
+  if (process.env.REACT_APP_API_URL) {
+    return `${process.env.REACT_APP_API_URL}/api`;
+  }
+  
+  // В production используем Render URL
+  if (process.env.NODE_ENV === 'production' || window.location.hostname !== 'localhost') {
+    return 'https://social-marketplace-api.onrender.com/api';
+  }
+  
+  // В development используем localhost
+  return 'http://localhost:8000/api';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 // Функция для получения токена из localStorage
 const getAuthToken = () => {

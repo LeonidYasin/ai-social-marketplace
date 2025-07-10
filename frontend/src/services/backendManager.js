@@ -9,7 +9,16 @@ class BackendManager {
     this.healthCheckInterval = null;
     this.autoStartEnabled = true;
     this.backendPort = 8000;
-    this.backendUrl = `http://localhost:${this.backendPort}`;
+    
+    // Используем правильный URL для production или development
+    if (process.env.NODE_ENV === 'production' || window.location.hostname !== 'localhost') {
+      // В production используем тот же домен, что и фронтенд
+      this.backendUrl = 'https://social-marketplace-api.onrender.com';
+    } else {
+      // В development используем localhost
+      this.backendUrl = `http://localhost:${this.backendPort}`;
+    }
+    
     this.autoStartEndpoint = '/api/backend/start'; // Эндпоинт для автозапуска
   }
 
