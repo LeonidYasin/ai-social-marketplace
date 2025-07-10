@@ -250,11 +250,28 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
       const backendPosts = response.posts.map(post => ({
         id: post.id,
         text: post.content,
-        images: post.media_urls ? post.media_urls.map(url => 
-          url.startsWith('blob:') ? url : 
-          url.startsWith('http') ? url : 
-          getPlaceholderImage(url)
-        ) : [],
+        images: post.media_urls ? post.media_urls.map(url => {
+          // Если это blob URL - используем как есть
+          if (url.startsWith('blob:')) {
+            return url;
+          }
+          
+          // Если это полный HTTP URL - используем как есть
+          if (url.startsWith('http')) {
+            return url;
+          }
+          
+          // Если это просто имя файла или относительный путь
+          // Пытаемся загрузить из папки uploads или используем placeholder
+          if (url.includes('.') && !url.startsWith('/')) {
+            // Это имя файла - пытаемся загрузить из uploads
+            const uploadUrl = `/uploads/${url}`;
+            return uploadUrl;
+          }
+          
+          // Для остальных случаев используем placeholder
+          return getPlaceholderImage(url);
+        }) : [],
         video: null,
         doc: null,
         bg: post.background_color || '',
@@ -1000,9 +1017,27 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
 
   // Заменяем генерацию placeholder-изображения
   const getPlaceholderImage = (url) => {
-    // Генерируем placeholder через API с помощью Jimp
+    // Используем простой SVG placeholder вместо API
     const encodedUrl = encodeURIComponent(url);
-    return `/api/admin/placeholder/400/300/cccccc/666666/${encodedUrl}`;
+    const width = 400;
+    const height = 300;
+    const bgColor = 'cccccc';
+    const textColor = '666666';
+    
+    // Создаем SVG placeholder
+    const svg = `
+      <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100%" height="100%" fill="#${bgColor}"/>
+        <text x="50%" y="50%" font-family="Arial, sans-serif" font-size="16" 
+              fill="#${textColor}" text-anchor="middle" dy=".3em">
+          ${encodedUrl.substring(0, 20)}...
+        </text>
+      </svg>
+    `;
+    
+    // Конвертируем SVG в data URL
+    const dataUrl = `data:image/svg+xml;base64,${btoa(svg)}`;
+    return dataUrl;
   };
 
   // Функция для выбора иконки события

@@ -29,6 +29,12 @@ if (!fs.existsSync(logsDir)) {
   fs.mkdirSync(logsDir, { recursive: true });
 }
 
+// Create uploads directory if it doesn't exist
+const uploadsDir = path.join(__dirname, '..', 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
 // Simple logger for startup (before main logger is loaded)
 const startupLogger = {
   info: (message) => {
@@ -159,6 +165,7 @@ const logsRouter = loadRoute('./routes/logs', 'logs');
 const placeholderRouter = loadRoute('./routes/placeholder', 'placeholder');
 const adminRouter = loadRoute('./routes/admin', 'admin');
 const syslogRouter = loadRoute('./routes/syslog', 'syslog');
+const uploadRouter = loadRoute('./routes/upload', 'upload');
 
 const app = express();
 const server = http.createServer(app);
@@ -442,6 +449,9 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Статическая папка для загрузки файлов
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+
 // Configure sessions
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-session-secret',
@@ -519,6 +529,7 @@ app.use('/api/logs', logsRouter);
 app.use('/api/placeholder', placeholderRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/syslog', syslogRouter);
+app.use('/api/upload', uploadRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Swagger JSON specification endpoint

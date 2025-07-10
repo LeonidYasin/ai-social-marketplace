@@ -80,9 +80,39 @@ const CreatePostPage = ({ currentUser }) => {
 
       console.log('🔑 Токен найден:', token.substring(0, 20) + '...');
 
+      // Сначала загружаем файлы, если они есть
+      let uploadedFiles = [];
+      if (images.length > 0) {
+        console.log('📤 Загружаем изображения...');
+        for (const image of images) {
+          try {
+            const formData = new FormData();
+            formData.append('file', image);
+            
+            const uploadResponse = await fetch('/api/upload', {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${token}`
+              },
+              body: formData
+            });
+            
+            if (uploadResponse.ok) {
+              const uploadResult = await uploadResponse.json();
+              uploadedFiles.push(uploadResult.filename);
+              console.log('✅ Файл загружен:', uploadResult.filename);
+            } else {
+              console.warn('⚠️ Не удалось загрузить файл:', image.name);
+            }
+          } catch (uploadError) {
+            console.warn('⚠️ Ошибка загрузки файла:', image.name, uploadError);
+          }
+        }
+      }
+
       const postData = {
         content: text,
-        media_urls: images.map(f => f.name),
+        media_urls: uploadedFiles,
         media_type: video ? 'video' : doc ? 'document' : images.length > 0 ? 'image' : null,
         background_color: bg,
         privacy: privacy === 'all' ? 'public' : privacy === 'private' ? 'private' : 'friends',
