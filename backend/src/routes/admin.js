@@ -6,6 +6,8 @@ const path = require('path');
 const logger = require('../utils/logger');
 const adminPasswordUtils = require('../utils/adminPassword');
 const { checkAdmin } = require('../middleware/checkAdmin');
+const fetch = require('node-fetch');
+const Jimp = require('jimp');
 
 // Административный пароль (в продакшене должен быть в переменных окружения)
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
@@ -282,6 +284,78 @@ router.post('/change-admin-password', checkAdmin, async (req, res) => {
   }
   await adminPasswordUtils.setAdminPassword(newPassword);
   res.json({ success: true, message: 'Пароль администратора успешно изменён' });
+});
+
+// Endpoint для проверки здоровья бэкенда
+router.get('/health', async (req, res) => {
+  try {
+    res.json({ 
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      memory: process.memoryUsage()
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      status: 'error',
+      message: error.message 
+    });
+  }
+});
+
+// Endpoint для генерации placeholder изображений
+router.get('/placeholder/:width/:height/:bgColor/:textColor/:text', async (req, res) => {
+  try {
+    const { width, height, bgColor, textColor, text } = req.params;
+    
+    // Парсим параметры
+    const w = parseInt(width) || 150;
+    const h = parseInt(height) || 150;
+    const bg = bgColor || 'cccccc';
+    const fg = textColor || '666666';
+    const label = decodeURIComponent(text) || 'Image';
+    
+    console.log(`🖼️ Генерация placeholder: ${w}x${h}, bg: #${bg}, fg: #${fg}, text: ${label}`);
+    
+    // Создаем изображение с помощью Jimp
+    const image = new Jimp(w, h, `#${bg}`);
+    
+    // Загружаем шрифт (используем встроенный)
+    const font = await Jimp.loadFont(Jimp.FONT_SANS_16_BLACK);
+    
+    // Вычисляем позицию текста (по центру)
+    const textWidth = Jimp.measureText(font, label);
+    const textHeight = Jimp.measureTextHeight(font, label, textWidth);
+    const x = (w - textWidth) / 2;
+    const y = (h - textHeight) / 2;
+    
+    // Рисуем текст
+    image.print(font, x, y, {
+      text: label,
+      alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
+      alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE
+    }, w, h);
+    
+    // Конвертируем в буфер
+    const buffer = await image.getBufferAsync(Jimp.MIME_PNG);
+    
+    // Устанавливаем заголовки
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Cache-Control', 'public, max-age=3600'); // Кэшируем на 1 час
+    res.setHeader('Content-Length', buffer.length);
+    
+    // Отправляем изображение
+    res.send(buffer);
+    
+    console.log(`✅ Placeholder изображение сгенерировано: ${w}x${h}`);
+    
+  } catch (error) {
+    console.error('❌ Ошибка генерации placeholder:', error);
+    res.status(500).json({
+      error: 'Failed to generate placeholder image',
+      message: error.message
+    });
+  }
 });
 
 module.exports = router; 

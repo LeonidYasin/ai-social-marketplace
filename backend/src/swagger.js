@@ -10,12 +10,12 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:3000',
-        description: 'Local server',
+        url: 'http://localhost:8000',
+        description: 'Backend server',
       },
     ],
   },
-  apis: ['./routes/*.js'], // Путь к вашим роутам для автосбора аннотаций
+  apis: [__dirname + '/routes/*.js'], // Абсолютный путь к роутам для автосбора аннотаций
 };
 
 const swaggerSpec = swaggerJSDoc(options);

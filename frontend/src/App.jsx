@@ -1,5 +1,5 @@
 import logger from './services/logging';
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Box, Typography, ThemeProvider, CssBaseline, IconButton } from '@mui/material';
 import { io } from 'socket.io-client';
 import AppBarMain from './components/AppBar';
@@ -210,7 +210,7 @@ const AppWithRouter = (props) => {
           setAiChatOpen={props.setAiChatOpen}
         />} />
         <Route path="chat/:id" element={<Chat currentUser={props.currentUser} />} />
-        <Route path="settings" element={<SettingsPage 
+        <Route path="/settings" element={<SettingsPage 
           currentUser={props.currentUser}
           setCurrentUser={props.setCurrentUser}
           fetchUsers={props.fetchUsers}
@@ -273,8 +273,16 @@ const App = ({ themeMode, onThemeToggle }) => {
   const [showPresentation, setShowPresentation] = useState(false);
   const togglePresentation = () => setShowPresentation(v => !v);
 
+  const failedUserFetchAttempts = useRef(0);
+  const MAX_USER_FETCH_ATTEMPTS = 3;
+  const shownConnectionErrorRef = useRef(false);
+
   // Функция загрузки пользователей из API
   const fetchUsers = async () => {
+    if (failedUserFetchAttempts.current >= MAX_USER_FETCH_ATTEMPTS) {
+      setLoadingUsers(false);
+      return;
+    }
     try {
       setLoadingUsers(true);
       
@@ -306,15 +314,23 @@ const App = ({ themeMode, onThemeToggle }) => {
           }
         }
         setRealUsers(uniqueUsers);
+        failedUserFetchAttempts.current = 0;
+        shownConnectionErrorRef.current = false;
       } else {
         console.error('API error fetching users:', response.status, response.statusText);
         // При ошибке API устанавливаем пустой массив пользователей
         setRealUsers([]);
+        failedUserFetchAttempts.current++;
       }
     } catch (error) {
       console.error('Error fetching users:', error);
       // При ошибке сети устанавливаем пустой массив пользователей
       setRealUsers([]);
+      failedUserFetchAttempts.current++;
+      if (failedUserFetchAttempts.current === MAX_USER_FETCH_ATTEMPTS && !shownConnectionErrorRef.current) {
+        shownConnectionErrorRef.current = true;
+        alert('Сервер недоступен. Проверьте подключение и перезагрузите страницу позже.');
+      }
     } finally {
       setLoadingUsers(false);
     }

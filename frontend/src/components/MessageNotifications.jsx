@@ -93,6 +93,51 @@ const MessageNotifications = ({ currentUser, socket }) => {
     // eslint-disable-next-line
   }, [socket, currentUser]);
 
+  // Слушаем события статуса бэкенда
+  useEffect(() => {
+    const handleBackendStatusChange = (event) => {
+      const { detail } = event;
+      
+      if (detail.type === 'backend_error') {
+        // Проверяем, нет ли уже такого уведомления
+        const hasBackendError = notifications.some(n => n.type === 'backend_error');
+        if (!hasBackendError) {
+          const backendNotification = {
+            id: Date.now(),
+            title: detail.title,
+            message: detail.message,
+            type: detail.type,
+            timestamp: detail.timestamp,
+            is_read: false
+          };
+          
+          setNotifications(prev => [backendNotification, ...prev]);
+        }
+      } else if (detail.type === 'backend_recovered') {
+        // Убираем уведомление о бэкенде когда он восстановлен
+        setNotifications(prev => prev.filter(n => n.type !== 'backend_error'));
+        
+        // Добавляем уведомление о восстановлении
+        const recoveryNotification = {
+          id: Date.now(),
+          title: detail.title,
+          message: detail.message,
+          type: detail.type,
+          timestamp: detail.timestamp,
+          is_read: false
+        };
+        
+        setNotifications(prev => [recoveryNotification, ...prev]);
+      }
+    };
+
+    window.addEventListener('backendStatusChanged', handleBackendStatusChange);
+
+    return () => {
+      window.removeEventListener('backendStatusChanged', handleBackendStatusChange);
+    };
+  }, [notifications]);
+
   // Открытие/закрытие поповера
   const handleOpen = (e) => {
     setAnchorEl(e.currentTarget);

@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Box, Card, CardContent, Typography, TextField, Button, Select, MenuItem, InputLabel, FormControl, CardMedia, Grid, Avatar, IconButton, Stack, Tabs, Tab, Divider, Tooltip, ToggleButtonGroup, ToggleButton, Popover, Chip, useTheme, useMediaQuery, Fab, InputBase, CircularProgress, Alert } from '@mui/material';
+import BackendStatus from './BackendStatus';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
@@ -22,9 +23,16 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import UserSettings from './UserSettings';
 import PostCard from './PostCard';
 import { postsAPI } from '../services/api';
+import backendManager from '../services/backendManager';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import PeopleIcon from '@mui/icons-material/People';
 import StarIcon from '@mui/icons-material/Star';
+import ErrorDisplay from './ErrorDisplay';
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
+import ErrorIcon from '@mui/icons-material/Error';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 const initialPosts = [
   { id: 1, text: 'Продаю iPhone 13', images: [], video: null, doc: null, bg: '', section: 'sell', privacy: 'all', reactions: { like: 3, love: 2, laugh: 1, wow: 0, sad: 0, angry: 0 } },
@@ -198,6 +206,18 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
   const [lastUpdate, setLastUpdate] = useState(new Date());
   // Уведомления
   const [notifications, setNotifications] = useState([]);
+  // Состояние лампочки статуса
+  const [statusLight, setStatusLight] = useState({ 
+    color: '#4caf50', 
+    intensity: 0.6, 
+    isFlashing: false 
+  });
+  // Развернута ли лента событий
+  const [showAllEvents, setShowAllEvents] = useState(false);
+  // Статус бэкенда
+  const [backendStatus, setBackendStatus] = useState({ isRunning: true });
+  // Предыдущий статус бэкенда для отслеживания изменений
+  const previousBackendStatus = useRef({ isRunning: true });
   // Настройки пользователя
 
   const [userSettings, setUserSettings] = useState(null);
@@ -210,8 +230,16 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
 
   const postInputRef = useRef(null);
 
+  const failedPostFetchAttempts = useRef(0);
+  const MAX_POST_FETCH_ATTEMPTS = 3;
+  const shownConnectionErrorRef = useRef(false);
+
   // Загрузка постов с backend
   const loadPosts = async () => {
+    if (failedPostFetchAttempts.current >= MAX_POST_FETCH_ATTEMPTS) {
+      setLoading(false);
+      return;
+    }
     try {
       console.log('loadPosts: Starting to load posts');
       setLoading(true);
@@ -225,7 +253,7 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
         images: post.media_urls ? post.media_urls.map(url => 
           url.startsWith('blob:') ? url : 
           url.startsWith('http') ? url : 
-          `/api/placeholder/400x300/cccccc/666666/${encodeURIComponent(url)}`
+          getPlaceholderImage(url)
         ) : [],
         video: null,
         doc: null,
@@ -248,11 +276,43 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
       }));
       console.log('loadPosts: Mapped posts:', backendPosts);
       setPosts(backendPosts);
+      failedPostFetchAttempts.current = 0;
+      shownConnectionErrorRef.current = false;
     } catch (err) {
       console.error('Ошибка загрузки постов:', err);
-      setError('Не удалось загрузить посты');
-      // Fallback к локальным данным
-      setPosts(initialPosts);
+      
+      // Умная обработка ошибок
+      let errorMessage = 'Не удалось загрузить посты';
+      let showFallback = true;
+      
+      if (err?.message) {
+        if (err.message.includes('Failed to fetch') || err.message.includes('ERR_CONNECTION_REFUSED')) {
+          errorMessage = 'Сервер недоступен. Показываем локальные данные.';
+          showFallback = true;
+        } else if (err.message.includes('401')) {
+          errorMessage = 'Необходима авторизация для загрузки постов.';
+          showFallback = false;
+        } else if (err.message.includes('500')) {
+          errorMessage = 'Ошибка сервера. Показываем локальные данные.';
+          showFallback = true;
+        } else {
+          errorMessage = `Ошибка: ${err.message}`;
+          showFallback = true;
+        }
+      }
+      
+      setError(errorMessage);
+      failedPostFetchAttempts.current++;
+      if (failedPostFetchAttempts.current === MAX_POST_FETCH_ATTEMPTS && !shownConnectionErrorRef.current) {
+        shownConnectionErrorRef.current = true;
+        setError('Сервер недоступен. Проверьте подключение и перезагрузите страницу позже.');
+        alert('Сервер недоступен. Проверьте подключение и перезагрузите страницу позже.');
+      }
+      
+      // Показываем fallback данные только если это уместно
+      if (showFallback) {
+        setPosts(initialPosts);
+      }
     } finally {
       setLoading(false);
     }
@@ -280,6 +340,92 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
         }
       });
     };
+  }, []);
+
+  // Анимация медленного затухания лампочки
+  useEffect(() => {
+    if (!statusLight.isFlashing && statusLight.intensity > 0.6) {
+      const timer = setTimeout(() => {
+        setStatusLight(prev => ({
+          ...prev,
+          intensity: Math.max(0.6, prev.intensity - 0.1)
+        }));
+      }, 1000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [statusLight.isFlashing, statusLight.intensity]);
+
+  // Отслеживание статуса бэкенда
+  useEffect(() => {
+    const checkBackendStatus = async () => {
+      // Сначала проверяем здоровье бэкенда через backendManager
+      const isHealthy = await backendManager.checkBackendHealth();
+      const status = backendManager.getBackendStatus();
+      
+      // Проверяем, изменился ли статус
+      const statusChanged = status.isRunning !== previousBackendStatus.current.isRunning;
+      setBackendStatus(status);
+      previousBackendStatus.current = status;
+      
+      // Отправляем уведомления только при изменении статуса
+      if (!status.isRunning && statusChanged) {
+        // Бэкенд стал недоступен
+        addNotification('Бэкенд не отвечает', 'error');
+        
+        // Создаем событие для отправки в MessageNotifications
+        const backendNotificationEvent = new CustomEvent('backendStatusChanged', {
+          detail: {
+            type: 'backend_error',
+            title: 'Сервер недоступен',
+            message: 'Бэкенд не отвечает. Проверьте подключение.',
+            timestamp: new Date().toISOString()
+          }
+        });
+        window.dispatchEvent(backendNotificationEvent);
+        
+        // Устанавливаем серый цвет лампочки при отсутствии соединения
+        setStatusLight({
+          color: '#9e9e9e',
+          intensity: 0.3,
+          isFlashing: false
+        });
+      } else if (status.isRunning && statusChanged) {
+        // Бэкенд восстановился
+        addNotification(`Бэкенд восстановлен (${new Date().toLocaleTimeString()})`, 'success');
+        
+        // Создаем событие для отправки в MessageNotifications
+        const backendRecoveredEvent = new CustomEvent('backendStatusChanged', {
+          detail: {
+            type: 'backend_recovered',
+            title: 'Сервер восстановлен',
+            message: 'Бэкенд снова доступен.',
+            timestamp: new Date().toISOString()
+          }
+        });
+        window.dispatchEvent(backendRecoveredEvent);
+        
+        // Возвращаем зеленый цвет лампочки
+        setStatusLight({
+          color: '#4caf50',
+          intensity: 0.6,
+          isFlashing: false
+        });
+      } else if (status.isRunning && !statusChanged) {
+        // Бэкенд работает стабильно - просто обновляем цвет лампочки
+        setStatusLight({
+          color: '#4caf50',
+          intensity: 0.6,
+          isFlashing: false
+        });
+      }
+    };
+
+    // Проверяем статус каждые 5 секунд
+    const interval = setInterval(checkBackendStatus, 5000);
+    checkBackendStatus(); // Первоначальная проверка
+
+    return () => clearInterval(interval);
   }, []);
 
   // Загрузка реакций из localStorage
@@ -446,15 +592,33 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
     addNotification(`${newComment.author} оставил комментарий`);
   };
 
-  // Добавление уведомления
-  const addNotification = (message) => {
+  // Добавление уведомления с анимацией лампочки
+  const addNotification = (message, type = 'success') => {
     const notification = {
       id: Date.now(),
       message,
       timestamp: new Date(),
+      type
     };
     
     setNotifications(prev => [notification, ...prev.slice(0, 4)]); // Максимум 5 уведомлений
+    
+    // Анимация лампочки
+    const lightColor = type === 'error' ? '#f44336' : '#4caf50';
+    setStatusLight({
+      color: lightColor,
+      intensity: 1,
+      isFlashing: true
+    });
+    
+    // Убираем вспышку через 300ms
+    setTimeout(() => {
+      setStatusLight(prev => ({
+        ...prev,
+        intensity: 0.6,
+        isFlashing: false
+      }));
+    }, 300);
     
     // Автоматически убираем уведомление через 5 секунд
     setTimeout(() => {
@@ -503,7 +667,7 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
       setBg('');
       if (onDataUpdate) onDataUpdate({ type: 'post_created', post: response.post });
     } catch (err) {
-      setErrorPost('Ошибка создания поста: ' + (err.message || ''));
+      setErrorPost('Ошибка создания поста: ' + (err?.message || ''));
     } finally {
       setLoadingPost(false);
     }
@@ -834,6 +998,42 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
     }
   }, [open]);
 
+  // Заменяем генерацию placeholder-изображения
+  const getPlaceholderImage = (url) => {
+    // Генерируем placeholder через API с помощью Jimp
+    const encodedUrl = encodeURIComponent(url);
+    return `/api/admin/placeholder/400/300/cccccc/666666/${encodedUrl}`;
+  };
+
+  // Функция для выбора иконки события
+  const getEventIcon = (type, message) => {
+    // Безопасная проверка параметров
+    const safeType = type || '';
+    const safeMessage = message || '';
+    
+    if (safeType === 'error' || /бэкенд не отвечает|ошибка/i.test(safeMessage)) {
+      return <ErrorIcon sx={{ color: 'error.main', fontSize: 22 }} />;
+    }
+    if (/опубликовал пост/i.test(safeMessage)) {
+      return <PostAddIcon sx={{ color: 'primary.main', fontSize: 22 }} />;
+    }
+    if (/лайк|реакц/i.test(safeMessage)) {
+      return <ThumbUpIcon sx={{ color: 'success.main', fontSize: 20 }} />;
+    }
+    if (/коммент/i.test(safeMessage)) {
+      return <ChatBubbleIcon sx={{ color: 'info.main', fontSize: 20 }} />;
+    }
+    return <NotificationsIcon sx={{ color: 'grey.600', fontSize: 20 }} />;
+  };
+
+  // Функция для тултипа лампочки статуса
+  const getStatusTooltip = () => {
+    if (statusLight.color === '#4caf50') return 'Онлайн';
+    if (statusLight.color === '#9e9e9e') return 'Офлайн';
+    if (statusLight.color === '#f44336') return 'Бэкенд не отвечает';
+    return 'Статус неизвестен';
+  };
+
   return (
     <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', m: 0, p: 0, maxWidth: 'none', bgcolor: 'background.default' }}>
       {/* Верхняя панель с кнопками открытия боковых панелей */}
@@ -941,86 +1141,120 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ flexWrap: 'wrap', gap: 1 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0, flex: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
-              <Box
-                sx={{
-                  display: 'inline-block',
-                  width: 8,
-                  height: 8,
-                  borderRadius: '50%',
-                  bgcolor: '#4caf50',
-                  boxShadow: '0 0 0 0 rgba(76, 175, 80, 0.6)',
-                  animation: 'pulseOnline 1.2s cubic-bezier(0.4,0,0.2,1) infinite',
-                  '@keyframes pulseOnline': {
-                    '0%':   { boxShadow: '0 0 0 0 rgba(76, 175, 80, 0.6)' },
-                    '10%':  { boxShadow: '0 0 0 4px rgba(76, 175, 80, 0)' },
-                    '12%':  { boxShadow: '0 0 0 4px rgba(76, 175, 80, 0)' },
-                    '100%': { boxShadow: '0 0 0 0 rgba(76, 175, 80, 0)' },
-                  },
-                }}
-              />
-              <Typography 
-                variant="body2" 
-                color="text.secondary"
-                sx={{ 
-                  fontSize: isMobile ? '0.7rem' : '0.75rem',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                }}
-              >
-                {isOnline ? 'Онлайн' : 'Офлайн'}
-                {isMobile 
-                  ? ` (${lastUpdate.toLocaleTimeString().slice(0, 5)})`
-                  : ` • Последнее обновление: ${lastUpdate.toLocaleTimeString().slice(0, 5)}`
-                }
-              </Typography>
+              {/* Лампочка статуса с тултипом "Онлайн"/"Офлайн" */}
+              <Tooltip title={getStatusTooltip()} arrow>
+                <Box
+                  sx={{
+                    display: 'inline-block',
+                    width: 6,
+                    height: 6,
+                    borderRadius: '50%',
+                    bgcolor: statusLight.color,
+                    opacity: statusLight.intensity,
+                    boxShadow: statusLight.isFlashing 
+                      ? `0 0 0 0 ${statusLight.color}40`
+                      : `0 0 0 0 ${statusLight.color}60`,
+                    animation: statusLight.isFlashing 
+                      ? 'elegantFlash 2s ease-in-out infinite'
+                      : statusLight.color === '#4caf50' 
+                        ? 'elegantPulse 3s ease-in-out infinite'
+                        : 'none',
+                    '@keyframes elegantFlash': {
+                      '0%':   { 
+                        opacity: 0.3,
+                        boxShadow: `0 0 0 0 ${statusLight.color}20`,
+                        transform: 'scale(0.8)'
+                      },
+                      '50%':  { 
+                        opacity: 1,
+                        boxShadow: `0 0 0 6px ${statusLight.color}40`,
+                        transform: 'scale(1.2)'
+                      },
+                      '100%': { 
+                        opacity: 0.3,
+                        boxShadow: `0 0 0 0 ${statusLight.color}20`,
+                        transform: 'scale(0.8)'
+                      },
+                    },
+                    '@keyframes elegantPulse': {
+                      '0%':   { 
+                        opacity: 0.4,
+                        boxShadow: '0 0 0 0 rgba(76, 175, 80, 0.3)',
+                        transform: 'scale(0.9)'
+                      },
+                      '50%':  { 
+                        opacity: 0.8,
+                        boxShadow: '0 0 0 3px rgba(76, 175, 80, 0.1)',
+                        transform: 'scale(1.1)'
+                      },
+                      '100%': { 
+                        opacity: 0.4,
+                        boxShadow: '0 0 0 0 rgba(76, 175, 80, 0.3)',
+                        transform: 'scale(0.9)'
+                      },
+                    },
+                    transition: 'all 0.5s ease',
+                    cursor: 'pointer',
+                    mr: 1
+                  }}
+                  onClick={() => setShowAllEvents(!showAllEvents)}
+                />
+              </Tooltip>
+              {/* Краткая надпись с датой и временем последнего обновления */}
+              <Tooltip title="Время последнего обновления" arrow>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: 'text.secondary',
+                    fontSize: isMobile ? '0.7rem' : '0.8rem',
+                    ml: 0.5,
+                    userSelect: 'none',
+                    cursor: 'pointer',
+                    display: 'inline-block',
+                    verticalAlign: 'middle'
+                  }}
+                >
+                  {`${lastUpdate.toLocaleTimeString().slice(0,5)} ${lastUpdate.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' })}`}
+                </Typography>
+              </Tooltip>
+              {/* Иконка последнего события — сразу после времени */}
+              {notifications.length > 0 && (
+                <Tooltip title={notifications[0]?.message || 'Нет событий'} arrow>
+                                      <Box onClick={() => setShowAllEvents(true)} sx={{ cursor: 'pointer', ml: 1 }}>
+                      {getEventIcon(notifications[0]?.type, notifications[0]?.message)}
+                    </Box>
+                </Tooltip>
+              )}
             </Box>
           </Box>
-          {/* Вставляем notifications */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 1, maxWidth: isMobile ? '60vw' : 340, overflowX: 'auto' }}>
-            {notifications.map(n => (
-              <Box key={n.id} sx={{
-                bgcolor: 'primary.50',
-                color: 'primary.main',
-                borderRadius: 2,
-                px: 1.5,
-                py: 0.5,
-                fontSize: isMobile ? '0.7rem' : '0.8rem',
-                boxShadow: 1,
-                whiteSpace: 'nowrap',
-                mr: 1,
-                minWidth: 0,
-                maxWidth: isMobile ? 120 : 180,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                transition: 'opacity 0.3s',
-                opacity: 0.95
-              }}>
-                {n.message}
-              </Box>
-            ))}
-          </Box>
+
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
             {!isMobile && (
-              <Button
-                size="small"
-                variant="outlined"
-                onClick={() => {
-                  setIsOnline(!isOnline);
-                  if (!isOnline) {
-                    setLastUpdate(new Date());
-                  }
-                }}
-                sx={{ 
-                  textTransform: 'none', 
-                  fontSize: '0.75rem',
-                  minWidth: 'auto',
-                  px: 2,
-                  py: 0.5
-                }}
-              >
-                {isOnline ? 'Отключить' : 'Включить'} реальное время
-              </Button>
+              <Tooltip title={isOnline ? 'Отключить реальное время' : 'Включить реальное время'} arrow>
+                <Box
+                  onClick={() => {
+                    setIsOnline(!isOnline);
+                    if (!isOnline) setLastUpdate(new Date());
+                  }}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    px: 0.5,
+                    py: 0.5,
+                    borderRadius: 2,
+                    bgcolor: isOnline ? 'primary.50' : 'grey.100',
+                    color: isOnline ? 'primary.main' : 'grey.600',
+                    cursor: 'pointer',
+                    transition: 'background 0.2s, color 0.2s',
+                    '&:hover': {
+                      bgcolor: isOnline ? 'primary.100' : 'grey.200',
+                      color: isOnline ? 'primary.dark' : 'grey.800',
+                    }
+                  }}
+                >
+                  <AccessTimeIcon sx={{ fontSize: 20 }} />
+                </Box>
+              </Tooltip>
             )}
             <IconButton 
               size={isMobile ? "small" : "medium"}
@@ -1039,6 +1273,95 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
           </Box>
         </Stack>
       </Box>
+
+      {/* Лента событий */}
+      {/* Развёрнутая лента событий (иконка последнего события всегда сверху, под ней — список) */}
+      {showAllEvents && (
+        <Box sx={{
+          mt: 1,
+          mb: 2,
+          px: 1,
+          py: 1,
+          bgcolor: 'background.paper',
+          borderRadius: 2,
+          boxShadow: 0,
+          maxHeight: 180,
+          overflowY: 'auto',
+          border: '1px solid',
+          borderColor: 'grey.100',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 0.5
+        }}>
+          {/* Иконка последнего события всегда сверху */}
+          <Box sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+            justifyContent: 'flex-start',
+            mb: 0.5
+          }}>
+                          <Tooltip title={notifications[0]?.message || 'Нет событий'} arrow>
+              <Box>
+                                  {getEventIcon(notifications[0]?.type, notifications[0]?.message)}
+              </Box>
+            </Tooltip>
+            <Typography variant="body2" sx={{
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              fontSize: isMobile ? '0.7rem' : '0.8rem',
+              fontWeight: 400,
+              flex: 1
+            }}>
+                              {notifications[0]?.message || 'Нет событий'}
+            </Typography>
+            <Typography variant="caption" color="text.secondary" sx={{ ml: 1, minWidth: 36, textAlign: 'right' }}>
+              {notifications[0]?.timestamp
+                ? (notifications[0].timestamp instanceof Date
+                    ? notifications[0].timestamp.toLocaleTimeString().slice(0, 5)
+                    : new Date(notifications[0].timestamp).toLocaleTimeString().slice(0, 5))
+                : ''}
+            </Typography>
+          </Box>
+          {/* Остальные события (кроме первого) */}
+          {notifications.length > 1 && notifications.slice(1).map(n => (
+            <Box key={n.id} sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1,
+              px: 1,
+              py: 0.25,
+              borderRadius: 1,
+              bgcolor: 'transparent',
+              minWidth: 0,
+              maxWidth: '100%',
+              fontSize: isMobile ? '0.7rem' : '0.8rem',
+              color: n.type === 'error' ? 'error.main' : 'text.primary',
+              fontWeight: 400
+            }}>
+                                  {getEventIcon(n?.type, n?.message)}
+              <Typography variant="body2" sx={{
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                fontSize: isMobile ? '0.7rem' : '0.8rem',
+                fontWeight: 400,
+                flex: 1
+              }}>
+                {n?.message || 'Нет сообщения'}
+              </Typography>
+              <Typography variant="caption" color="text.secondary" sx={{ ml: 1, minWidth: 36, textAlign: 'right' }}>
+                {n?.timestamp
+                  ? (n.timestamp instanceof Date
+                      ? n.timestamp.toLocaleTimeString().slice(0, 5)
+                      : new Date(n.timestamp).toLocaleTimeString().slice(0, 5))
+                  : ''}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
+      )}
 
       {/* Маленькая форма "Что у вас нового?" */}
       {!open && (
@@ -1100,7 +1423,7 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
                 <CloseIcon />
               </IconButton>
             </Stack>
-            {errorPost && <Alert severity="error" sx={{ mb: 2 }}>{errorPost}</Alert>}
+            {/* ErrorDisplay отключен для устранения всплывающих ошибок */}
             <TextField
               inputRef={postInputRef}
               label="Текст поста"
@@ -1318,9 +1641,10 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
           <Typography sx={{ ml: 2 }}>Загрузка постов...</Typography>
         </Box>
       ) : error ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', py: 4 }}>
-          <Typography color="error">{error}</Typography>
-          <Button sx={{ ml: 2 }} onClick={loadPosts}>Повторить</Button>
+        <Box sx={{ py: 4, textAlign: 'center' }}>
+          <Typography variant="body2" color="text.secondary">
+            Ошибка загрузки постов. Проверьте подключение к серверу.
+          </Typography>
         </Box>
       ) : (
         <Grid container spacing={{ xs: 0, sm: 2 }} sx={{ m: 0, px: 0, maxWidth: 'none', width: '100%' }}>

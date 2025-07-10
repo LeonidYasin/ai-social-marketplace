@@ -1,5 +1,6 @@
 import logger from './logging';
 import { API_CONFIG, API_STATUS, ERROR_MESSAGES } from '../config/api';
+import backendManager from './backendManager';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL ? `${process.env.REACT_APP_API_URL}/api` : 'http://localhost:8000/api';
 
@@ -84,9 +85,12 @@ const apiRequest = async (endpoint, options = {}) => {
       window.apiLogs.push(`API Error: ${error.message} ${url}`);
     }
     
+    // Обрабатываем ошибку без всплывающих уведомлений
+    const errorInfo = await backendManager.handleConnectionError(error, endpoint);
+    // backendManager.showErrorNotification(errorInfo); // Отключаем всплывающие уведомления
     
     // Логируем ошибку
-    logger.logApiError(method, url, error);
+    logger.logApiError(config.method || 'GET', url, error);
     throw error;
   }
 };
@@ -208,8 +212,9 @@ export const postsAPI = {
         }
       }
       console.error('postsAPI.getPosts error:', error);
-      alert(errorMsg + (error && error.stack ? '\n' + error.stack : ''));
-      logger.logApiError('GET', '/posts', error);
+      // Отключаем alert и логирование
+      // alert(errorMsg + (error && error.stack ? '\n' + error.stack : ''));
+      // logger.logApiError('GET', '/posts', error);
       throw error;
     }
   },
@@ -269,7 +274,7 @@ export const postsAPI = {
         }
       }
       console.error('postsAPI.getPost error:', error);
-      alert(errorMsg + (error && error.stack ? '\n' + error.stack : ''));
+      console.error(errorMsg + (error && error.stack ? '\n' + error.stack : ''));
       logger.logApiError('GET', `/posts/${postId}`, error);
       throw error;
     }
@@ -319,7 +324,7 @@ export const commentsAPI = {
         }
       }
       console.error('commentsAPI.addComment error:', error);
-      alert(errorMsg + (error && error.stack ? '\n' + error.stack : ''));
+      console.error(errorMsg + (error && error.stack ? '\n' + error.stack : ''));
       logger.logApiError('POST', `/posts/${postId}/comments`, error);
       throw error;
     }
@@ -354,7 +359,7 @@ export const reactionsAPI = {
         }
       }
       console.error('reactionsAPI.addReaction error:', error);
-      alert(errorMsg + (error && error.stack ? '\n' + error.stack : ''));
+      console.error(errorMsg + (error && error.stack ? '\n' + error.stack : ''));
       logger.logApiError('POST', `/posts/${postId}/reactions`, error);
       throw error;
     }

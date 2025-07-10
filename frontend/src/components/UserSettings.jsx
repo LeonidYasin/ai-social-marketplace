@@ -499,27 +499,27 @@ const UserSettings = ({ open, onClose, onUserChange, posts = [], currentUser, se
         facebook: { 
           name: 'Facebook Пользователь', 
           email: 'facebook@example.com',
-          avatar: '/api/placeholder/150/4267B2/FFFFFF/F'
+          avatar: '/api/admin/placeholder/150/150/4267B2/FFFFFF/F'
         },
         vk: { 
           name: 'VK Пользователь', 
           email: 'vk@example.com',
-          avatar: '/api/placeholder/150/4C75A3/FFFFFF/V'
+          avatar: '/api/admin/placeholder/150/150/4C75A3/FFFFFF/V'
         },
         telegram: { 
           name: 'Telegram Пользователь', 
           email: 'telegram@example.com',
-          avatar: '/api/placeholder/150/0088cc/FFFFFF/T'
+          avatar: '/api/admin/placeholder/150/150/0088cc/FFFFFF/T'
         },
         github: { 
           name: 'GitHub Пользователь', 
           email: 'github@example.com',
-          avatar: '/api/placeholder/150/333/FFFFFF/GH'
+          avatar: '/api/admin/placeholder/150/150/333/FFFFFF/GH'
         },
         whatsapp: { 
           name: 'WhatsApp Пользователь', 
           email: 'whatsapp@example.com',
-          avatar: '/api/placeholder/150/25D366/FFFFFF/W'
+          avatar: '/api/admin/placeholder/150/150/25D366/FFFFFF/W'
         },
       };
       

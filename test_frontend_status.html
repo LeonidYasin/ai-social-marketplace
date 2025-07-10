@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест статуса бэкенда</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .status-online { background-color: #4caf50; }
+        .status-offline { background-color: #f44336; }
+        .status-unknown { background-color: #9e9e9e; }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .warning { color: #ffc107; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Тест статуса бэкенда</h1>
+    
+    <div class="test-section">
+        <h2>📊 Текущий статус</h2>
+        <div id="currentStatus">
+            <span class="status-indicator status-unknown" id="statusLight"></span>
+            <span id="statusText">Проверка...</span>
+        </div>
+        <button onclick="checkBackendStatus()">🔄 Проверить статус</button>
+        <button onclick="clearLog()">🗑️ Очистить лог</button>
+    </div>
+
+    <div class="test-section">
+        <h2>📝 Лог событий</h2>
+        <div class="log" id="eventLog"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔧 Тесты</h2>
+        <button onclick="testHealthEndpoint()">🏥 Health Endpoint</button>
+        <button onclick="testAdminHealth()">👨‍💼 Admin Health</button>
+        <button onclick="testPostsAPI()">📝 Posts API</button>
+        <button onclick="simulateBackendDown()">💥 Симуляция отключения</button>
+    </div>
+
+    <script>
+        let logElement = document.getElementById('eventLog');
+        let statusLight = document.getElementById('statusLight');
+        let statusText = document.getElementById('statusText');
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = type;
+            logEntry.textContent = `[${timestamp}] ${message}`;
+            logElement.appendChild(logEntry);
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        function clearLog() {
+            logElement.innerHTML = '';
+        }
+
+        function updateStatus(isOnline) {
+            statusLight.className = 'status-indicator ' + (isOnline ? 'status-online' : 'status-offline');
+            statusText.textContent = isOnline ? 'Онлайн' : 'Офлайн';
+        }
+
+        async function checkBackendStatus() {
+            log('🔍 Проверка статуса бэкенда...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/admin/health', {
+                    method: 'GET',
+                    timeout: 5000
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    log(`✅ Бэкенд отвечает: ${data.status}`, 'success');
+                    updateStatus(true);
+                } else {
+                    log(`❌ Бэкенд ошибка: HTTP ${response.status}`, 'error');
+                    updateStatus(false);
+                }
+            } catch (error) {
+                log(`❌ Ошибка подключения: ${error.message}`, 'error');
+                updateStatus(false);
+            }
+        }
+
+        async function testHealthEndpoint() {
+            log('🏥 Тестирование /api/health...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/health');
+                if (response.ok) {
+                    const data = await response.json();
+                    log(`✅ Health OK: ${data.status}`, 'success');
+                } else {
+                    log(`❌ Health Error: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ Health Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testAdminHealth() {
+            log('👨‍💼 Тестирование /api/admin/health...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/admin/health');
+                if (response.ok) {
+                    const data = await response.json();
+                    log(`✅ Admin Health OK: ${data.status}`, 'success');
+                } else {
+                    log(`❌ Admin Health Error: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ Admin Health Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testPostsAPI() {
+            log('📝 Тестирование /api/posts...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/posts');
+                if (response.ok) {
+                    const data = await response.json();
+                    log(`✅ Posts API OK: ${data.posts?.length || 0} постов`, 'success');
+                } else {
+                    log(`❌ Posts API Error: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ Posts API Error: ${error.message}`, 'error');
+            }
+        }
+
+        function simulateBackendDown() {
+            log('💥 Симуляция отключения бэкенда...', 'warning');
+            updateStatus(false);
+            log('⚠️ Статус установлен в "Офлайн"', 'warning');
+        }
+
+        // Автоматическая проверка при загрузке
+        window.onload = function() {
+            log('🚀 Тест загружен, проверяем статус...', 'info');
+            checkBackendStatus();
+        };
+
+        // Периодическая проверка каждые 10 секунд
+        setInterval(checkBackendStatus, 10000);
+    </script>
+</body>
+</html> 

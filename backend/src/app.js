@@ -521,6 +521,12 @@ app.use('/api/admin', adminRouter);
 app.use('/api/syslog', syslogRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+// Swagger JSON specification endpoint
+app.get('/api-docs.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
+
 // Test route
 app.get('/api/test', (req, res) => {
   res.json({ message: 'API works!' });
