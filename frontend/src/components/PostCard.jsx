@@ -166,7 +166,13 @@ const PostCard = ({ post }) => {
             <Avatar sx={{ width: 32, height: 32, mr: 1 }}>{post.author[0]}</Avatar>
             <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>{post.author}</Typography>
             <Typography variant="caption" color="text.secondary" sx={{ ml: 2 }}>
-              {post.createdAt ? new Date(post.createdAt).toLocaleString() : ''}
+              {post.createdAt ? new Date(post.createdAt).toLocaleString('ru-RU', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        }) : ''}
             </Typography>
           </Box>
         )}

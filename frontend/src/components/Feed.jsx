@@ -265,8 +265,14 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
           // Пытаемся загрузить из папки uploads или используем placeholder
           if (url.includes('.') && !url.startsWith('/')) {
             // Это имя файла - пытаемся загрузить из uploads
-            const uploadUrl = `/uploads/${url}`;
-            return uploadUrl;
+            // В production используем полный URL к бэкенду
+            if (process.env.NODE_ENV === 'production' || window.location.hostname !== 'localhost') {
+              const uploadUrl = `https://social-marketplace-api.onrender.com/uploads/${url}`;
+              return uploadUrl;
+            } else {
+              const uploadUrl = `/uploads/${url}`;
+              return uploadUrl;
+            }
           }
           
           // Для остальных случаев используем placeholder
@@ -981,7 +987,7 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
     // Сортировка
     switch (userSettings.filters.sortBy) {
       case 'oldest':
-        filteredPosts.sort((a, b) => new Date(a.timestamp || 0) - new Date(b.timestamp || 0));
+        filteredPosts.sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
         break;
       case 'popular':
         filteredPosts.sort((a, b) => {
@@ -999,7 +1005,7 @@ const Feed = ({ onDataUpdate, currentUser, leftSidebarOpen, setLeftSidebarOpen, 
         break;
       case 'newest':
       default:
-        filteredPosts.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+        filteredPosts.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
         break;
     }
 
